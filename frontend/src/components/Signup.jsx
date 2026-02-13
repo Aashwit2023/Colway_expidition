@@ -30,7 +30,7 @@ export default function Signup() { // Defines and exports the Signup function co
   // Handling the form submit
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert(user);
+    alert("Thank you for choosing us.");
   }
   return ( // Returns the JSX structure for the signup page.
     <form onSubmit = {handleSubmit}>

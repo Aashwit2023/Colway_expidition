@@ -28,7 +28,7 @@ export default function Login() {
   // Handling the form submit
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert(user);
+    alert("Welcome back!!");
   }
 
    return ( // Returns the JSX structure for the login page.
