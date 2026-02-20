@@ -186,75 +186,6 @@ a {
   cursor: pointer;
 }
 
-/* Explore by Theme */
-.explore-theme {
-  padding: 80px 0;
-  background: #f8f9fa;
-}
-
-.explore-theme h2 {
-  text-align: center;
-  font-size: 2.5rem;
-  margin-bottom: 50px;
-  color: #1a365d;
-}
-
-.theme-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 30px;
-}
-
-.theme-card {
-  background: white;
-  border-radius: 15px;
-  overflow: hidden;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  cursor: pointer;
-  position: relative;
-}
-
-.theme-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(45deg, rgba(255,215,0,0.1), rgba(26,54,93,0.1));
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.theme-card:hover {
-  transform: translateY(-15px) scale(1.02);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.25);
-}
-
-.theme-card:hover::before {
-  opacity: 1;
-}
-
-.theme-card img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
-
-.theme-card h3 {
-  padding: 20px;
-  font-size: 1.5rem;
-  color: #1a365d;
-  margin: 0;
-}
-
-.theme-card p {
-  padding: 0 20px 20px;
-  color: #666;
-  font-family: 'Lato', sans-serif;
-}
-
 /* Why Travelers Choose Us */
 .why-choose-us {
   padding: 80px 0;
@@ -320,75 +251,8 @@ a {
   color: #666;
   font-family: 'Lato', sans-serif;
   font-size: 0.95rem;
-}
+} 
 
-/* Featured Destinations */
-.featured-destinations {
-  padding: 80px 0;
-  background: #f8f9fa;
-}
-
-.featured-destinations h2 {
-  text-align: center;
-  font-size: 2.5rem;
-  margin-bottom: 50px;
-  color: #1a365d;
-}
-
-.destinations-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 30px;
-}
-
-.destination-card {
-  background: white;
-  border-radius: 15px;
-  overflow: hidden;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  position: relative;
-}
-
-.destination-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(45deg, rgba(26,54,93,0.1), rgba(255,215,0,0.1));
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.destination-card:hover {
-  transform: translateY(-12px) scale(1.02);
-  box-shadow: 0 18px 40px rgba(0,0,0,0.2);
-}
-
-.destination-card:hover::before {
-  opacity: 1;
-}
-
-.destination-card img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
-
-.destination-card h3 {
-  padding: 20px 20px 10px;
-  font-size: 1.5rem;
-  color: #1a365d;
-  margin: 0;
-}
-
-.destination-card p {
-  padding: 0 20px 20px;
-  color: #666;
-  font-family: 'Lato', sans-serif;
-}
 
 /* Stories From Travelers */
 .stories {
@@ -435,14 +299,6 @@ a {
 
 .story-card:hover {
   transform: translateY(-5px);
-}
-
-.story-card {
-  background: #f8f9fa;
-  padding: 30px;
-  border-radius: 15px;
-  text-align: center;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 .story-card img {
@@ -647,6 +503,7 @@ a {
   }
 
   .story-card {
+    padding: 20px;
     min-width: 300px;
   }
 
@@ -680,11 +537,6 @@ a {
 
   .overlay p {
     font-size: 1rem;
-  }
-
-  .story-card {
-    min-width: 280px;
-    padding: 20px;
   }
 
   .theme-card img,

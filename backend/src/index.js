@@ -1,7 +1,10 @@
-require('dotenv').config();
-const express = require('express');
+import dotenv from "dotenv";
+import express from "express";
 const app = express();
-const authRoutes = require("./routes/authRoutes");
+import authRoutes from "./routes/authRoutes.js";
+import connectDB from ".config/db.js";
+
+dotenv.config();
 
 app.use(express.json());
 
@@ -12,5 +15,6 @@ app.use("/api/auth", authRoutes);
 const port = process.env.PORT || 3000;
 
 app.listen(process.env.PORT, () => {
+    connectDB();
     console.log(`Example app Listening on port ${port}`)
 })

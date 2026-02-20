@@ -1,6 +1,6 @@
 
 // This is the Login component for the TravelX website, providing a form for user authentication. Connected to src/App.jsx for routing, and src/style.css for styling.
-import { Link } from 'react-router-dom' // Imports Link component from react-router-dom for navigation. Connected to src/main.jsx for BrowserRouter setup.
+import { Link } from 'react-router-dom'
 import { useState } from 'react'
 
 
@@ -12,7 +12,7 @@ export default function Login() {
      
   });
 
-  console.log(user) // Print the data
+  console.log(user)
   // handling the Input values
   const handleInput = (e) => {
     console.log(e);
@@ -31,7 +31,7 @@ export default function Login() {
     alert("Welcome back!!");
   }
 
-   return ( // Returns the JSX structure for the login page.
+   return ( 
       <form onSubmit={handleSubmit}>
     <div className="auth"> 
       <h2>Login to TravelX</h2> 
@@ -52,7 +52,7 @@ export default function Login() {
       </div>
       <button>Login</button> 
       <p>Don't have an account? <Link to="/signup"> Sign up here </Link></p>
-    </div> // Closes auth div.
+    </div>
       </form>
-  ) // Closes return statement.
-} // Closes Login function.
+  ) 
+}

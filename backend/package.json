@@ -4,7 +4,8 @@
   "description": "travelor book their journey ",
   "main": "index.js",
   "scripts": {
-    "start": "node src/app.js"
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,7 @@
   "homepage": "https://github.com/Aashwit2023/Travelor-Go#readme",
   "dependencies": {
     "dotenv": "^17.2.4",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "mongoose": "^9.2.1"
   }
 }
