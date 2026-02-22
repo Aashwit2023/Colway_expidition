@@ -1,4 +1,3 @@
-// This is the ImageSlider component for the TravelX website, displaying a rotating slideshow of travel images. Connected to src/components/Home.jsx for inclusion, and src/style.css for styling.
 import { useEffect, useState } from "react" 
 
 const images = [

@@ -1,13 +1,13 @@
 
 // This is the Signup component for the TravelX website, providing a form for user registration. Connected to src/App.jsx for routing, and src/style.css for styling.
-import { Link } from 'react-router-dom' // Imports Link component from react-router-dom for navigation. Connected to src/main.jsx for BrowserRouter setup.
+import { Link } from 'react-router-dom' 
 import { useState } from 'react'
 
 
-export default function Signup() { // Defines and exports the Signup function component, which renders the signup form. Connected to src/App.jsx for routing to "/signup".
-  
+export default function Signup() {
+
   const [user, setUser] = useState({
-    username: "",
+    fullname: "",
     email: "",
     password : "",
     // cnfm_passwrod: "",
@@ -32,14 +32,14 @@ export default function Signup() { // Defines and exports the Signup function co
     e.preventDefault();
     alert("Thank you for choosing us.");
   }
-  return ( // Returns the JSX structure for the signup page.
+  return (
     <form onSubmit = {handleSubmit}>
     <div className="auth"> 
       <h2>Join TravelX</h2>
       <p>Create your account to start exploring amazing destinations.</p> 
       <input type="text" placeholder="Full Name" 
-        name="username"
-        value={user.username}
+        name="fullname"
+        value={user.fullname}
         onChange={handleInput}
         required /> 
       <input type="email" placeholder="Email" 
@@ -65,7 +65,7 @@ export default function Signup() { // Defines and exports the Signup function co
       </div> 
       <button>Create Account</button> 
       <p>Already have an account? <Link to="/login">Login here</Link></p>
-    </div> // Closes auth div.
+    </div>
     </form>
-  ) // Closes return statement.
-} // Closes Signup function.
+  ) 
+}

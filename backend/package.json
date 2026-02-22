@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/Aashwit2023/Travelor-Go#readme",
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "dotenv": "^17.2.4",
     "express": "^5.2.1",
     "mongoose": "^9.2.1"

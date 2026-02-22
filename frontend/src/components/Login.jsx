@@ -1,11 +1,8 @@
-
-// This is the Login component for the TravelX website, providing a form for user authentication. Connected to src/App.jsx for routing, and src/style.css for styling.
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 
 
 export default function Login() {
-   // Defines and exports the Login function component, which renders the login form. Connected to src/App.jsx for routing to "/login".
   const [user, setUser] = useState({
     email: "",
     password : "",

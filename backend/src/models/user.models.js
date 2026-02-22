@@ -28,3 +28,6 @@ const userSchema = new mongoose.Schema({
         required: true
     },
 }, {timespamps: true});
+
+const User = mongoose.model("User", userSchema);
+export default User;
