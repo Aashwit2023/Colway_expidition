@@ -670,7 +670,7 @@ a {
 }
 
 /* User Data Form Styles */
-.user-data-form {
+/* .user-data-form {
   max-width: 600px;
   margin: 100px auto;
   background: white;
@@ -760,7 +760,230 @@ a {
 }
 
 /* Responsive Design for User Data Form */
+
+
+.callback-form {
+  max-width: 600px;
+  margin: 100px auto;
+  background: white;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  font-family: 'Playfair Display', serif;
+
+}
+
+.callback-form h1 {
+  text-align: center;
+  margin-bottom: 2px;
+  color: #160e83;
+  font-size: 40px;
+  
+}
+.callback-form h2 {
+  text-align: center;
+  /* margin-top: 1px;
+  margin-bottom: 16px; */
+  color: #333;
+  font-size: 28px;
+}
+.callback-form p {
+  text-align: center;
+  margin-bottom: 16px;
+  color: #5a5858;
+  font-size: 14px;
+}
+.callback-form input,
+.callback-form select,
+.callback-form button {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.callback-form .row {
+  display: flex;
+  gap: 10px;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+  font-weight: 500;
+  color: #363232;
+  font-size: 18px ;
+}
+
+
+.phone-box {
+  flex: 1;
+}
+
+/* Container */
+.phone-container {
+  width: 100% !important;
+  margin-top: 6px;
+}
+
+/* Input field */
+.phone-input {
+  width: 100% !important;
+  height: 42px !important;
+  border: 1px solid #ccc !important;
+  border-radius: 4px !important;
+  font-size: 14px !important;
+  padding-left: 60px !important;
+}
+
+/*country Flag dropdown button */
+.flag-button {
+  border: 1px solid #ccc !important;
+  border-right: none !important;
+  border-radius: 4px 0 0 4px !important;
+  background: #f5f5f5 !important;
+}
+
+/* Focus effect like professional forms */
+.phone-input:focus {
+  border-color: #f3b322 !important;
+  box-shadow: 0 0 0 2px rgba(243, 179, 34, 0.2) !important;
+}
 @media (max-width: 768px) {
+  .phone-input {
+    font-size: 13px !important;
+  }
+}
+
+.checkbox-group{
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 10px;
+  width: 100%;
+}
+
+
+.checkbox-line {
+  display: flex;
+  align-items: center;  /* vertical alignment fix */
+  gap: 1.5px;              /* space between checkbox & text */
+  white-space: nowrap;   /* keeps sentence in one row */
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 0.4;
+}
+
+.checkbox-line input {
+  margin-right: 10px;   /*  proper spacing */
+  width: 16px;
+  height: 16px;
+}
+
+.required {
+  color: #e53935;
+  margin-left: 4px;
+  font-weight: bold;
+}
+
+
+.checkbox-row {
+  display: flex;
+  justify-content: space-between;  /*  equal spacing in each option across full width */
+  width: 100%;
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.checkbox-item {
+  display: flex;
+  /* align-items: center; */
+  gap: 5px;   /* small space between checkbox and text */
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1.2;
+}
+
+.checkbox-item input {
+  margin: 0;  /* removes default spacing */
+  width: 16px;
+  height: 16px;
+}
+
+input[type="month"] {
+  width: 50%;
+}
+
+
+select {
+  width: 60%;
+}
+
+/* Main control box */
+.custom-select__control {
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 6px !important;
+  min-height: 42px !important;
+  box-shadow: none !important;
+}
+
+/* Focus border */
+.custom-select__control--is-focused {
+  border-color: #b2b2b8 !important;
+  box-shadow: 0 0 0 1px #b2b2b8 !important;
+}
+
+/* Dropdown menu */
+.custom-select__menu {
+  border-radius: 6px !important;
+  overflow: hidden;
+}
+
+/* Option hover */
+.custom-select__option--is-focused {
+  background-color: #f1f5f9 !important;
+  color: black !important;
+}
+
+/* Selected option */
+.custom-select__option--is-selected {
+  background-color: #b2b2b8 !important;
+  color: white !important;
+}
+
+.treks{
+  width: 50%;
+  border-color: #f3b322;
+}
+.choice{
+  display: flex;
+  gap: 60px;
+}
+
+.choice-item{
+  display: flex;
+  align-items: center;
+  gap: 5px;   /* small space between checkbox and text */
+  cursor: pointer;
+  font-size: 15px;
+}
+
+
+.callback-form button {
+  background: #0052cc;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.callback-form button:hover {
+  background: #003d99;
+}
+/* @media (max-width: 768px) {
   .user-data-form {
     margin: 80px 20px;
     padding: 30px 20px;
@@ -773,4 +996,4 @@ a {
   .user-data-form p {
     font-size: 14px;
   }
-}
+} */
