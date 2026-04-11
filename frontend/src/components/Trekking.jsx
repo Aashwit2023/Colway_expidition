@@ -7,7 +7,7 @@ import trekking33 from '../assets/trekking33.jpg';
 import Trekking_cards from './Trekking_cards/Trekking_cards';
 import adventure from "../assets/adventure.jpg";
 import culture from "../assets/culture.jpg";
-import trekking from "../assets/Trekking.jpg";
+import trekking from "../assets/trekking.jpg";
 import baliPassCamp from "../assets/bali_pass.jpg";
 import everest_base_camp from "../assets/everest_base_camp.jpg";
 import frndship from "../assets/friendship_peak.jpg";
