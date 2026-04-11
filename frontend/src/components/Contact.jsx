@@ -24,7 +24,7 @@ export default function ContactUs() {
   };
 
   return (
-    <div className="min-h-screen flex items-center pl-[20%] bg-gray-100 font-sans">
+    <div className="min-h-screen flex items-center pl-[20%] bg-gray-100 font-sans my-[50px] mx-auto">
 
       <div className="w-225 bg-white rounded-xl flex shadow-2xl overflow-hidden">
 

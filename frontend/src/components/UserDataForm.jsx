@@ -187,7 +187,7 @@ export default function UserDataForm() {
         </div>
 
         <div className="phone-box">
-          <label>Whatsapp Number</label>
+          <label>Whatsapp Number<span className="required">*</span></label>
           <PhoneInput
             country={"in"}
             value={formData.whatsapp}
@@ -223,7 +223,7 @@ export default function UserDataForm() {
       </div>
 
       {/* Experience */}
-      <label>Do you have previous trekking experience?</label>
+      <label>Do you have previous trekking experience?<span className="required">*</span></label>
 
       <div className='checkbox-group'>
           <label className='checkbox-line'>
@@ -332,7 +332,7 @@ export default function UserDataForm() {
 
       <div className="slots">
         <label>
-          Please choose a time slot based on your availabilty
+          Please choose a time slot based on your availabilty<span className="required">*</span>
         </label>
         <select name="slots" value={formData.slots} onChange={handleChange} required>
           <option value="">Select slots</option>

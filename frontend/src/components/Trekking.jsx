@@ -7,7 +7,7 @@ import trekking33 from '../assets/trekking33.jpg';
 import Trekking_cards from './Trekking_cards/Trekking_cards';
 import adventure from "../assets/adventure.jpg";
 import culture from "../assets/culture.jpg";
-import trekking from "../assets/Trekking.jpg";
+import trekking from "../assets/trekking.jpg";
 import baliPassCamp from "../assets/bali_pass.jpg";
 import everest_base_camp from "../assets/everest_base_camp.jpg";
 import frndship from "../assets/friendship_peak.jpg";
@@ -172,7 +172,7 @@ export default function Trekking() {
           position: relative;
           z-index: 1;
           text-align: relative;
-          padding: 40px 20px;
+          padding: 30px 20px;
           color: white;
           
           font-family: Arial, sans-serif;
@@ -186,7 +186,7 @@ export default function Trekking() {
 
         .trekking-content p {
           font-size: 1.2rem;
-          margin: 10px 0;
+          margin: 8px 0;
           text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
       `}</style>
