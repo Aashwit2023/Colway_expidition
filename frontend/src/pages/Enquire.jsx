@@ -4,7 +4,7 @@ import "react-phone-input-2/lib/style.css";
 import Select from "react-select";
 import { requestCallback } from '../api/api';
 
-export default function UserDataForm() {
+export default function Enquire() {
 
   const [formData, setFormData] = useState({
     firstName: "",
