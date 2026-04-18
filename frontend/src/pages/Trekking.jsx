@@ -22,119 +22,158 @@ export default function Trekking() {
 
 const themes = [
   {
-    image: adventure,
-    days: "6 days",
-    difficulty: "moderate",
-    title: "Valley Adventure",
-    description: "A perfect blend of nature and excitement for beginners.",
+    image: trekking1,
+    days: "5 days",
+    difficulty: "easy-moderate",
+    title: "Sar Pass Trek",
+    description: "A beginner-friendly trek through forests, meadows, and snow-covered trails in Parvati Valley.",
     hasModal: true,
-    price: "₹12,499",
-    location: "Kullu Valley, Himachal",
-    images: [adventure, trekking1, trekking2, trekking3],
+    price: "₹9,499",
+    location: "Kasol, Himachal Pradesh",
+    images: [trekking1, trekking2, trekking3],
     highlights: [
-      "Ancient Village Exploration",
-      "Alpine Meadow Camping",
-      "Crystal Clear River Crossings",
-      "Panoramic Himalayan Views",
-      "Professional Photography Session",
-      "Traditional Himachali Dinner"
+      "Snow Trails",
+      "Parvati Valley Views",
+      "Forest Camping",
+      "Easy Summit Experience"
     ],
-    inclusions: [
-      "Certified Trekking Guides",
-      "Premium All-weather Tents",
-      "Sleeping bags & liners",
-      "All meals (Organic/Local Source)",
-      "Trek permits & fees",
-      "Transportation from/to Basecamp"
-    ],
+    inclusions: ["Guides", "Camping Gear", "Meals", "Permits"],
     fullDescription:
-      "Step into the mesmerizing landscapes of Kullu Valley, where every trail unfolds a new story. This trek is thoughtfully designed for beginners and nature lovers who want to experience the grandeur of the Himalayas without extreme physical strain. Walk through dense pine forests filled with the scent of fresh earth, cross sparkling glacial streams, and camp in vast alpine meadows under a sky full of stars. Along the way, interact with locals in remote villages, experience authentic Himachali culture, and enjoy freshly prepared traditional meals. Whether it's sunrise over snow-capped peaks or peaceful evenings by the campfire, this journey offers the perfect balance of adventure, relaxation, and cultural immersion."
+      "The Sar Pass Trek is an ideal introduction to Himalayan trekking. Starting from Kasol, the trail winds through dense pine forests, scenic meadows, and seasonal snowfields. Trekkers experience a gradual altitude gain, making it comfortable yet adventurous. The summit rewards you with panoramic views of Parvati Valley, while the descent through snow adds an element of fun. It is perfect for beginners looking for a balanced mix of challenge and natural beauty."
   },
 
   {
-    image: culture,
+    image: trekking2,
     days: "8 days",
     difficulty: "moderate-difficult",
-    title: "Cultural Highlands",
-    description: "Explore the ancient traditions while traversing high ridges.",
+    title: "Buran Ghati Trek",
+    description: "An adventurous trek featuring lush valleys, high passes, and a thrilling descent.",
     hasModal: true,
-    price: "₹14,499",
+    price: "₹14,999",
     location: "Himachal Pradesh",
-    images: [culture, trekking1, trekking2],
+    images: [trekking2, trekking3, trekking1],
     highlights: [
-      "Village Culture Experience",
-      "Mountain Ridge Walks",
-      "Local Food Exploration",
-      "Scenic Landscapes"
+      "Rappelling Experience",
+      "Alpine Meadows",
+      "Village Trails",
+      "Snow Pass Crossing"
     ],
-    inclusions: [
-      "Certified Guides",
-      "Camping Gear",
-      "Meals Included",
-      "Permits & Fees"
-    ],
+    inclusions: ["Guides", "Camping Gear", "Meals", "Permits"],
     fullDescription:
-      "Immerse yourself in the rich cultural heritage of the Himalayas as you trek through ancient highland villages untouched by time. This journey takes you across scenic ridgelines offering breathtaking views of distant snow peaks while introducing you to centuries-old traditions and lifestyles. Experience warm hospitality from local communities, taste authentic regional cuisine, and witness rituals and stories passed down through generations. The trek perfectly combines moderate physical challenge with deep cultural exploration, making it ideal for travelers seeking more than just landscapes."
+      "Buran Ghati Trek offers a diverse Himalayan experience with ever-changing landscapes. The trail passes through charming villages, dense forests, and wide meadows before reaching the high-altitude pass. The highlight is the thrilling descent, often involving rappelling on snow walls. This trek is ideal for those seeking a mix of scenic beauty and adventure without extreme technical difficulty."
   },
 
   {
-    image: trekking,
-    days: "9 days",
-    difficulty: "difficult",
-    title: "Classic Peaks",
-    description: "The ultimate trekking experience for seasoned hikers.",
+    image: trekking3,
+    days: "7 days",
+    difficulty: "moderate-difficult",
+    title: "Rupin Pass Trek",
+    description: "A scenic crossover trek known for waterfalls, hanging villages, and snow bridges.",
     hasModal: true,
-    price: "₹18,999",
-    location: "Himalayas",
-    images: [trekking, trekking1, trekking2, trekking3],
+    price: "₹15,999",
+    location: "Uttarakhand",
+    images: [trekking3, trekking1, trekking2],
     highlights: [
-      "High Altitude Trek",
-      "Snow Peaks",
-      "Advanced Trails",
-      "Epic Views"
+      "Waterfall Camps",
+      "Snow Bridges",
+      "Hanging Villages",
+      "Pass Crossing"
     ],
-    inclusions: [
-      "Expert Guides",
-      "All Equipment",
-      "Food & Stay",
-      "Permits"
-    ],
+    inclusions: ["Guides", "Gear", "Meals", "Permits"],
     fullDescription:
-      "Designed for experienced trekkers, this expedition challenges you to conquer rugged terrains and reach breathtaking high-altitude viewpoints. Traverse steep ascents, glacier-fed valleys, and rocky ridgelines while witnessing some of the most dramatic landscapes the Himalayas have to offer. Each day presents a new test of endurance and a rewarding panorama of towering peaks. This is not just a trek—it's a true adventure that pushes your limits and leaves you with unforgettable memories."
+      "Rupin Pass Trek is one of the most dynamic treks in the Himalayas. Each day presents a new landscape, from forest trails and riverside camps to waterfalls and snowfields. The climb to the pass is both challenging and rewarding, offering stunning high-altitude views. This trek is perfect for those who enjoy variety and dramatic scenery."
   },
 
   {
     image: baliPassCamp,
-    days: "7 days",
-    difficulty: "moderate-difficult",
-    title: "Bali Pass Expedition",
-    description: "A challenging route through the heart of the Himalayas.",
+    days: "8 days",
+    difficulty: "difficult",
+    title: "Bali Pass Trek",
+    description: "A demanding high-altitude trek with glacier sections and panoramic Himalayan views.",
     hasModal: true,
-    price: "₹16,999",
+    price: "₹17,999",
     location: "Uttarakhand",
     images: [baliPassCamp, trekking2, trekking3],
     highlights: [
       "High Pass Crossing",
-      "Snow Trails",
-      "Remote Campsites",
-      "River Valleys"
+      "Glacier Trails",
+      "Snow Fields",
+      "Remote Campsites"
     ],
-    inclusions: [
-      "Guides",
-      "Camping Gear",
-      "Meals",
-      "Transport"
-    ],
+    inclusions: ["Expert Guides", "Meals", "Gear", "Permits"],
     fullDescription:
-      "Embark on one of the most thrilling Himalayan crossings as you traverse the iconic Bali Pass. This adventure takes you through diverse terrains—from lush green valleys and cascading waterfalls to snow-covered slopes and high-altitude passes. Experience raw wilderness, camp in remote untouched locations, and witness ever-changing landscapes that keep you captivated throughout the journey. A perfect trek for those seeking both challenge and unmatched natural beauty."
+      "Bali Pass Trek is a challenging expedition suited for experienced trekkers. The route connects Har Ki Dun Valley to Yamunotri and involves steep climbs, glacier crossings, and rugged terrain. Along the way, trekkers witness spectacular views of Swargarohini peaks and untouched Himalayan wilderness. It offers both physical challenge and unmatched scenic rewards."
+  },
+
+  {
+    image: adventure,
+    days: "5 days",
+    difficulty: "easy-moderate",
+    title: "Hampta Pass Trek",
+    description: "A beautiful crossover trek from green valleys to the barren landscapes of Spiti.",
+    hasModal: true,
+    price: "₹8,999",
+    location: "Himachal Pradesh",
+    images: [adventure, trekking2, trekking3],
+    highlights: [
+      "Valley Transition",
+      "River Crossings",
+      "Open Meadows",
+      "Spiti Landscapes"
+    ],
+    inclusions: ["Guides", "Meals", "Gear", "Permits"],
+    fullDescription:
+      "Hampta Pass Trek is known for its dramatic contrast in landscapes. Starting from the lush green Kullu Valley, the trail gradually leads into the stark and barren terrain of Spiti. The trek includes river crossings, scenic campsites, and a moderate pass climb. It is ideal for beginners and intermediate trekkers seeking a visually rewarding experience."
+  },
+
+  {
+    image: culture,
+    days: "7 days",
+    difficulty: "moderate",
+    title: "Kashmir Great Lakes Trek",
+    description: "A breathtaking trek across alpine lakes, meadows, and high mountain passes.",
+    hasModal: true,
+    price: "₹16,499",
+    location: "Kashmir",
+    images: [culture, trekking1, trekking2],
+    highlights: [
+      "Alpine Lakes",
+      "Flower Meadows",
+      "Mountain Views",
+      "Peaceful Camps"
+    ],
+    inclusions: ["Guides", "Meals", "Camping", "Permits"],
+    fullDescription:
+      "The Kashmir Great Lakes Trek is considered one of the most beautiful treks in India. The trail takes you across multiple high-altitude lakes surrounded by snow-capped peaks and vast meadows. Each day reveals a new landscape, making the journey visually captivating. It is perfect for trekkers who want a balance of comfort and stunning natural beauty."
+  },
+
+  {
+    image: trekking33,
+    days: "7 days",
+    difficulty: "moderate",
+    title: "Pin Bhaba Pass Trek",
+    description: "A unique trek showcasing the transition from lush greenery to cold desert terrain.",
+    hasModal: true,
+    price: "₹15,499",
+    location: "Himachal Pradesh",
+    images: [trekking33, trekking2, trekking3],
+    highlights: [
+      "Kinnaur to Spiti",
+      "River Trails",
+      "Wide Meadows",
+      "Desert Landscapes"
+    ],
+    inclusions: ["Guides", "Meals", "Gear", "Permits"],
+    fullDescription:
+      "Pin Bhaba Pass Trek offers one of the most dramatic landscape transitions in the Himalayas. The journey begins in the green valleys of Kinnaur and gradually moves into the dry, rugged terrain of Spiti. The contrast in scenery, combined with moderate difficulty, makes it a favorite among trekkers seeking variety."
   },
 
   {
     image: everest_base_camp,
     days: "12 days",
     difficulty: "difficult",
-    title: "Everest Gateway",
-    description: "Journey to the base of the world's highest peak.",
+    title: "Everest Base Camp Trek",
+    description: "A legendary trek to the base of Mount Everest through Sherpa villages and valleys.",
     hasModal: true,
     price: "₹45,000",
     location: "Nepal",
@@ -142,46 +181,13 @@ const themes = [
     highlights: [
       "Everest Views",
       "Sherpa Culture",
-      "High Altitude Adventure",
-      "Iconic Base Camp"
+      "High Altitude",
+      "Base Camp"
     ],
-    inclusions: [
-      "Guides",
-      "Accommodation",
-      "Meals",
-      "Permits"
-    ],
+    inclusions: ["Guides", "Stay", "Meals", "Permits"],
     fullDescription:
-      "Follow in the footsteps of legendary mountaineers on the iconic Everest Base Camp trek. This once-in-a-lifetime journey takes you through the heart of the Khumbu region, where you'll experience breathtaking views of Mount Everest and surrounding peaks. Walk through vibrant Sherpa villages, visit ancient monasteries, and gradually ascend through dramatic landscapes. Reaching base camp is an achievement in itself—one that rewards you with awe-inspiring scenery and a deep sense of accomplishment."
-  },
-
-  {
-    image: trekking1,
-    days: "5 days",
-    difficulty: "easy-moderate",
-    title: "Kedarkantha Trek",
-    description: "Popular winter trek through snow trails.",
-    hasModal: true,
-    price: "₹9,999",
-    location: "Uttarakhand",
-    images: [trekking1, trekking2, trekking3],
-    highlights: [
-      "Snow Trek",
-      "Pine Forests",
-      "Summit Climb",
-      "Winter Camping"
-    ],
-    inclusions: [
-      "Guides",
-      "Camping Gear",
-      "Meals",
-      "Permits"
-    ],
-    fullDescription:
-      "Experience the magic of a winter wonderland on the Kedarkantha trek. Walk through snow-covered pine forests, camp in frozen clearings, and summit a peak that offers stunning 360-degree views of the Himalayas. Ideal for beginners, this trek provides the thrill of snow trekking without extreme difficulty, making it one of India's most loved winter adventures."
+      "The Everest Base Camp Trek is a world-famous journey through the Khumbu region of Nepal. Trekkers pass through traditional Sherpa villages, monasteries, and scenic valleys while gradually ascending to base camp. The experience combines cultural immersion with breathtaking views of the world's highest peaks, making it a truly unforgettable adventure."
   }
-
-  // You can continue similar style for remaining treks if needed
 ];
 
   return (
@@ -211,7 +217,7 @@ const themes = [
               items={themes}
               heading={
                 <>
-                  <h2 className="text-4xl md:text-5xl font-black text-gray-00 mb-4 italic tracking-tighter">Choose Your Journey</h2>
+                  <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4 italic tracking-tighter">Choose Your Journey</h2>
                   <div className="w-24 h-1 bg-blue-600 mx-auto rounded-full mb-8"></div>
                 </>
               }
