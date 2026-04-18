@@ -1,6 +1,6 @@
-  import { Link } from "react-router-dom";
-  import ImageSlider from "./ImageSlider";
-  import ExploreTheme from "./Cards/ExploreTheme";
+import { Link } from "react-router-dom";
+  import ImageSlider from "../components/ImageSlider";
+  import ExploreTheme from "../components/Cards/ExploreTheme";
   import adventure from "../assets/adventure.jpg";
   import culture from "../assets/culture.jpg";
   import trekking from "../assets/trekking.jpg";
