@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import "./ExploreTheme.css";
 
 export default function ExploreTheme({ items, heading }) {
@@ -34,15 +35,16 @@ export default function ExploreTheme({ items, heading }) {
             <h2>{heading}</h2>
             <div className="theme-grid">
                 {items.map(( theme, index) => (
-                    <div
-                        key={index}
-                        className="theme-card"
-                        ref={(el) => cardsRef.current[index] = el}
-                    >
-                        <img src={theme.image} alt={theme.title} />
-                        <h3>{theme.title}</h3>
-                        <p>{theme.description}</p>
-                    </div>
+                    <Link key={index} to={theme.link || "#"} className="theme-link">
+                        <div
+                            className="theme-card"
+                            ref={(el) => cardsRef.current[index] = el}
+                        >
+                            <img src={theme.image} alt={theme.title} />
+                            <h3>{theme.title}</h3>
+                            <p>{theme.description}</p>
+                        </div>
+                    </Link>
                 ))}
 
             </div>
