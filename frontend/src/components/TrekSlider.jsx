@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './TrekSlider.css';
 
@@ -22,6 +22,16 @@ export default function TrekSlider({ treks }) {
     setCurrentIndex(index);
   };
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) =>
+        prevIndex === treks.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [treks.length]);
+
   return (
     <section className="trek-slider">
       <div className="slider-container">
@@ -39,6 +49,7 @@ export default function TrekSlider({ treks }) {
                 <div className="card-content">
                   <h3>{trek.title}</h3>
                   <p className="location">{trek.location}</p>
+                  <p className="slider-description">{trek.description}</p>
                   <div className="details">
                     <span className="duration">{trek.duration}</span>
                     <span className="grade">{trek.grade}</span>
