@@ -1,64 +1,102 @@
 import { Link } from "react-router-dom";
-  import ImageSlider from "../components/ImageSlider";
-  import ExploreTheme from "../components/Cards/ExploreTheme";
-  import adventure from "../assets/adventure.jpg";
-  import culture from "../assets/culture.jpg";
-  import trekking from "../assets/trekking.jpg";
-  import baliPassCamp from "../assets/bali_pass.jpg";
-  import everest_base_camp from "../assets/everest_base_camp.jpg";
-  import frndship from "../assets/friendship_peak.jpg";
+import TrekSlider from "../components/TrekSlider";
+import ExploreTheme from "../components/Cards/ExploreTheme";
+import adventure from "../assets/adventure.jpg";
+import culture from "../assets/culture.jpg";
+import trekking from "../assets/trekking.jpg";
+import baliPassCamp from "../assets/bali_pass.jpg";
+import everest_base_camp from "../assets/everest_base_camp.jpg";
+import frndship from "../assets/friendship_peak.jpg";
+import trekking1 from "../assets/trekking1.jpg";
+import trekking2 from "../assets/trekking2.jpg";
+import cultural from "../assets/cultural.jpg";  
 
-  export default function Home() {
-    const themes = [
-          {
-            image: adventure,
-            title: "Adventure",
-            description: "Thrilling expeditions for the bold explorer."
-          },
-          {
-            image: culture,
-            title: "Cultural Immersion",
-            description: "Dive deep into local traditions and heritage."
-          },
-          {
-            image: trekking,
-            title: "Trekking",
-            description: "Epic trails through the world's most stunning landscapes."
-          }
-        ];
-        
+export default function Home() {
+  const themes = [
+    {
+      image: trekking1,
+      title: "Expeditions",
+      description: "Explore high-altitude expeditions and challenging mountain adventures for experienced trekkers.",
+      link: "/expeditions"
+    },
+    {
+      image: trekking2,
+      title: "Trekking",
+      description: "Discover breathtaking trails and scenic routes through stunning landscapes and mountain valleys.",
+      link: "/trekking"
+    },
+    {
+      image: cultural,
+      title: "Villages",
+      description: "Experience authentic local culture and traditions in remote Himalayan villages.",
+      link: "/villages"
+    },
+    {
+      image: baliPassCamp,
+      title: "Kailash Trek",
+      description: "Embark on a spiritual pilgrimage to the sacred Mount Kailash and nearby regions.",
+      link: "/kailash-trek"
+    }
+  ];
+      
 
-    const Destination = [
-          {
-            image: baliPassCamp,
-            title: "Bali Pass Camp, India",
-            description: "Experience the serene beauty of Bali Pass Camp, nestled in the heart of India's wilderness. Enjoy luxurious tents, breathtaking views, and unforgettable adventures."
-          },
-          {
-            image: everest_base_camp,
-            title: "Everest Base Camp, Nepal",
-            description: "Embark on a once-in-a-lifetime trek to Everest Base Camp. Witness the majestic Himalayas, vibrant Sherpa culture, and the thrill of standing at the foot of the world's highest peak."
-          },
-          {
-            image: frndship,
-            title: "Friendship Trek",
-            description: "Celebrate the universal bond of friendship with our unique travel experiences designed to connect you with people and cultures around the world."
-          } 
-        ];
+  const Destination = [
+        {
+          image: baliPassCamp,
+          title: "Bali Pass Camp, India",
+          description: "Experience the serene beauty of Bali Pass Camp, nestled in the heart of India's wilderness. Enjoy luxurious tents, breathtaking views, and unforgettable adventures."
+        },
+        {
+          image: everest_base_camp,
+          title: "Everest Base Camp, Nepal",
+          description: "Embark on a once-in-a-lifetime trek to Everest Base Camp. Witness the majestic Himalayas, vibrant Sherpa culture, and the thrill of standing at the foot of the world's highest peak."
+        },
+        {
+          image: frndship,
+          title: "Friendship Trek",
+          description: "Celebrate the universal bond of friendship with our unique travel experiences designed to connect you with people and cultures around the world."
+        } 
+      ];
+
+  const treks = [
+    {
+      image: trekking1,
+      title: "Expeditions",
+      location: "High-altitude adventure",
+      duration: "Explore",
+      grade: "All Levels",
+      link: "/expeditions"
+    },
+    {
+      image: trekking2,
+      title: "Trekking",
+      location: "Trail experiences",
+      duration: "Discover",
+      grade: "All Trails",
+      link: "/trekking"
+    },
+    {
+      image: cultural,
+      title: "Villages",
+      location: "Cultural immersion",
+      duration: "Experience",
+      grade: "Local Culture",
+      link: "/villages"
+    },
+    {
+      image: baliPassCamp,
+      title: "Kailash Trek",
+      location: "Spiritual journey",
+      duration: "Pilgrimage",
+      grade: "Sacred Trek",
+      link: "/kailash-trek"
+    }
+  ];
     return (
       <>
-        <div className="hero">
-          <div className="overlay">
-            <h1>Discover Extraordinary Journeys</h1>
-            <p>
-              Embark on unparalleled adventures crafted for the discerning
-              traveler.
-            </p>
-            <Link to= "/enquire"><button>Start Your Journey</button></Link>
-          </div>
-        </div>
-        
-        <ExploreTheme items={themes} heading="Explore By Theme"/>
+        <TrekSlider treks={treks} />
+
+        <ExploreTheme items={themes} heading="Popular Adventures"/>
 
         <section className="why-choose-us container">
           <h2>Why Travelers Choose Us</h2>
