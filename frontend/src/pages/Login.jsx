@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { loginUser } from '../api/api';
+import loginimg from '../assets/loginimg.jpg';
 
 
 export default function Login() {
@@ -51,32 +52,39 @@ export default function Login() {
   }
 
    return ( 
-      <form onSubmit={handleSubmit}>
-    <div className="auth"> 
-      <h2>Login to TravelX</h2>
-      <p>Welcome back! Please sign in to your account.</p> 
+      <div
+        className="relative min-h-screen bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${loginimg})` }}
+      >
+        <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-16">
+          <form onSubmit={handleSubmit} className="w-full max-w-[500px] rounded-3xl bg-white/17 border border-white/30 p-6">
+            <div className="auth"> 
+              <h2>Login to TravelX</h2>
+              <p>Welcome back! Please sign in to your account.</p> 
 
-      {error && <p style={{ color: "#ff4d4d", fontSize: "14px", margin: "8px 0" }}>{error}</p>}
-      {success && <p style={{ color: "#4dff88", fontSize: "14px", margin: "8px 0" }}>{success}</p>}
-      <input type="email" name="email" placeholder="Email" 
-        value = {user.email}
-        onChange={handleInput}
-        required /> 
-      <input type="password" name= "password" placeholder="Password"
-        value = {user.password}
-        onChange={handleInput}
-        required /> 
-      <div className="remember-forgot"> 
-        <label>
-          <input type="checkbox" /> Remember me 
-        </label> 
-        <Link to="/forgot-password">Forgot password?</Link> 
+              {error && <p style={{ color: "#ff4d4d", fontSize: "14px", margin: "8px 0" }}>{error}</p>}
+              {success && <p style={{ color: "#4dff88", fontSize: "14px", margin: "8px 0" }}>{success}</p>}
+              <input type="email" name="email" placeholder="Email" 
+                value = {user.email}
+                onChange={handleInput}
+                required /> 
+              <input type="password" name= "password" placeholder="Password"
+                value = {user.password}
+                onChange={handleInput}
+                required /> 
+              <div className="remember-forgot"> 
+                <label>
+                  <input type="checkbox" /> Remember me 
+                </label> 
+                <Link to="/forgot-password">Forgot password?</Link> 
+              </div>
+              <button disabled={loading}>
+                {loading ? "Logging in..." : "Login"}
+              </button>
+              <p>Don't have an account? <Link to="/signup"> Sign up here </Link></p>
+            </div>
+          </form>
+        </div>
       </div>
-      <button disabled={loading}>
-        {loading ? "Logging in..." : "Login"}
-      </button>
-      <p>Don't have an account? <Link to="/signup"> Sign up here </Link></p>
-    </div>
-      </form>
   ) 
 }

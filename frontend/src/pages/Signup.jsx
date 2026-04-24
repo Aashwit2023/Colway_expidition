@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom' 
 import { useState } from 'react'
 import { signUpUser } from '../api/api';
+import signimg from '../assets/signimg.jpg';
 
 export default function Signup() {
   const [user, setUser] = useState({
@@ -70,52 +71,74 @@ export default function Signup() {
     }
   }
   return (
-    <form onSubmit={handleSubmit}>
-    <div className="auth"> 
-      <h2>Join TravelX</h2>
-      <p>Create your account to start exploring amazing destinations.</p> 
+    <div
+      className="relative min-h-screen bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: `url(${signimg})` }}
+    >
+      <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-20">
+        <form onSubmit={handleSubmit} className="w-full max-w-[500px] rounded-3xl bg-white/20 border border-white/20 p-3">
+          <div className="auth">
+            <h2>Join TravelX</h2>
+            <p>Create your account to start exploring amazing destinations.</p>
 
-      {error && <p style={{ color: "#ff4d4d", fontSize: "14px", margin: "8px 0" }}>{error}</p>}
-      {success && <p style={{ color: "#4dff88", fontSize: "14px", margin: "8px 0" }}>{success}</p>}
+            {error && <p style={{ color: "#ff4d4d", fontSize: "14px", margin: "8px 0" }}>{error}</p>}
+            {success && <p style={{ color: "#4dff88", fontSize: "14px", margin: "8px 0" }}>{success}</p>}
 
-      <input type="text" placeholder="First Name" 
-        name="firstname"
-        value={user.firstname}
-        onChange={handleInput}
-        required /> 
+            <input
+              type="text"
+              placeholder="First Name"
+              name="firstname"
+              value={user.firstname}
+              onChange={handleInput}
+              required
+            />
 
-      <input type="text" placeholder="Last Name" 
-        name="lastname"
-        value={user.lastname}
-        onChange={handleInput}
-        required />
+            <input
+              type="text"
+              placeholder="Last Name"
+              name="lastname"
+              value={user.lastname}
+              onChange={handleInput}
+              required
+            />
 
-      <input type="email" placeholder="Email" 
-        name="email"
-        value={user.email}
-        onChange={handleInput}
-        required /> 
-      
-      <input type="password" placeholder="Password" 
-        name="password"
-        value={user.password}
-        onChange={handleInput}
-        required /> 
-      
-      <input type="password" placeholder="Confirm Password" 
-        name="cnfm_password"
-        value={user.cnfm_password}
-        onChange={handleInput}
-        required /> 
-      <div className="terms">
-        <label> 
-          <input type="checkbox" required /> 
-          I agree to the <Link to=" /terms "> Terms and Conditions </Link> and <Link to=" /privacy "> Privacy Policy</Link> 
-        </label> 
-      </div> 
-      <button disabled={loading}>{loading ? "Creating Account..." : "Create Account"}</button>
-      <p>Already have an account? <Link to="/login">Login here</Link></p>
+            <input
+              type="email"
+              placeholder="Email"
+              name="email"
+              value={user.email}
+              onChange={handleInput}
+              required
+            />
+
+            <input
+              type="password"
+              placeholder="Password"
+              name="password"
+              value={user.password}
+              onChange={handleInput}
+              required
+            />
+
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              name="cnfm_password"
+              value={user.cnfm_password}
+              onChange={handleInput}
+              required
+            />
+            <div className="terms">
+              <label>
+                <input type="checkbox" required />
+                I agree to the <Link to="/terms">Terms and Conditions</Link> and <Link to="/privacy">Privacy Policy</Link>
+              </label>
+            </div>
+            <button disabled={loading}>{loading ? "Creating Account..." : "Create Account"}</button>
+            <p>Already have an account? <Link to="/login">Login here</Link></p>
+          </div>
+        </form>
+      </div>
     </div>
-    </form>
   ) 
 }

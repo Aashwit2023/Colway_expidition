@@ -3,6 +3,7 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import Select from "react-select";
 import { requestCallback } from '../api/api';
+import cllbck from '../assets/cllbck.jpg';
 
 export default function Enquire() {
 
@@ -128,7 +129,33 @@ export default function Enquire() {
   };
 
   return (
-    <form className="callback-form" onSubmit={handleSubmit}>
+    <div 
+      className="enquire-page-container" 
+      style={{
+        backgroundImage: `url(${cllbck})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+        minHeight: '100vh',
+        paddingTop: '40px',
+        paddingBottom: '40px',
+        display: 'flex',
+        alignItems: 'flex-start',
+        justifyContent: 'center'
+      }}
+    >
+      <form 
+        className="callback-form" 
+        onSubmit={handleSubmit}
+        style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.93)',
+          borderRadius: '12px',
+          padding: '40px',
+          maxWidth: '700px',
+          width: '100%',
+          boxShadow: '0 10px 40px rgba(0, 0, 0, 0.2)'
+        }}
+      >
       <h1>Request a callback?</h1>
       <h2>Plan Your Himalayan Trek With Us</h2>
 
@@ -342,7 +369,8 @@ export default function Enquire() {
         </select>
       </div>
       <button type="submit" disabled={loading}>{loading ? "Submitting..." : "Request Callback"}</button>
-    </form>
+      </form>
+    </div>
   );
 
 

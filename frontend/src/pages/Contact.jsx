@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "../style.css"
+import contactimg from '../assets/contact.jpg';
 
 export default function ContactUs() {
 
@@ -24,9 +25,12 @@ export default function ContactUs() {
   };
 
   return (
-    <div className="min-h-screen flex items-center pl-[20%] bg-gray-100 font-sans my-[50px] mx-auto">
-
-      <div className="w-225 bg-white rounded-xl flex shadow-2xl overflow-hidden">
+    <div
+      className="relative min-h-screen bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: `url(${contactimg})` }}
+    >
+      <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-16">
+        <div className="w-full max-w-[900px] bg-white rounded-xl flex shadow-2xl overflow-hidden">
 
         {/* Left Section */}
         <div className="w-[40%] p-10 bg-gray-50">
@@ -122,7 +126,7 @@ export default function ContactUs() {
         </div>
 
       </div>
-
+      </div>
     </div>
   );
 }
