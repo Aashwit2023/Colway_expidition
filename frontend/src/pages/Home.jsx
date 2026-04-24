@@ -47,6 +47,11 @@ export default function Home() {
           description: "Experience the serene beauty of Bali Pass Camp, nestled in the heart of India's wilderness. Enjoy luxurious tents, breathtaking views, and unforgettable adventures."
         },
         {
+          image: trekking2,
+          title: "Mountain trek, India",
+          description: "Experience the serene beauty of mountain Camp, nestled in the heart of India's wilderness. Enjoy luxurious tents, breathtaking views, and unforgettable adventures."
+        },
+        {
           image: everest_base_camp,
           title: "Everest Base Camp, Nepal",
           description: "Embark on a once-in-a-lifetime trek to Everest Base Camp. Witness the majestic Himalayas, vibrant Sherpa culture, and the thrill of standing at the foot of the world's highest peak."
@@ -63,6 +68,7 @@ export default function Home() {
       image: trekking1,
       title: "Expeditions",
       location: "High-altitude adventure",
+      description: "Explore the most iconic Himalayan expeditions with expertly curated routes, local guides, and unforgettable mountain views.",
       duration: "Explore",
       grade: "All Levels",
       link: "/expeditions"
@@ -71,6 +77,7 @@ export default function Home() {
       image: trekking2,
       title: "Trekking",
       location: "Trail experiences",
+      description: "Discover scenic trails through valleys, forests, and mountain terrain designed for both beginners and seasoned trekkers.",
       duration: "Discover",
       grade: "All Trails",
       link: "/trekking"
@@ -79,6 +86,7 @@ export default function Home() {
       image: cultural,
       title: "Villages",
       location: "Cultural immersion",
+      description: "Experience authentic village life, local culture, and meaningful homestays in the heart of the Himalayas.",
       duration: "Experience",
       grade: "Local Culture",
       link: "/villages"
@@ -87,6 +95,7 @@ export default function Home() {
       image: baliPassCamp,
       title: "Kailash Trek",
       location: "Spiritual journey",
+      description: "Embark on a sacred pilgrimage to Mount Kailash with deep cultural insights and soulful mountain encounters.",
       duration: "Pilgrimage",
       grade: "Sacred Trek",
       link: "/kailash-trek"

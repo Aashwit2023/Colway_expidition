@@ -25,7 +25,7 @@
   background: white;
   border-radius: 15px;
   overflow: hidden;
-  box-shadow: 0 8px 25px rgba(0,0,0,.1);
+  box-shadow: 0 18px 50px rgba(0,0,0,.12);
   cursor: pointer;
   position: relative;
   display: flex;
@@ -39,6 +39,27 @@
   opacity .8s ease,
   transform .8s ease,
   box-shadow .4s ease;
+}
+
+.theme-card:hover {
+  transform: translateY(-12px);
+  box-shadow: 0 28px 70px rgba(0,0,0,.18);
+}
+
+.theme-card h3 {
+  padding: 24px 20px 12px;
+  font-size: 1.6rem;
+  color: #1a365d;
+  margin: 0;
+}
+
+.theme-card p {
+  padding: 0 20px 24px;
+  color: #444;
+  font-family: "Lato", sans-serif;
+  flex: 1;
+  display: flex;
+  align-items: center;
 }
 
 /* Scroll animation */
