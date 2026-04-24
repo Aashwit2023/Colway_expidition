@@ -507,7 +507,7 @@ a {
   }
 
   .nav {
-    padding: 15px 0;
+    padding: 15px 0; /* Vertical padding. */
   }
 
   .nav h1, .nav h2 {

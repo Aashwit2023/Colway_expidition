@@ -5,11 +5,14 @@ import adventure from "../assets/adventure.jpg";
 import culture from "../assets/culture.jpg";
 import trekking from "../assets/trekking.jpg";
 import baliPassCamp from "../assets/bali_pass.jpg";
+import kailash from "../assets/kailash.jpg";
 import everest_base_camp from "../assets/everest_base_camp.jpg";
 import frndship from "../assets/friendship_peak.jpg";
 import trekking1 from "../assets/trekking1.jpg";
 import trekking2 from "../assets/trekking2.jpg";
-import cultural from "../assets/cultural.jpg";  
+import cultural from "../assets/cultural.jpg"; 
+import buran_ghati from "../assets/buran_ghati.jpg"; 
+import punchkula from "../assets/punchkula.jpg"
 
 export default function Home() {
   const themes = [
@@ -32,7 +35,7 @@ export default function Home() {
       link: "/villages"
     },
     {
-      image: baliPassCamp,
+      image: kailash,
       title: "Kailash Trek",
       description: "Embark on a spiritual pilgrimage to the sacred Mount Kailash and nearby regions.",
       link: "/kailash-trek"
@@ -47,18 +50,19 @@ export default function Home() {
           description: "Experience the serene beauty of Bali Pass Camp, nestled in the heart of India's wilderness. Enjoy luxurious tents, breathtaking views, and unforgettable adventures."
         },
         {
-          image: trekking2,
-          title: "Mountain trek, India",
-          description: "Experience the serene beauty of mountain Camp, nestled in the heart of India's wilderness. Enjoy luxurious tents, breathtaking views, and unforgettable adventures."
+          image: buran_ghati,
+          title: "Buran Ghati Trek, India",
+          description: "A scenic high-altitude mountain pass, popular among trekkers for its dramatic landscapes. The trail passes through dense forests, alpine meadows, and snow-covered slopes, offering breathtaking Himalayan views."
+
         },
         {
-          image: everest_base_camp,
-          title: "Everest Base Camp, Nepal",
-          description: "Embark on a once-in-a-lifetime trek to Everest Base Camp. Witness the majestic Himalayas, vibrant Sherpa culture, and the thrill of standing at the foot of the world's highest peak."
+          image: punchkula,
+          title: "Panchkula Trek, India",
+          description: "Explore the natural beauty of Panchkula through its serene trekking trails nestled in the Shivalik range. From forest walks to hilltop views,the experience combines adventure with tranquility."
         },
         {
           image: frndship,
-          title: "Friendship Trek",
+          title: "Friendship Trek, India",
           description: "Celebrate the universal bond of friendship with our unique travel experiences designed to connect you with people and cultures around the world."
         } 
       ];
@@ -92,7 +96,7 @@ export default function Home() {
       link: "/villages"
     },
     {
-      image: baliPassCamp,
+      image: kailash,
       title: "Kailash Trek",
       location: "Spiritual journey",
       description: "Embark on a sacred pilgrimage to Mount Kailash with deep cultural insights and soulful mountain encounters.",
@@ -136,7 +140,7 @@ export default function Home() {
           </div>
         </section>
 
-        <ExploreTheme items={Destination} heading="Our Destination" /> 
+        <ExploreTheme items={Destination} heading="Recently Visited Treks" /> 
 
         <section className="stories container">
 
@@ -275,36 +279,6 @@ export default function Home() {
           </div>
         </section>
 
-        <footer className="footer">
-          <div className="container">
-            <div className="footer-content">
-              <div className="footer-section">
-                <h3>TravelX</h3>
-                <p>Creating extraordinary travel experiences since 2015.</p>
-              </div>
-
-              <div className="footer-section">
-                <h4>Quick Links</h4>
-                <ul>
-                  <li><a href="#">Destinations</a></li>
-                  <li><a href="#">Experiences</a></li>
-                  <li><a href="#">About Us</a></li>
-                  <li><a href="/Contact">Contact</a></li>
-                </ul>
-              </div>
-
-              <div className="footer-section">
-                <h4>Contact Info</h4>
-                <p>info@travelx.com</p>
-                <p>+91 9856367254</p>
-              </div>
-            </div>
-
-            <div className="footer-bottom">
-              <p>&copy; 2026 TravelX. All rights reserved.</p>
-            </div>
-          </div>
-        </footer>
       </>
     );
   }
