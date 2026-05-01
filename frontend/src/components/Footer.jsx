@@ -6,8 +6,8 @@ export default function Footer() {
       <div className="container">
         <div className="footer-content">
           <div className="footer-section">
-            <h3>TravelX</h3>
-            <p>Creating extraordinary travel experiences since 2015.</p>
+            <h3>Colway Expedition</h3>
+            <p>Creating extraordinary travel experiences since 2025.</p>
           </div>
 
           <div className="footer-section">
@@ -25,13 +25,15 @@ export default function Footer() {
               <li>
                 <Link to="/contact">Contact</Link>
               </li>
+              <li>
+                <Link to="/#faq">FAQ</Link>
+              </li>
             </ul>
           </div>
 
           <div className="footer-section">
             <h4>Contact Info</h4>
             <p>info.colwayexpedition@gmail.com</p>
-            <p>+91 9856367254</p>
             <p>+91 85807 79179</p>
             <a
               href="https://www.instagram.com/colwayhimalayanexpedition/"

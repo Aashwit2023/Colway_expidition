@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom' 
+import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { signUpUser } from '../api/api';
 import signimg from '../assets/signimg.jpg';
@@ -20,7 +20,7 @@ export default function Signup() {
   const handleInput = (e) => {
     let name = e.target.name;
     let value = e.target.value;
-    
+
     setUser({
       ...user,
       [name]: value,
@@ -42,12 +42,12 @@ export default function Signup() {
 
     try {
       const { response, data } = await signUpUser({
-          firstname: user.firstname,
-          lastname: user.lastname,
-          email: user.email,
-          password: user.password,
-          cnfmPassword: user.cnfm_password,
-        });
+        firstname: user.firstname,
+        lastname: user.lastname,
+        email: user.email,
+        password: user.password,
+        cnfmPassword: user.cnfm_password,
+      });
 
       // const data = await response.json();
 
@@ -140,5 +140,5 @@ export default function Signup() {
         </form>
       </div>
     </div>
-  ) 
+  )
 }
