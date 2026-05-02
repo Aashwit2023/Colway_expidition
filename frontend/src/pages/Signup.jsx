@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom' 
+import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { signUpUser } from '../api/api';
 import signimg from '../assets/signimg.jpg';
@@ -20,7 +20,7 @@ export default function Signup() {
   const handleInput = (e) => {
     let name = e.target.name;
     let value = e.target.value;
-    
+
     setUser({
       ...user,
       [name]: value,
@@ -42,12 +42,12 @@ export default function Signup() {
 
     try {
       const { response, data } = await signUpUser({
-          firstname: user.firstname,
-          lastname: user.lastname,
-          email: user.email,
-          password: user.password,
-          cnfmPassword: user.cnfm_password,
-        });
+        firstname: user.firstname,
+        lastname: user.lastname,
+        email: user.email,
+        password: user.password,
+        cnfmPassword: user.cnfm_password,
+      });
 
       // const data = await response.json();
 
@@ -78,7 +78,7 @@ export default function Signup() {
       <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-20">
         <form onSubmit={handleSubmit} className="w-full max-w-[500px] rounded-3xl bg-white/20 border border-white/20 p-3">
           <div className="auth">
-            <h2>Join TravelX</h2>
+            <h2>Join Colway Expeditions</h2>
             <p>Create your account to start exploring amazing destinations.</p>
 
             {error && <p style={{ color: "#ff4d4d", fontSize: "14px", margin: "8px 0" }}>{error}</p>}
@@ -140,5 +140,5 @@ export default function Signup() {
         </form>
       </div>
     </div>
-  ) 
+  )
 }

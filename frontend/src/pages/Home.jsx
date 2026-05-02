@@ -13,6 +13,8 @@ import trekking2 from "../assets/trekking2.jpg";
 import cultural from "../assets/cultural.jpg"; 
 import buran_ghati from "../assets/buran_ghati.jpg"; 
 import punchkula from "../assets/punchkula.jpg"
+import FAQ from "../components/FAQ/FAQ.jsx";
+
 
 export default function Home() {
   const themes = [
@@ -62,7 +64,7 @@ export default function Home() {
         },
         {
           image: frndship,
-          title: "Friendship Trek, India",
+          title: "Friendship Peak, India",
           description: "Celebrate the universal bond of friendship with our unique travel experiences designed to connect you with people and cultures around the world."
         } 
       ];
@@ -70,38 +72,38 @@ export default function Home() {
   const treks = [
     {
       image: trekking1,
-      title: "Expeditions",
-      location: "High-altitude adventure",
-      description: "Explore the most iconic Himalayan expeditions with expertly curated routes, local guides, and unforgettable mountain views.",
-      duration: "Explore",
-      grade: "All Levels",
+      title: "Himalayan Expeditions",
+      location: "High-Altitude Mastery",
+      description: "Conquer the giants of the world. Our expertly guided expeditions provide the ultimate challenge for seasoned adventurers seeking the roof of the world.",
+      duration: "14-21 Days",
+      grade: "Elite Level",
       link: "/expeditions"
     },
     {
       image: trekking2,
-      title: "Trekking",
-      location: "Trail experiences",
-      description: "Discover scenic trails through valleys, forests, and mountain terrain designed for both beginners and seasoned trekkers.",
-      duration: "Discover",
-      grade: "All Trails",
+      title: "Alpine Trekking",
+      location: "The Path Less Traveled",
+      description: "Discover hidden valleys and ancient trails. From lush forests to stark glacial moraines, experience the diverse beauty of the mountains at every step.",
+      duration: "7-12 Days",
+      grade: "All Levels",
       link: "/trekking"
     },
     {
       image: cultural,
-      title: "Villages",
-      location: "Cultural immersion",
-      description: "Experience authentic village life, local culture, and meaningful homestays in the heart of the Himalayas.",
-      duration: "Experience",
-      grade: "Local Culture",
+      title: "Village Immersion",
+      location: "Heart of the Mountains",
+      description: "Step into a world of tradition. Experience authentic Himalayan hospitality and ancient cultural heritage in remote mountain settlements.",
+      duration: "5-8 Days",
+      grade: "Cultural",
       link: "/villages"
     },
     {
       image: kailash,
-      title: "Kailash Trek",
-      location: "Spiritual journey",
-      description: "Embark on a sacred pilgrimage to Mount Kailash with deep cultural insights and soulful mountain encounters.",
-      duration: "Pilgrimage",
-      grade: "Sacred Trek",
+      title: "Mount Kailash Kora",
+      location: "The Sacred Pilgrimage",
+      description: "Embark on the ultimate spiritual journey. A transformative experience around the mystical Mount Kailash, the center of the spiritual universe.",
+      duration: "18-22 Days",
+      grade: "Spiritual",
       link: "/kailash-trek"
     }
   ];
@@ -278,6 +280,9 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        <FAQ />
+
 
       </>
     );
