@@ -3,6 +3,7 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import Select from "react-select";
 import { requestCallback } from '../api/api';
+import cllbck from '../assets/cllbck.jpg';
 
 export default function Enquire() {
 
@@ -128,104 +129,130 @@ export default function Enquire() {
   };
 
   return (
-    <form className="callback-form" onSubmit={handleSubmit}>
-      <h1>Request a callback?</h1>
-      <h2>Plan Your Himalayan Trek With Us</h2>
+    <div
+      className="enquire-page-container"
+      style={{
+        backgroundImage: `url(${cllbck})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+        minHeight: '100vh',
+        paddingTop: '40px',
+        paddingBottom: '40px',
+        display: 'flex',
+        alignItems: 'flex-start',
+        justifyContent: 'center'
+      }}
+    >
+      <form
+        className="callback-form"
+        onSubmit={handleSubmit}
+        style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.93)',
+          borderRadius: '12px',
+          padding: '40px',
+          maxWidth: '700px',
+          width: '100%',
+          boxShadow: '0 10px 40px rgba(0, 0, 0, 0.2)'
+        }}
+      >
+        <h1>Request a callback?</h1>
+        <h2>Plan Your Himalayan Trek With Us</h2>
 
-      <p>We’ll help you choose the right one, find the best season, and prepare well.
-        Schedule a call with our Trek Advisors for personalised guidance.
-        We’ll reach out during your preferred time within Mon–Fri, 9:30 AM–6:30 PM.</p>
-      
-      {error && <p style={{ color: "#ff4d4d", fontSize: "14px", margin: "8px 0" }}>{error}</p>}
-      {success && <p style={{ color: "#4dff88", fontSize: "14px", margin: "8px 0" }}>{success}</p>}
+        <p>We’ll help you choose the right one, find the best season, and prepare well.
+          Schedule a call with our Trek Advisors for personalised guidance.
+          We’ll reach out during your preferred time within Mon–Fri, 9:30 AM–6:30 PM.</p>
 
-      <label>Name <span className="required">*</span></label>
-      <div className="row">
-        <input
-          type="text"
-          name="firstName"
-          placeholder="First Name "
-          value={formData.firstName}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="lastName"
-          placeholder="Last Name "
-          value={formData.lastName}
-          onChange={handleChange}
-          required
-        />
-      </div>
+        {error && <p style={{ color: "#ff4d4d", fontSize: "14px", margin: "8px 0" }}>{error}</p>}
+        {success && <p style={{ color: "#4dff88", fontSize: "14px", margin: "8px 0" }}>{success}</p>}
 
-      <label>Email <span className="required">*</span> </label>
-      <input
-        type="email"
-        name="email"
-        placeholder="Email"
-        value={formData.email}
-        onChange={handleChange}
-        required
-      />
-
-      <div className="row">
-        <div className="phone-box">
-          <label>Phone <span className="required">*</span></label>
-          <PhoneInput
-            country={"in"}
-            value={formData.phone}
-            onChange={(value) => setFormData({ ...formData, phone: value })}
-            inputProps={{
-              name: "phone",
-              required: true,
-            }}
-            containerClass="phone-container" 
-            inputClass="phone-input"
-            buttonClass="flag-button"
+        <label>Name <span className="required">*</span></label>
+        <div className="row">
+          <input
+            type="text"
+            name="firstName"
+            placeholder="First Name "
+            value={formData.firstName}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="text"
+            name="lastName"
+            placeholder="Last Name "
+            value={formData.lastName}
+            onChange={handleChange}
+            required
           />
         </div>
 
-        <div className="phone-box">
-          <label>Whatsapp Number<span className="required">*</span></label>
-          <PhoneInput
-            country={"in"}
-            value={formData.whatsapp}
-            onChange={(value) => setFormData({ ...formData, whatsapp: value })}
-            inputProps={{
-              name: "whatsapp",
-            }}
-            containerClass="phone-container"
-            inputClass="phone-input"
-            buttonClass="flag-button"
-            required={true}
+        <label>Email <span className="required">*</span> </label>
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
+
+        <div className="row">
+          <div className="phone-box">
+            <label>Phone <span className="required">*</span></label>
+            <PhoneInput
+              country={"in"}
+              value={formData.phone}
+              onChange={(value) => setFormData({ ...formData, phone: value })}
+              inputProps={{
+                name: "phone",
+                required: true,
+              }}
+              containerClass="phone-container"
+              inputClass="phone-input"
+              buttonClass="flag-button"
+            />
+          </div>
+
+          <div className="phone-box">
+            <label>Whatsapp Number<span className="required">*</span></label>
+            <PhoneInput
+              country={"in"}
+              value={formData.whatsapp}
+              onChange={(value) => setFormData({ ...formData, whatsapp: value })}
+              inputProps={{
+                name: "whatsapp",
+              }}
+              containerClass="phone-container"
+              inputClass="phone-input"
+              buttonClass="flag-button"
+              required={true}
+            />
+          </div>
+        </div>
+
+
+
+        {/* City */}
+        <div className="city-field">
+          <label>
+            Which City are you from? <span className="required">*</span>
+          </label>
+
+          <Select
+            options={cityOptions}
+            value={cityOptions.find(option => option.value === formData.city)}
+            onChange={(selected) =>
+              setFormData({ ...formData, city: selected?.value })
+            }
+            placeholder="Search & Select City"
+            isSearchable
           />
         </div>
-      </div>
 
+        {/* Experience */}
+        <label>Do you have previous trekking experience?<span className="required">*</span></label>
 
-
-      {/* City */}
-      <div className="city-field">
-        <label>
-          Which City are you from? <span className="required">*</span>
-        </label>
-
-        <Select
-          options={cityOptions}
-          value={cityOptions.find(option => option.value === formData.city)}
-          onChange={(selected) =>
-            setFormData({ ...formData, city: selected?.value })
-          }
-          placeholder="Search & Select City"
-          isSearchable
-        />
-      </div>
-
-      {/* Experience */}
-      <label>Do you have previous trekking experience?<span className="required">*</span></label>
-
-      <div className='checkbox-group'>
+        <div className='checkbox-group'>
           <label className='checkbox-line'>
             <input
               type="radio"
@@ -258,91 +285,92 @@ export default function Enquire() {
             />
             Yes, 3 or more treks
           </label>
-      </div>
+        </div>
 
-      {/* Concerns */}
-      <label>Any specific concerns you want us to help with?</label>
-      <div className="checkbox-row">
-        <label className="checkbox-item"><input type="checkbox" name='concerns'  value="Fitness" checked={formData.concerns.includes("Fitness")} onChange={handleChange} /> Fitness</label>
-        <label className="checkbox-item"><input type="checkbox" name='concerns' value="Gear" checked={formData.concerns.includes("Gear")} onChange={handleChange} /> Gear</label>
-        <label className="checkbox-item"><input type="checkbox" name='concerns' value="Altitude" checked={formData.concerns.includes("Altitude")} onChange={handleChange} /> Altitude</label>
-      </div>
+        {/* Concerns */}
+        <label>Any specific concerns you want us to help with?</label>
+        <div className="checkbox-row">
+          <label className="checkbox-item"><input type="checkbox" name='concerns' value="Fitness" checked={formData.concerns.includes("Fitness")} onChange={handleChange} /> Fitness</label>
+          <label className="checkbox-item"><input type="checkbox" name='concerns' value="Gear" checked={formData.concerns.includes("Gear")} onChange={handleChange} /> Gear</label>
+          <label className="checkbox-item"><input type="checkbox" name='concerns' value="Altitude" checked={formData.concerns.includes("Altitude")} onChange={handleChange} /> Altitude</label>
+        </div>
 
-      {/* Month */}
-      <label>Which month are you planning for?</label>
-      <input 
-        type="month" 
-        name="month"
-        value={formData.month}
-        onChange={handleChange}
-        required={true}
-      />
+        {/* Month */}
+        <label>Which month are you planning for?</label>
+        <input
+          type="month"
+          name="month"
+          value={formData.month}
+          onChange={handleChange}
+          required={true}
+        />
 
-      {/* Region */}
-      <label>
-        In which region are you planning your trek?
-        <span className="required">*</span>
-      </label>
-      <Select
-        options={trekOptions}
-        placeholder="Search & Select Trek"
-        isSearchable={true}
-        noOptionsMessage={() => "No options found"}
-        value={trekOptions.find(option => option.value === formData.region)}
-        onChange={(selected) => 
-          setFormData({ ...formData, region: selected?.value })
-        }
-      />
-
-      {/* Special Program */}
-      <label>Are you looking for a special program? If yes, then which?</label>
-      <select name="specialProgram" value={formData.specialProgram} onChange={handleChange}>
-        <option value="">Select Program</option>
-        <option>Corporate Trek</option>
-        <option>School Trek</option>
-        <option>Custom Expedition</option>
-        <option>Family Trek with Children</option>
-        <option>Seniors Trek</option>
-      </select>
-
-      {/* Treks */}
-      <div className="treks">
+        {/* Region */}
         <label>
-          Treks <span className="required">*</span>
+          In which region are you planning your trek?
+          <span className="required">*</span>
         </label>
-        <select name="treks" value={formData.treks} onChange={handleChange} required>
-          <option value="">Select Trek</option>
-          <option>Hampta Pass</option>
-          <option>Valley of Flowers</option>
-          <option>Sandakphu Trek</option>
-          <option>Kedarkantha Trek</option>
+        <Select
+          options={trekOptions}
+          placeholder="Search & Select Trek"
+          isSearchable={true}
+          noOptionsMessage={() => "No options found"}
+          value={trekOptions.find(option => option.value === formData.region)}
+          onChange={(selected) =>
+            setFormData({ ...formData, region: selected?.value })
+          }
+        />
+
+        {/* Special Program */}
+        <label>Are you looking for a special program? If yes, then which?</label>
+        <select name="specialProgram" value={formData.specialProgram} onChange={handleChange}>
+          <option value="">Select Program</option>
+          <option>Corporate Trek</option>
+          <option>School Trek</option>
+          <option>Custom Expedition</option>
+          <option>Family Trek with Children</option>
+          <option>Seniors Trek</option>
         </select>
-      </div>
+
+        {/* Treks */}
+        <div className="treks">
+          <label>
+            Treks <span className="required">*</span>
+          </label>
+          <select name="treks" value={formData.treks} onChange={handleChange} required>
+            <option value="">Select Trek</option>
+            <option>Hampta Pass</option>
+            <option>Valley of Flowers</option>
+            <option>Sandakphu Trek</option>
+            <option>Kedarkantha Trek</option>
+          </select>
+        </div>
 
 
-      {/* Call Option */}
-      <label>
-        Do you want a call from us?
-        <span className="required">*</span>
-      </label>
-      <div className="choice">
-        <label className="choice-item"><input type="radio" name="call" value="Yes" checked={formData.call === "Yes"} onChange={handleChange} required /> Yes</label>
-        <label className="choice-item"><input type="radio" name="call" value="No" checked={formData.call === "No"} onChange={handleChange} required /> No</label>
-      </div>
-
-      <div className="slots">
+        {/* Call Option */}
         <label>
-          Please choose a time slot based on your availabilty<span className="required">*</span>
+          Do you want a call from us?
+          <span className="required">*</span>
         </label>
-        <select name="slots" value={formData.slots} onChange={handleChange} required>
-          <option value="">Select slots</option>
-          <option value="11:00 AM to 01:00 PM IST">11 : 00 AM to 01 : 00 PM IST</option>
-          <option value="Not available on above timings">Not available on above timings</option>
-          
-        </select>
-      </div>
-      <button type="submit" disabled={loading}>{loading ? "Submitting..." : "Request Callback"}</button>
-    </form>
+        <div className="choice">
+          <label className="choice-item"><input type="radio" name="call" value="Yes" checked={formData.call === "Yes"} onChange={handleChange} required /> Yes</label>
+          <label className="choice-item"><input type="radio" name="call" value="No" checked={formData.call === "No"} onChange={handleChange} required /> No</label>
+        </div>
+
+        <div className="slots">
+          <label>
+            Please choose a time slot based on your availabilty<span className="required">*</span>
+          </label>
+          <select name="slots" value={formData.slots} onChange={handleChange} required>
+            <option value="">Select slots</option>
+            <option value="11:00 AM to 01:00 PM IST">11 : 00 AM to 01 : 00 PM IST</option>
+            <option value="Not available on above timings">Not available on above timings</option>
+
+          </select>
+        </div>
+        <button type="submit" disabled={loading}>{loading ? "Submitting..." : "Request Callback"}</button>
+      </form>
+    </div>
   );
 
 

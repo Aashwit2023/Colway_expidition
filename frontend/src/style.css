@@ -2,23 +2,32 @@
 @import "tailwindcss";
 
 * {
-  margin: 0; /* Removes default margin from all elements. */
-  padding: 0; /* Removes default padding from all elements. */
-  box-sizing: border-box; /* Includes padding and border in element's total width and height. */
-  font-family: 'Playfair Display', serif; /* Sets default font family for the entire site. */
+  margin: 0;
+  /* Removes default margin from all elements. */
+  padding: 0;
+  /* Removes default padding from all elements. */
+  box-sizing: border-box;
+  /* Includes padding and border in element's total width and height. */
+  font-family: 'Playfair Display', serif;
+  /* Sets default font family for the entire site. */
 }
 
 /* Body styles for the overall page background and text. */
 body {
-  background: #ffffff; /* Sets white background for the page. */
-  color: #333; /* Sets default text color to dark gray. */
-  line-height: 1.6; /* Sets line height for better readability. */
+  background: #ffffff;
+  /* Sets white background for the page. */
+  color: #333;
+  /* Sets default text color to dark gray. */
+  line-height: 1.6;
+  /* Sets line height for better readability. */
 }
 
 /* Link styles to remove underline and inherit color. */
 a {
-  text-decoration: none; /* Removes underline from links. */
-  color: inherit; /* Links inherit color from parent element. */
+  text-decoration: none;
+  /* Removes underline from links. */
+  color: inherit;
+  /* Links inherit color from parent element. */
 }
 
 /* Container class for centering content with max width. */
@@ -29,14 +38,22 @@ a {
 }
 
 /* Navigation bar styles */
-.nav { /* Main navigation bar container, fixed at top of page. */
-  background: #1b365c; /* Dark blue background color. */
-  padding: 20px 0; /* Vertical padding for spacing. */
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2); /* Subtle shadow for depth. */
-  position: fixed; /* Fixed positioning at top of viewport. */
-  top: 0; /* Aligns to top of page. */
-  width: 100%; /* Full width of viewport. */
-  z-index: 1000; /* High z-index to stay above other content. */
+.nav {
+  /* Main navigation bar container, fixed at top of page. */
+  background: #1b365c;
+  /* Dark blue background color. */
+  padding: 20px 0;
+  /* Vertical padding for spacing. */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  /* Subtle shadow for depth. */
+  position: fixed;
+  /* Fixed positioning at top of viewport. */
+  top: 0;
+  /* Aligns to top of page. */
+  width: 100%;
+  /* Full width of viewport. */
+  z-index: 1000;
+  /* High z-index to stay above other content. */
 }
 
 /* .nav-content {
@@ -45,104 +62,167 @@ a {
   align-items: center; 
 } */
 
-.nav h1, .nav h2 { /* Logo/brand name styling. */
-  color: white; /* White color for brand. */
-  font-size: 1.8rem; /* Large font size. */
-  font-weight: 700; /* Bold weight. */
+.nav h1,
+.nav h2 {
+  /* Logo/brand name styling. */
+  color: white;
+  /* White color for brand. */
+  font-size: 1.8rem;
+  /* Large font size. */
+  font-weight: 700;
+  /* Bold weight. */
 }
 
-.links a { /* Navigation link styles. */
-  margin-left: 20px; /* Left margin for spacing. */
-  color: white; /* White text color. */
-  font-weight: 500; /* Medium font weight. */
-  transition: color 0.3s ease; /* Smooth color transition on hover. */
+.links a {
+  /* Navigation link styles. */
+  margin-left: 20px;
+  /* Left margin for spacing. */
+  color: white;
+  /* White text color. */
+  font-weight: 500;
+  /* Medium font weight. */
+  transition: color 0.3s ease;
+  /* Smooth color transition on hover. */
 }
 
-.links a:hover { /* Hover state for nav links. */
-  color: #ffd700; /* Changes to gold on hover. */
+.links a:hover {
+  /* Hover state for nav links. */
+  color: #ffd700;
+  /* Changes to gold on hover. */
 }
 
-.links .btn { /* Sign up button in nav. */
-  background: #ffd700; /* Gold background. */
-  padding: 10px 20px; /* Padding for button size. */
-  border-radius: 25px; /* Rounded corners. */
-  color: #1a365d; /* Dark blue text. */
-  font-weight: 600; /* Semi-bold weight. */
-  transition: all 0.3s ease; /* Smooth transition for all properties. */
+.links .btn {
+  /* Sign up button in nav. */
+  background: #ffd700;
+  /* Gold background. */
+  padding: 10px 20px;
+  /* Padding for button size. */
+  border-radius: 25px;
+  /* Rounded corners. */
+  color: #1a365d;
+  /* Dark blue text. */
+  font-weight: 600;
+  /* Semi-bold weight. */
+  transition: all 0.3s ease;
+  /* Smooth transition for all properties. */
 }
 
-.links .btn:hover { /* Hover state for sign up button. */
-  background: #ffed4e; /* Lighter gold on hover. */
-  transform: translateY(-1px); /* Slight upward movement. */
+.links .btn:hover {
+  /* Hover state for sign up button. */
+  background: #ffed4e;
+  /* Lighter gold on hover. */
+  transform: translateY(-1px);
+  /* Slight upward movement. */
 }
 
 /* Hamburger menu styles */
-.hamburger { /* Hamburger button styling. */
-  display: none; /* Hidden by default (shown on mobile). */
-  flex-direction: column; /* Stack bars vertically. */
-  cursor: pointer; /* Pointer cursor. */
-  background: none; /* No background. */
-  border: none; /* No border. */
-  padding: 5px; /* Small padding. */
+.hamburger {
+  /* Hamburger button styling. */
+  display: none;
+  /* Hidden by default (shown on mobile). */
+  flex-direction: column;
+  /* Stack bars vertically. */
+  cursor: pointer;
+  /* Pointer cursor. */
+  background: none;
+  /* No background. */
+  border: none;
+  /* No border. */
+  padding: 5px;
+  /* Small padding. */
 }
 
-.bar { /* Individual bar styling. */
-  width: 25px; /* Width of bars. */
-  height: 3px; /* Height of bars. */
-  background: white; /* White color. */
-  margin: 3px 0; /* Vertical margin. */
-  transition: 0.3s; /* Smooth transition. */
+.bar {
+  /* Individual bar styling. */
+  width: 25px;
+  /* Width of bars. */
+  height: 3px;
+  /* Height of bars. */
+  background: white;
+  /* White color. */
+  margin: 3px 0;
+  /* Vertical margin. */
+  transition: 0.3s;
+  /* Smooth transition. */
 }
 
 /* Dropdown menu styles */
-.dropdown { /* Container for dropdown menu. */
-  position: relative; /* Positioning context for dropdown. */
-  display: inline-block; /* Inline block for proper alignment. */
+.dropdown {
+  /* Container for dropdown menu. */
+  position: relative;
+  /* Positioning context for dropdown. */
+  display: inline-block;
+  /* Inline block for proper alignment. */
 }
 
-.dropdown-toggle { /* Styles for dropdown toggle button. */
-  cursor: pointer; /* Pointer cursor on hover. */
-  color: white; /* White text color. */
-  font-weight: 500; /* Medium font weight. */
-  transition: color 0.3s ease; /* Smooth color transition. */
+.dropdown-toggle {
+  /* Styles for dropdown toggle button. */
+  cursor: pointer;
+  /* Pointer cursor on hover. */
+  color: white;
+  /* White text color. */
+  font-weight: 500;
+  /* Medium font weight. */
+  transition: color 0.3s ease;
+  /* Smooth color transition. */
 }
 
-.dropdown-toggle:hover { /* Hover state for dropdown toggle. */
-  color: #ffd700; /* Gold color on hover. */
+.dropdown-toggle:hover {
+  /* Hover state for dropdown toggle. */
+  color: #ffd700;
+  /* Gold color on hover. */
 }
 
-.dropdown-menu { /* Styles for dropdown menu. */
-  display: none; /* Hidden by default. */
-  position: absolute; /* Absolute positioning. */
-  background: #1a365d; /* Dark blue background. */
-  min-width: 160px; /* Minimum width. */
-  box-shadow: 0 8px 16px rgba(0,0,0,0.2); /* Shadow for depth. */
-  z-index: 1001; /* High z-index to appear above other content. */
-  border-radius: 5px; /* Rounded corners. */
+.dropdown-menu {
+  /* Styles for dropdown menu. */
+  display: none;
+  /* Hidden by default. */
+  position: absolute;
+  /* Absolute positioning. */
+  background: #1a365d;
+  /* Dark blue background. */
+  min-width: 160px;
+  /* Minimum width. */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  /* Shadow for depth. */
+  z-index: 1001;
+  /* High z-index to appear above other content. */
+  border-radius: 5px;
+  /* Rounded corners. */
 }
 
-.dropdown:hover .dropdown-menu { /* Show dropdown on hover. */
-  display: block; /* Display dropdown. */
+.dropdown:hover .dropdown-menu {
+  /* Show dropdown on hover. */
+  display: block;
+  /* Display dropdown. */
 }
 
-.dropdown-menu a { /* Styles for dropdown links. */
-  color: white; /* White text color. */
-  padding: 12px 16px; /* Padding for links. */
-  text-decoration: none; /* Remove underline. */
-  display: block; /* Block display for full width. */
-  transition: background 0.3s ease; /* Smooth background transition. */
+.dropdown-menu a {
+  /* Styles for dropdown links. */
+  color: white;
+  /* White text color. */
+  padding: 12px 16px;
+  /* Padding for links. */
+  text-decoration: none;
+  /* Remove underline. */
+  display: block;
+  /* Block display for full width. */
+  transition: background 0.3s ease;
+  /* Smooth background transition. */
 }
 
-.dropdown-menu a:hover { /* Hover state for dropdown links. */
-  background: #2d3748; /* Darker background on hover. */
+.dropdown-menu a:hover {
+  /* Hover state for dropdown links. */
+  background: #2d3748;
+  /* Darker background on hover. */
 }
 
 .hero {
   height: 100vh;
   background:
-    radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
-    linear-gradient(rgba(0,0,0,.3), rgba(0,0,0,.5)),
+    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    linear-gradient(rgba(0, 0, 0, .3), rgba(0, 0, 0, .5)),
     url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
   background-size: cover, cover, cover, cover;
   background-position: center, center, center, center;
@@ -221,14 +301,14 @@ a {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(255,215,0,0.05), rgba(26,54,93,0.05));
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.05), rgba(26, 54, 93, 0.05));
   opacity: 0;
   transition: opacity 0.3s ease;
 }
 
 .reason-card:hover {
   transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
 }
 
 .reason-card:hover::before {
@@ -250,7 +330,7 @@ a {
   color: #666;
   font-family: 'Lato', sans-serif;
   font-size: 0.95rem;
-} 
+}
 
 
 /* Stories From Travelers */
@@ -280,6 +360,7 @@ a {
   0% {
     transform: translateX(0);
   }
+
   100% {
     transform: translateX(-50%);
   }
@@ -290,7 +371,7 @@ a {
   padding: 30px;
   border-radius: 15px;
   text-align: center;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   min-width: 400px;
   margin-right: 30px;
   transition: transform 0.3s ease;
@@ -344,7 +425,7 @@ a {
   background: white;
   padding: 30px;
   border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
   overflow: hidden;
@@ -357,14 +438,14 @@ a {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(26,54,93,0.05), rgba(255,215,0,0.05));
+  background: linear-gradient(135deg, rgba(26, 54, 93, 0.05), rgba(255, 215, 0, 0.05));
   opacity: 0;
   transition: opacity 0.3s ease;
 }
 
 .team-member:hover {
   transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
 }
 
 .team-member:hover::before {
@@ -448,30 +529,48 @@ a {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .hamburger { /* Show hamburger on mobile. */
-    display: flex; /* Flex display. */
+  .hamburger {
+    /* Show hamburger on mobile. */
+    display: flex;
+    /* Flex display. */
   }
 
-  .links { /* Hide links by default on mobile. */
-    display: none; /* Hidden. */
-    position: absolute; /* Absolute positioning. */
-    top: 100%; /* Below navbar. */
-    left: 0; /* Align to left. */
-    width: 100%; /* Full width. */
-    background: #1a365d; /* Dark blue background. */
-    flex-direction: column; /* Stack links vertically. */
-    padding: 20px 0; /* Vertical padding. */
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2); /* Shadow. */
+  .links {
+    /* Hide links by default on mobile. */
+    display: none;
+    /* Hidden. */
+    position: absolute;
+    /* Absolute positioning. */
+    top: 100%;
+    /* Below navbar. */
+    left: 0;
+    /* Align to left. */
+    width: 100%;
+    /* Full width. */
+    background: #1a365d;
+    /* Dark blue background. */
+    flex-direction: column;
+    /* Stack links vertically. */
+    padding: 20px 0;
+    /* Vertical padding. */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    /* Shadow. */
   }
 
-  .links.open { /* Show links when open. */
-    display: flex; /* Flex display. */
+  .links.open {
+    /* Show links when open. */
+    display: flex;
+    /* Flex display. */
   }
 
-  .links a { /* Style links in mobile menu. */
-    margin: 10px 20px; /* Margin for spacing. */
-    padding: 10px 0; /* Vertical padding. */
-    border-bottom: 1px solid rgba(255,255,255,0.1); /* Subtle border. */
+  .links a {
+    /* Style links in mobile menu. */
+    margin: 10px 20px;
+    /* Margin for spacing. */
+    padding: 10px 0;
+    /* Vertical padding. */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    /* Subtle border. */
   }
 
   .hero {
@@ -508,9 +607,11 @@ a {
 
   .nav {
     padding: 15px 0;
+    /* Vertical padding. */
   }
 
-  .nav h1, .nav h2 {
+  .nav h1,
+  .nav h2 {
     font-size: 1.5rem;
   }
 
@@ -551,7 +652,7 @@ a {
   background: white;
   padding: 30px;
   border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
 }
@@ -671,11 +772,11 @@ a {
 
 .callback-form {
   max-width: 600px;
-  margin: 100px auto;
+  margin: 50px auto;
   background: white;
   padding: 40px;
   border-radius: 15px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
   font-family: 'Playfair Display', serif;
@@ -687,8 +788,9 @@ a {
   margin-bottom: 2px;
   color: #160e83;
   font-size: 40px;
-  
+
 }
+
 .callback-form h2 {
   text-align: center;
   /* margin-top: 1px;
@@ -696,12 +798,14 @@ a {
   color: #333;
   font-size: 28px;
 }
+
 .callback-form p {
   text-align: center;
   margin-bottom: 16px;
   color: #5a5858;
   font-size: 14px;
 }
+
 .callback-form input,
 .callback-form select,
 .callback-form button {
@@ -723,7 +827,7 @@ label {
   margin-top: 10px;
   font-weight: 500;
   color: #363232;
-  font-size: 18px ;
+  font-size: 18px;
 }
 
 
@@ -760,13 +864,14 @@ label {
   border-color: #f3b322 !important;
   box-shadow: 0 0 0 2px rgba(243, 179, 34, 0.2) !important;
 }
+
 @media (max-width: 768px) {
   .phone-input {
     font-size: 13px !important;
   }
 }
 
-.checkbox-group{
+.checkbox-group {
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -777,16 +882,20 @@ label {
 
 .checkbox-line {
   display: flex;
-  align-items: center;  /* vertical alignment fix */
-  gap: 1.5px;              /* space between checkbox & text */
-  white-space: nowrap;   /* keeps sentence in one row */
+  align-items: center;
+  /* vertical alignment fix */
+  gap: 1.5px;
+  /* space between checkbox & text */
+  white-space: nowrap;
+  /* keeps sentence in one row */
   cursor: pointer;
   font-size: 15px;
   line-height: 0.4;
 }
 
 .checkbox-line input {
-  margin-right: 10px;   /*  proper spacing */
+  margin-right: 10px;
+  /*  proper spacing */
   width: 16px;
   height: 16px;
 }
@@ -799,7 +908,8 @@ label {
 
 
 .checkbox-row {
-  display: flex;  /*  equal spacing in each option across full width */
+  display: flex;
+  /*  equal spacing in each option across full width */
   width: 100%;
   margin-top: 0;
   margin-bottom: 15px;
@@ -809,14 +919,16 @@ label {
 .checkbox-item {
   display: flex;
   /* align-items: center; */
-  gap: 5px;   /* small space between checkbox and text */
+  gap: 5px;
+  /* small space between checkbox and text */
   cursor: pointer;
   font-size: 15px;
   line-height: 1.2;
 }
 
 .checkbox-item input {
-  margin: 0;  /* removes default spacing */
+  margin: 0;
+  /* removes default spacing */
   width: 16px;
   height: 16px;
 }
@@ -862,19 +974,21 @@ select {
   color: white !important;
 }
 
-.treks{
+.treks {
   width: 50%;
   border-color: #f3b322;
 }
-.choice{
+
+.choice {
   display: flex;
   gap: 60px;
 }
 
-.choice-item{
+.choice-item {
   display: flex;
   align-items: center;
-  gap: 5px;   /* small space between checkbox and text */
+  gap: 5px;
+  /* small space between checkbox and text */
   cursor: pointer;
   font-size: 15px;
 }
@@ -890,4 +1004,3 @@ select {
 .callback-form button:hover {
   background: #e66a15;
 }
-

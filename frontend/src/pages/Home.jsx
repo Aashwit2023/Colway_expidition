@@ -1,64 +1,117 @@
 import { Link } from "react-router-dom";
-  import ImageSlider from "../components/ImageSlider";
-  import ExploreTheme from "../components/Cards/ExploreTheme";
-  import adventure from "../assets/adventure.jpg";
-  import culture from "../assets/culture.jpg";
-  import trekking from "../assets/trekking.jpg";
-  import baliPassCamp from "../assets/bali_pass.jpg";
-  import everest_base_camp from "../assets/everest_base_camp.jpg";
-  import frndship from "../assets/friendship_peak.jpg";
+import TrekSlider from "../components/TrekSlider";
+import ExploreTheme from "../components/Cards/ExploreTheme";
+import adventure from "../assets/adventure.jpg";
+import culture from "../assets/culture.jpg";
+import trekking from "../assets/trekking.jpg";
+import baliPassCamp from "../assets/bali_pass.jpg";
+import kailash from "../assets/kailash.jpg";
+import everest_base_camp from "../assets/everest_base_camp.jpg";
+import frndship from "../assets/friendship_peak.jpg";
+import trekking1 from "../assets/trekking1.jpg";
+import trekking2 from "../assets/trekking2.jpg";
+import cultural from "../assets/cultural.jpg"; 
+import buran_ghati from "../assets/buran_ghati.jpg"; 
+import punchkula from "../assets/punchkula.jpg"
+import FAQ from "../components/FAQ/FAQ.jsx";
 
-  export default function Home() {
-    const themes = [
-          {
-            image: adventure,
-            title: "Adventure",
-            description: "Thrilling expeditions for the bold explorer."
-          },
-          {
-            image: culture,
-            title: "Cultural Immersion",
-            description: "Dive deep into local traditions and heritage."
-          },
-          {
-            image: trekking,
-            title: "Trekking",
-            description: "Epic trails through the world's most stunning landscapes."
-          }
-        ];
-        
 
-    const Destination = [
-          {
-            image: baliPassCamp,
-            title: "Bali Pass Camp, India",
-            description: "Experience the serene beauty of Bali Pass Camp, nestled in the heart of India's wilderness. Enjoy luxurious tents, breathtaking views, and unforgettable adventures."
-          },
-          {
-            image: everest_base_camp,
-            title: "Everest Base Camp, Nepal",
-            description: "Embark on a once-in-a-lifetime trek to Everest Base Camp. Witness the majestic Himalayas, vibrant Sherpa culture, and the thrill of standing at the foot of the world's highest peak."
-          },
-          {
-            image: frndship,
-            title: "Friendship Trek",
-            description: "Celebrate the universal bond of friendship with our unique travel experiences designed to connect you with people and cultures around the world."
-          } 
-        ];
+export default function Home() {
+  const themes = [
+    {
+      image: trekking1,
+      title: "Expeditions",
+      description: "Explore high-altitude expeditions and challenging mountain adventures for experienced trekkers.",
+      link: "/expeditions"
+    },
+    {
+      image: trekking2,
+      title: "Trekking",
+      description: "Discover breathtaking trails and scenic routes through stunning landscapes and mountain valleys.",
+      link: "/trekking"
+    },
+    {
+      image: cultural,
+      title: "Villages",
+      description: "Experience authentic local culture and traditions in remote Himalayan villages.",
+      link: "/villages"
+    },
+    {
+      image: kailash,
+      title: "Kailash Trek",
+      description: "Embark on a spiritual pilgrimage to the sacred Mount Kailash and nearby regions.",
+      link: "/kailash-trek"
+    }
+  ];
+      
+
+  const Destination = [
+        {
+          image: baliPassCamp,
+          title: "Bali Pass Camp, India",
+          description: "Experience the serene beauty of Bali Pass Camp, nestled in the heart of India's wilderness. Enjoy luxurious tents, breathtaking views, and unforgettable adventures."
+        },
+        {
+          image: buran_ghati,
+          title: "Buran Ghati Trek, India",
+          description: "A scenic high-altitude mountain pass, popular among trekkers for its dramatic landscapes. The trail passes through dense forests, alpine meadows, and snow-covered slopes, offering breathtaking Himalayan views."
+
+        },
+        {
+          image: punchkula,
+          title: "Panchkula Trek, India",
+          description: "Explore the natural beauty of Panchkula through its serene trekking trails nestled in the Shivalik range. From forest walks to hilltop views,the experience combines adventure with tranquility."
+        },
+        {
+          image: frndship,
+          title: "Friendship Peak, India",
+          description: "Celebrate the universal bond of friendship with our unique travel experiences designed to connect you with people and cultures around the world."
+        } 
+      ];
+
+  const treks = [
+    {
+      image: trekking1,
+      title: "Himalayan Expeditions",
+      location: "High-Altitude Mastery",
+      description: "Conquer the giants of the world. Our expertly guided expeditions provide the ultimate challenge for seasoned adventurers seeking the roof of the world.",
+      duration: "14-21 Days",
+      grade: "Elite Level",
+      link: "/expeditions"
+    },
+    {
+      image: trekking2,
+      title: "Alpine Trekking",
+      location: "The Path Less Traveled",
+      description: "Discover hidden valleys and ancient trails. From lush forests to stark glacial moraines, experience the diverse beauty of the mountains at every step.",
+      duration: "7-12 Days",
+      grade: "All Levels",
+      link: "/trekking"
+    },
+    {
+      image: cultural,
+      title: "Village Immersion",
+      location: "Heart of the Mountains",
+      description: "Step into a world of tradition. Experience authentic Himalayan hospitality and ancient cultural heritage in remote mountain settlements.",
+      duration: "5-8 Days",
+      grade: "Cultural",
+      link: "/villages"
+    },
+    {
+      image: kailash,
+      title: "Mount Kailash Kora",
+      location: "The Sacred Pilgrimage",
+      description: "Embark on the ultimate spiritual journey. A transformative experience around the mystical Mount Kailash, the center of the spiritual universe.",
+      duration: "18-22 Days",
+      grade: "Spiritual",
+      link: "/kailash-trek"
+    }
+  ];
     return (
       <>
-        <div className="hero">
-          <div className="overlay">
-            <h1>Discover Extraordinary Journeys</h1>
-            <p>
-              Embark on unparalleled adventures crafted for the discerning
-              traveler.
-            </p>
-            <Link to= "/enquire"><button>Start Your Journey</button></Link>
-          </div>
-        </div>
-        
-        <ExploreTheme items={themes} heading="Explore By Theme"/>
+        <TrekSlider treks={treks} />
+
+        <ExploreTheme items={themes} heading="Popular Adventures"/>
 
         <section className="why-choose-us container">
           <h2>Why Travelers Choose Us</h2>
@@ -89,7 +142,7 @@ import { Link } from "react-router-dom";
           </div>
         </section>
 
-        <ExploreTheme items={Destination} heading="Our Destination" /> 
+        <ExploreTheme items={Destination} heading="Recently Visited Treks" /> 
 
         <section className="stories container">
 
@@ -228,36 +281,9 @@ import { Link } from "react-router-dom";
           </div>
         </section>
 
-        <footer className="footer">
-          <div className="container">
-            <div className="footer-content">
-              <div className="footer-section">
-                <h3>TravelX</h3>
-                <p>Creating extraordinary travel experiences since 2015.</p>
-              </div>
+        <FAQ />
 
-              <div className="footer-section">
-                <h4>Quick Links</h4>
-                <ul>
-                  <li><a href="#">Destinations</a></li>
-                  <li><a href="#">Experiences</a></li>
-                  <li><a href="#">About Us</a></li>
-                  <li><a href="/Contact">Contact</a></li>
-                </ul>
-              </div>
 
-              <div className="footer-section">
-                <h4>Contact Info</h4>
-                <p>info@travelx.com</p>
-                <p>+91 9856367254</p>
-              </div>
-            </div>
-
-            <div className="footer-bottom">
-              <p>&copy; 2026 TravelX. All rights reserved.</p>
-            </div>
-          </div>
-        </footer>
       </>
     );
   }
