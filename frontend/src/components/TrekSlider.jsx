@@ -37,20 +37,21 @@ export default function TrekSlider({ treks }) {
         <button className="absolute top-1/2 -translate-y-1/2 bg-black/38 text-white border-none w-11 h-11 rounded-full cursor-pointer text-xl z-10 transition-all duration-400 hover:bg-black/65 hover:scale-105 left-2.5" onClick={prevSlide}>
           &#10094;
         </button>
-        <div className="overflow-hidden rounded-lg max-h-[590px]" ref={sliderRef}>
+        <div className="overflow-hidden rounded-lg h-[590px]" ref={sliderRef}>
           <div
-            className="flex transition-transform duration-500 ease-in-out"
+            className="flex transition-transform duration-500 ease-in-out h-full"
             style={{ transform: `translateX(-${currentIndex * 100}%)` }}
           >
             {treks.map((trek, index) => (
-              <div key={index} className="min-w-full relative rounded-lg overflow-hidden shadow-sm">
-                <img src={trek.image} alt={trek.title} className="w-full h-[575px] object-cover" />
-                <div className="absolute inset-0 right-auto w-[clamp(320px,42%,460px)] font-bold text-white p-12  flex flex-col justify-center">
+              <div key={index} className="min-w-full relative rounded-lg overflow-hidden shadow-sm h-full">
+                <img src={trek.image} alt={trek.title} className="w-full h-full object-cover" />
+                <div className="absolute inset-y-0 left-0 w-[clamp(320px,42%,460px)] bg-gradient-to-r from-black/80 via-black/40 to-transparent z-10 pointer-events-none"></div>
+                <div className="absolute inset-y-0 left-0 w-[clamp(320px,42%,460px)] font-bold text-white p-12 flex flex-col justify-center  z-20">
                   <h3 className="text-4xl mb-4 font-extrabold leading-tight">{trek.title}</h3>
                   <p className="text-lg mb-3 opacity-90">{trek.location}</p>
                   <p className="text-lg leading-relaxed mb-13 max-w-full opacity-92">{trek.description}</p>
                   <div className="flex justify-between gap-3 mb-5">
-                    <span className="bg-blue-800/20  px-4 py-1 rounded-full text-sm">{trek.duration}</span>
+                    <span className="bg-blue-800/20 px-4 py-1 rounded-full text-sm">{trek.duration}</span>
                     <span className="bg-blue-800/22 text-white px-4 py-1 rounded-full text-sm">{trek.grade}</span>
                   </div>
                   <Link to={trek.link} className="mt-10 inline-flex items-center justify-center text-white px-4 py-3 no-underline rounded-full border-2 border-blue-950 bg-blue-500/15 font-black text-lg transition-all duration-300 hover:bg-blue-950">
