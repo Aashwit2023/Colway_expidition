@@ -28,6 +28,9 @@ export default function Footer() {
               <li>
                 <Link to="/#faq">FAQ</Link>
               </li>
+              <li>
+                <Link to="/cancellation-policy">Cancellation Policy</Link>
+              </li>
             </ul>
           </div>
 
@@ -56,7 +59,7 @@ export default function Footer() {
         </div>
 
         <div className="footer-bottom">
-          <p>&copy; 2026 TravelX. All rights reserved.</p>
+          <p>&copy; 2026 Colway Expeditions. All rights reserved.</p>
         </div>
       </div>
     </footer>

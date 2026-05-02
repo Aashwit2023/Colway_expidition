@@ -59,7 +59,7 @@ export default function Login() {
         <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-16">
           <form onSubmit={handleSubmit} className="w-full max-w-[500px] rounded-3xl bg-white/17 border border-white/30 p-6">
             <div className="auth"> 
-              <h2>Login to TravelX</h2>
+              <h2>Login to Colway Expeditions</h2>
               <p>Welcome back! Please sign in to your account.</p> 
 
               {error && <p style={{ color: "#ff4d4d", fontSize: "14px", margin: "8px 0" }}>{error}</p>}

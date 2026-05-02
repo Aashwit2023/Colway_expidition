@@ -78,7 +78,7 @@ export default function Signup() {
       <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-20">
         <form onSubmit={handleSubmit} className="w-full max-w-[500px] rounded-3xl bg-white/20 border border-white/20 p-3">
           <div className="auth">
-            <h2>Join TravelX</h2>
+            <h2>Join Colway Expeditions</h2>
             <p>Create your account to start exploring amazing destinations.</p>
 
             {error && <p style={{ color: "#ff4d4d", fontSize: "14px", margin: "8px 0" }}>{error}</p>}
