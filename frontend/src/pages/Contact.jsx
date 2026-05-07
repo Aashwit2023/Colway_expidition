@@ -77,7 +77,7 @@ export default function ContactUs() {
             <input
               type="text"
               name="name"
-              placeholder="Name"
+              placeholder="Full Name"
               value={formData.name}
               onChange={handleChange}
               required
@@ -123,6 +123,7 @@ export default function ContactUs() {
 
           </form>
 
+        </div>
         </div>
       </div>
     </div>
