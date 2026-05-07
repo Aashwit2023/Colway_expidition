@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { X, Calendar, MapPin, TrendingUp, Info, CheckCircle2 } from 'lucide-react';
+import { X, Calendar, MapPin, TrendingUp, Info, CheckCircle2, Users, Mountain, Home } from 'lucide-react';
 
 const TrekModal = ({ trek, isOpen, onClose }) => {
   const [activeImage, setActiveImage] = useState(trek?.image);
@@ -41,41 +41,49 @@ const TrekModal = ({ trek, isOpen, onClose }) => {
 
   if (!isOpen || !trek) return null;
 
+  const iconMap = {
+    difficulty: TrendingUp,
+    duration: Calendar,
+    altitude: Mountain,
+    users: Users,
+    location: MapPin,
+    tent: Home,
+  };
+
   return (
     <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 -mb-20 -mt-5">
       {/* Blurred Backdrop */}
-      <div 
+      <div
         className="absolute inset-0 bg-black/70 backdrop-blur-xl transition-opacity duration-300"
         onClick={onClose}
       />
 
       {/* Modal Content container */}
       <div className="relative bg-white w-full max-w-4xl max-h-[90vh] rounded-[2rem] shadow-2xl overflow-hidden flex flex-col transform transition-all duration-500 scale-100 opacity-100">
-        
+
         {/* Scrollable Container */}
-        <div 
+        <div
           ref={scrollRef}
           className="overflow-y-auto w-full scroll-smooth"
         >
           {/* Top Section: Image Gallery */}
           <div className="w-full h-[50vh] md:h-[65vh] relative bg-gray-100">
-            <img 
-              src={activeImage} 
-              alt={trek.title} 
+            <img
+              src={activeImage}
+              alt={trek.title}
               className="w-full h-full object-cover transition-all duration-700"
             />
             {/* Thumbnails Overlay */}
             <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 px-4 w-full max-w-xl justify-center overflow-x-auto pb-2 scrollbar-hide">
               {(trek.images || [trek.image]).map((img, idx) => (
-                <button 
+                <button
                   key={idx}
                   onClick={(e) => {
                     e.stopPropagation();
                     setActiveImage(img);
                   }}
-                  className={`flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-xl overflow-hidden border-2 transition-all ${
-                    activeImage === img ? 'border-orange-500 scale-110 shadow-lg' : 'border-white/50 opacity-70 hover:opacity-100'
-                  }`}
+                  className={`flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-xl overflow-hidden border-2 transition-all ${activeImage === img ? 'border-orange-500 scale-110 shadow-lg' : 'border-white/50 opacity-70 hover:opacity-100'
+                    }`}
                 >
                   <img src={img} className="w-full h-full object-cover" alt="" />
                 </button>
@@ -83,7 +91,7 @@ const TrekModal = ({ trek, isOpen, onClose }) => {
             </div>
 
             {/* Float Close Button - Top Right of Image */}
-            <button 
+            <button
               onClick={onClose}
               className="absolute top-6 right-6 z-50 p-3 bg-black/20 hover:bg-black/40 backdrop-blur-md rounded-full text-white transition-all hover:rotate-90"
             >
@@ -99,7 +107,7 @@ const TrekModal = ({ trek, isOpen, onClose }) => {
                   <MapPin size={14} />
                   {trek.location || 'Himalayas'}
                 </div>
-                
+
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-6">
                   <h2 className="text-4xl md:text-6xl font-black text-gray-900 tracking-tighter italic leading-none">
                     {trek.title}
@@ -113,8 +121,8 @@ const TrekModal = ({ trek, isOpen, onClose }) => {
                     </button>
                   </div>
                 </div>
-                
-                <div className="flex flex-wrap gap-4 mb-8">
+
+                {/* <div className="flex flex-wrap gap-4 mb-8">
                   <div className="flex items-center gap-2 px-4 py-2 bg-gray-50 border border-gray-100 rounded-2xl text-sm font-bold text-gray-600">
                     <Calendar size={18} className="text-blue-500" />
                     {trek.days}
@@ -123,7 +131,44 @@ const TrekModal = ({ trek, isOpen, onClose }) => {
                     <TrendingUp size={18} className="text-orange-500" />
                     {trek.difficulty}
                   </div>
-                </div>
+                </div> */}
+
+
+                {/* Trek Info Grid */}
+
+                {trek.info && (
+                  <div className="mb-12">
+                    <h4 className="text-2xl font-black text-gray-900 mb-6 italic tracking-tight">
+                      Trek Details
+                    </h4>
+
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                      {trek.info.map((item, i) => {
+                        const Icon = iconMap[item.icon];
+
+                        return (
+                          <div
+                            key={i}
+                            className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl border border-gray-100"
+                          >
+                            <div className="p-2 bg-orange-100 rounded-lg">
+                              {Icon && <Icon size={20} className="text-orange-500" />}
+                            </div>
+
+                            <div>
+                              <p className="text-xs font-bold text-gray-400 uppercase">
+                                {item.label}
+                              </p>
+                              <p className="text-sm font-semibold text-gray-800">
+                                {item.value}
+                              </p>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
 
                 <p className="text-lg text-gray-600 font-light leading-relaxed mb-10">
                   {trek.fullDescription || trek.description}
@@ -146,18 +191,46 @@ const TrekModal = ({ trek, isOpen, onClose }) => {
               )}
 
               {/* Inclusions */}
-              {trek.inclusions && (
+              {trek.inclusions?.length > 0 && (
                 <div className="mb-12">
-                  <h4 className="text-2xl font-black text-gray-900 mb-6 italic tracking-tight">What's Included</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-y-3 gap-x-8">
-                    {trek.inclusions.map((inc, i) => (
-                      <div key={i} className="text-base text-gray-500 flex items-start gap-3">
-                        <div className="w-2 h-2 bg-orange-400 rounded-full mt-2 shrink-0" />
-                        {inc}
-                      </div>
-                    ))}
+                  <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6 w-full">
+
+                    <h4 className="text-lg font-bold text-center mb-4 uppercase">
+                      What's Included
+                    </h4>
+
+                    <div className="space-y-3">
+                      {trek.inclusions.map((inc, i) => (
+                        <div key={i} className="flex items-start gap-3 text-gray-700 text-sm">
+                          <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                          {inc}
+                        </div>
+                      ))}
+                    </div>
+
                   </div>
                 </div>
+              )}
+
+              {/* Non-Inclusions */}
+              {trek.nonincludions?.length > 0 && (
+                <div className="mb-12">
+                  <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6 w-full">
+
+                    <h4 className="text-lg font-bold text-center mb-4 uppercase">
+                      What's Not Included
+                    </h4>
+
+                    <div className="space-y-3">
+                      {trek.nonincludions.map((inc, i) => (
+                        <div key={i} className="flex items-start gap-3 text-gray-700 text-sm">
+                          <div className="w-2 h-2 bg-red-500 rounded-full mt-2"></div>
+                          {inc}
+                        </div>
+                      ))}
+                    </div>
+                    </div>
+                    </div>
               )}
             </div>
           </div>

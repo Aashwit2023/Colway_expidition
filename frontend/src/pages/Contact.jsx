@@ -50,7 +50,7 @@ export default function ContactUs() {
           <div>
             <h4 className="font-semibold mb-2 text-sm md:text-base">Socials</h4>
 
-              <div className="flex gap-4 mt-2">
+            <div className="flex gap-4 mt-2">
 
               <span className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center font-bold cursor-pointer hover:bg-gray-300 text-sm">
                 F
@@ -64,10 +64,10 @@ export default function ContactUs() {
                 Ig
               </span>
 
-              </div>
             </div>
-
           </div>
+
+        </div>
 
         {/* Right Section */}
         <div className="w-full md:w-[60%] p-6 md:p-10">
