@@ -59,7 +59,7 @@ export default function Trekking() {
       title: "Buran Ghati Trek",
       description: "An adventurous trek featuring lush valleys, high passes, and a thrilling descent.",
       hasModal: true,
-      price: "₹14,999",
+      price: "₹16,750",
       location: "Himachal Pradesh",
       images: [trekking2, trekking3, trekking1],
       highlights: [
