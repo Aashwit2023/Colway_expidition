@@ -76,9 +76,9 @@ export default function Signup() {
       style={{ backgroundImage: `url(${signimg})` }}
     >
       <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-20">
-        <form onSubmit={handleSubmit} className="w-full max-w-[500px] rounded-3xl bg-white/20 border border-white/20 p-3">
+        <form onSubmit={handleSubmit} className="w-full max-w-[500px] rounded-3xl  p-3">
           <div className="auth">
-            <h2>Join Colway Expeditions</h2>
+            <h2 className="text-3xl font-bold text-white mb-4">Join Colway Expeditions</h2>
             <p>Create your account to start exploring amazing destinations.</p>
 
             {error && <p style={{ color: "#ff4d4d", fontSize: "14px", margin: "8px 0" }}>{error}</p>}
@@ -129,9 +129,9 @@ export default function Signup() {
               required
             />
             <div className="terms">
-              <label>
+              <label className="text-sm text-black/80">
                 <input type="checkbox" required />
-                I agree to the <Link to="/terms">Terms and Conditions</Link> and <Link to="/privacy">Privacy Policy</Link>
+                I agree to the  <Link to="/terms" className="mx-1"> Terms and Conditions </Link> and <Link to="/privacy" className="mx-1 text-blue-600 hover:underline">Privacy Policy</Link>
               </label>
             </div>
             <button disabled={loading}>{loading ? "Creating Account..." : "Create Account"}</button>

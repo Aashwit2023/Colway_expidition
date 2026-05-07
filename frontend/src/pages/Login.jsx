@@ -57,9 +57,9 @@ export default function Login() {
         style={{ backgroundImage: `url(${loginimg})` }}
       >
         <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-16">
-          <form onSubmit={handleSubmit} className="w-full max-w-[500px] rounded-3xl bg-white/17 border border-white/30 p-6">
+          <form onSubmit={handleSubmit} className="w-full max-w-[500px] rounded-3x p-6">
             <div className="auth"> 
-              <h2>Login to Colway Expeditions</h2>
+              <h2 className="text-2xl font-bold text-white">Login to Colway Expeditions</h2>
               <p>Welcome back! Please sign in to your account.</p> 
 
               {error && <p style={{ color: "#ff4d4d", fontSize: "14px", margin: "8px 0" }}>{error}</p>}
@@ -73,7 +73,7 @@ export default function Login() {
                 onChange={handleInput}
                 required /> 
               <div className="remember-forgot"> 
-                <label>
+                <label className="text-sm text-black/80">
                   <input type="checkbox" /> Remember me 
                 </label> 
                 <Link to="/forgot-password">Forgot password?</Link> 

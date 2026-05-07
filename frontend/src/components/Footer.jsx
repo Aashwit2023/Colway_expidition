@@ -8,6 +8,8 @@ export default function Footer() {
           <div className="footer-section">
             <h3>Colway Expedition</h3>
             <p>Creating extraordinary travel experiences since 2025.</p>
+            <p>Model town, Manali</p>
+            <p>Himachal Pradesh, 175131</p>
           </div>
 
           <div className="footer-section">
