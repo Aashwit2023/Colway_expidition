@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "../style.css"
 import contactimg from '../assets/contact.jpg';
+import toast from 'react-hot-toast';
 
 export default function ContactUs() {
 
@@ -20,8 +21,14 @@ export default function ContactUs() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert("Message Sent!");
+    toast.success("Message Sent! We will get back to you soon.");
     console.log(formData);
+    setFormData({
+      name: "",
+      email: "",
+      subject: "",
+      message: "",
+    });
   };
 
   return (

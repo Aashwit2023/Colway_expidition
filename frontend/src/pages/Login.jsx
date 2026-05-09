@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { loginUser } from '../api/api';
 import loginimg from '../assets/loginimg.jpg';
+import toast from 'react-hot-toast';
 
 
 export default function Login() {
@@ -11,8 +12,6 @@ export default function Login() {
   });
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
 
   const handleInput = (e) => {
     let name = e.target.name;
@@ -27,24 +26,22 @@ export default function Login() {
   // Handling the form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    setSuccess("");
     setLoading(true);
 
     try {
       const {response, data} = await  loginUser(user.email, user.password);
 
       if (response.ok) {
-        setSuccess(data.message || "Logged in successfully!");
+        toast.success(data.message || "Logged in successfully!");
         setUser({
           email: "",
           password: "",
         });
       } else {
-        setError(data.message || "Login failed. Please check your Credentials.");
+        toast.error(data.message || "Login failed. Please check your Credentials.");
       }
     } catch (err) {
-      setError("An error occurred. Please try again later.");
+      toast.error("An error occurred. Please try again later.");
     } finally {
       setLoading(false);
     }
@@ -57,31 +54,35 @@ export default function Login() {
         style={{ backgroundImage: `url(${loginimg})` }}
       >
         <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-16">
-          <form onSubmit={handleSubmit} className="w-full max-w-[500px] rounded-3x p-6">
-            <div className="auth"> 
-              <h2 className="text-2xl font-bold text-white">Login to Colway Expeditions</h2>
-              <p>Welcome back! Please sign in to your account.</p> 
-
-              {error && <p style={{ color: "#ff4d4d", fontSize: "14px", margin: "8px 0" }}>{error}</p>}
-              {success && <p style={{ color: "#4dff88", fontSize: "14px", margin: "8px 0" }}>{success}</p>}
+          <form onSubmit={handleSubmit} className="w-full max-w-[450px]">
+            <div className="bg-white/95 backdrop-blur-sm p-8 rounded-2xl shadow-2xl flex flex-col"> 
+              <h2 className="text-3xl font-bold text-gray-800 mb-2">Login to Colway Expeditions</h2>
+              <p className="text-gray-600 mb-6 text-sm font-medium">Welcome back! Please sign in to your account.</p> 
               <input type="email" name="email" placeholder="Email" 
+                className="mb-4 p-3 border border-gray-300 rounded-lg focus:border-[#ff7a18] focus:ring-2 focus:ring-[#ff7a18]/20 outline-none transition-all"
                 value = {user.email}
                 onChange={handleInput}
                 required /> 
               <input type="password" name= "password" placeholder="Password"
+                className="mb-4 p-3 border border-gray-300 rounded-lg focus:border-[#ff7a18] focus:ring-2 focus:ring-[#ff7a18]/20 outline-none transition-all"
                 value = {user.password}
                 onChange={handleInput}
                 required /> 
-              <div className="remember-forgot"> 
-                <label className="text-sm text-black/80">
-                  <input type="checkbox" /> Remember me 
+              <div className="flex justify-between items-center mb-6 text-sm"> 
+                <label className="flex items-center gap-2 cursor-pointer text-gray-700">
+                  <input type="checkbox" className="w-4 h-4 rounded text-[#ff7a18] focus:ring-[#ff7a18]" /> Remember me 
                 </label> 
-                <Link to="/forgot-password">Forgot password?</Link> 
+                <Link to="/forgot-password" title="Forgot password?" className="text-[#ff7a18] hover:underline font-medium">Forgot password?</Link> 
               </div>
-              <button disabled={loading}>
+              <button 
+                disabled={loading}
+                className={`w-full p-3 rounded-lg text-white font-bold text-lg transition-all duration-300 ${
+                  loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#ff7a18] hover:bg-[#e66a15] shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'
+                }`}
+              >
                 {loading ? "Logging in..." : "Login"}
               </button>
-              <p>Don't have an account? <Link to="/signup"> Sign up here </Link></p>
+              <p className="mt-6 text-center text-sm text-gray-600 font-medium">Don't have an account? <Link to="/signup" className="text-[#ff7a18] hover:underline font-bold ml-1"> Sign up here </Link></p>
             </div>
           </form>
         </div>
