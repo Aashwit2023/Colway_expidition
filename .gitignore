@@ -7,3 +7,4 @@ frontend/TODO.md
 frontend/.env
 /package-lock.json
 /node_modules
+/frontend/dist
