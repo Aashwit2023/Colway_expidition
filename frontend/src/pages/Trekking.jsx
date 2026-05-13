@@ -89,11 +89,15 @@ export default function Trekking() {
         { label: "Trek Difficulty", value: "Moderate-Difficult", icon: "difficulty" },
         { label: "Trek Duration", value: "8 days / 40.5 km", icon: "duration" },
         { label: "Highest Altitude", value: "15,000 ft", icon: "altitude" },
+        { label: "Country", value: "India", icon: "country" },
         { label: "Suitable For", value: "12 to 62 years", icon: "users" },
         { label: "Basecamp", value: "Janglik, Himachal Pradesh", icon: "location" },
         { label: "Accommodation Type", value: "Tents", icon: "tent" },
         { label: "Season", value: "June to September", icon: "season" },
         { label: "Start/End Point", value: "Old bus stand, Shimla", icon: "location" },
+        { label: "Trail Type", value: "Cross over with valley path", icon: "trail" },
+        { label: "Distance", value: "37 km", icon: "distance" },
+        { label: "Rail Head", value: "Kalka", icon: "rail" },
       ]
     },
 

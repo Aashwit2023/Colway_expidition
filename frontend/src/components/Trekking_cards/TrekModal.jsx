@@ -48,6 +48,12 @@ const TrekModal = ({ trek, isOpen, onClose }) => {
     users: Users,
     location: MapPin,
     tent: Home,
+    challange: Info,
+    distance: TrendingUp,
+    season: Calendar,
+    trail: Info,
+    rail: Info,
+    country: MapPin,
   };
 
   return (
@@ -122,19 +128,7 @@ const TrekModal = ({ trek, isOpen, onClose }) => {
                   </div>
                 </div>
 
-                {/* <div className="flex flex-wrap gap-4 mb-8">
-                  <div className="flex items-center gap-2 px-4 py-2 bg-gray-50 border border-gray-100 rounded-2xl text-sm font-bold text-gray-600">
-                    <Calendar size={18} className="text-blue-500" />
-                    {trek.days}
-                  </div>
-                  <div className="flex items-center gap-2 px-4 py-2 bg-gray-50 border border-gray-100 rounded-2xl text-sm font-bold text-gray-600 uppercase">
-                    <TrendingUp size={18} className="text-orange-500" />
-                    {trek.difficulty}
-                  </div>
-                </div> */}
 
-
-                {/* Trek Info Grid */}
 
                 {trek.info && (
                   <div className="mb-12">
@@ -173,6 +167,121 @@ const TrekModal = ({ trek, isOpen, onClose }) => {
                 <p className="text-lg text-gray-600 font-light leading-relaxed mb-10">
                   {trek.fullDescription || trek.description}
                 </p>
+              </div>
+
+              {/* Buran Ghati Trek Itinerary */}
+              <h4 className="text-2xl font-black text-gray-900 mb-6 italic tracking-tight">
+                Buran Ghati Trek Itinerary
+              </h4>
+
+              <div className="max-w-3xl mx-auto p-6">
+                {[
+                  {
+                    day: 1,
+                    title: "Shimla to Janglik",
+                    details: [
+                      "Altitude: 2,800 m / 9,200 ft.",
+                      "Drive Distance: 160 km | 9-10 hr.",
+                    ],
+                  },
+                  {
+                    day: 2,
+                    title: "Janglik to Dayara Thatch",
+                    details: [
+                      "Altitude: 3,400 m / 11,150 ft.",
+                      "Trek Distance: 6-7 km | 5-6 hr.",
+                    ],
+                  },
+                  {
+                    day: 3,
+                    title: "Dayara Thatch to Litham",
+                    details: [
+                      "Altitude: 3,600 m / 11,800 ft.",
+                      "Trek Distance: 4-5 km | 3-4 hrs.",
+                    ],
+                  },
+                  {
+                    day: 4,
+                    title: "Acclimatization day, visit to Chandranahan Lake",
+                    details: [
+                      "Altitude: 4,023 m / 13,200 ft.",
+                      "Trek Distance: 6 km Both side | 6-7 hr.",
+                    ],
+                  },
+                  {
+                    day: 5,
+                    title: "Litham to Dhunda",
+                    details: [
+                      "Altitude: 4,000 m / 13,100 ft.",
+                      "Trek Distance: 4-5 km | 4-5 hrs.",
+                    ],
+                  },
+                  {
+                    day: 6,
+                    title: "Dhunda to Munirang (River camp) via Buran Ghati Pass",
+                    details: [
+                      "Munirang Campsite Altitude: 3,400 m / 11,100 ft.",
+                      "Buran Ghati Pass: 4,550 m / 15,000 ft.",
+                      "Trek Distance: 8 km (10 - 11 hrs approx).",
+                    ],
+                  },
+                  {
+                    day: 7,
+                    title: "Munirang to Barua village & Drive to Shimla",
+                    details: [
+                      "Altitude: 2,300 m / 7,700 ft.",
+                      "Trek Distance: 5-6 km | 2-3 hr.",
+                    ],
+                  },
+                ].map((item, index) => (
+                  <div key={index} className="flex gap-4 mb-8">
+
+                    {/* Number Circle */}
+                    <div className="flex flex-col items-center">
+                      <div className="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
+                        {item.day}
+                      </div>
+
+                      {/* Vertical Line */}
+                      {index !== 6 && (
+                        <div className="w-1 bg-blue-200 flex-1 mt-1"></div>
+                      )}
+                    </div>
+
+                    {/* Content */}
+                    <div>
+                      <h2 className="text-xl font-bold text-gray-800 mb-2">
+                        {item.title}
+                      </h2>
+
+                      <ul className="list-disc pl-5 space-y-1 text-gray-700">
+                        {item.details.map((detail, i) => (
+                          <li key={i}>{detail}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                ))}
+
+                {/* Notes Section */}
+                <div className="mt-10">
+                  <h3 className="text-xl font-bold mb-3">Note:</h3>
+
+                  <ul className="list-disc pl-5 space-y-2 text-gray-700">
+                    <li>Keep a buffer day in your travel plan.</li>
+                    <li>
+                      If buffer day is not used in the travel then it can be used to
+                      explore Shimla.
+                    </li>
+                    <li>
+                      Distance, Altitude, and Trekking hours are approximate and rounded off.
+                    </li>
+                    <li>Keep the original and copy of ID proof handy.</li>
+                    <li>
+                      Come one day early if planning to come by flight.
+                    </li>
+                  </ul>
+                </div>
               </div>
 
               {/* highlights */}
@@ -229,8 +338,8 @@ const TrekModal = ({ trek, isOpen, onClose }) => {
                         </div>
                       ))}
                     </div>
-                    </div>
-                    </div>
+                  </div>
+                </div>
               )}
             </div>
           </div>
