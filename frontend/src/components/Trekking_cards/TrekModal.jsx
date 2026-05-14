@@ -128,31 +128,39 @@ const TrekModal = ({ trek, isOpen, onClose }) => {
                     </p>
 
                     <h2 className="text-3xl font-bold text-gray-900 mt-1">
-                      ₹16,750
+                      {trek.price}
                     </h2>
 
                     {/* Divider */}
                     <div className="my-3 border-t"></div>
 
                     {/* Inclusions */}
-                    <h4 className="text-sm font-semibold text-gray-700 mb-2">
-                      Includes
-                    </h4>
-
-                    <ul className="text-sm text-gray-600 space-y-1">
-                      <li>+ ₹240 Trek Insurance</li>
-                      <li>+ ₹3,000 Transport (to & from basecamp)</li>
-                    </ul>
+                    {trek.sidebarInclusions && trek.sidebarInclusions.length > 0 && (
+                      <div className="mb-4">
+                        <h4 className="text-sm font-semibold text-gray-700 mb-2">
+                          Includes
+                        </h4>
+                        <ul className="text-sm text-gray-600 space-y-1">
+                          {trek.sidebarInclusions.map((item, i) => (
+                            <li key={i}>{item}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
 
                     {/* Optional Add-ons */}
-                    <h4 className="text-sm font-semibold text-gray-700 mt-4 mb-2">
-                      Optional Add-ons
-                    </h4>
-
-                    <ul className="text-sm text-gray-600 space-y-1">
-                      <li>+ Tents</li>
-                      <li>₹4,800 Backpack Offloading</li>
-                    </ul>
+                    {trek.addOns && trek.addOns.length > 0 && (
+                      <div>
+                        <h4 className="text-sm font-semibold text-gray-700 mb-2">
+                          Optional Add-ons
+                        </h4>
+                        <ul className="text-sm text-gray-600 space-y-1">
+                          {trek.addOns.map((item, i) => (
+                            <li key={i}>{item}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
 
                     {/* CTA Button */}
                     <button className="w-full mt-5 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-xl transition-all shadow-md">

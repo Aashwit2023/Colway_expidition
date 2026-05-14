@@ -276,9 +276,9 @@ export default function Enquire() {
           </label>
           <Select
             options={cityOptions}
-            value={cityOptions.find(option => option.value === formData.city)}
+            value={cityOptions.find(option => option.value === formData.city) || null}
             onChange={(selected) =>
-              setFormData({ ...formData, city: selected?.value })
+              setFormData({ ...formData, city: selected?.value || "" })
             }
             placeholder="Search & Select City"
             isSearchable
@@ -357,9 +357,9 @@ export default function Enquire() {
             options={trekOptions}
             placeholder="Search & Select Region"
             isSearchable={true}
-            value={trekOptions.find(option => option.value === formData.region)}
+            value={trekOptions.find(option => option.value === formData.region) || null}
             onChange={(selected) =>
-              setFormData({ ...formData, region: selected?.value })
+              setFormData({ ...formData, region: selected?.value || "" })
             }
             styles={{
               control: (base) => ({

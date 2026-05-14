@@ -40,6 +40,14 @@ export default function Trekking() {
       inclusions: ["Guides", "Camping Gear", "Meals", "Permits"],
       fullDescription:
         "The Sar Pass Trek is an ideal introduction to Himalayan trekking. Starting from Kasol, the trail winds through dense pine forests, scenic meadows, and seasonal snowfields. Trekkers experience a gradual altitude gain, making it comfortable yet adventurous. The summit rewards you with panoramic views of Parvati Valley, while the descent through snow adds an element of fun. It is perfect for beginners looking for a balanced mix of challenge and natural beauty.",
+      sidebarInclusions: [
+        "+ ₹240 Trek Insurance",
+        "+ ₹1,500 Transport (to & from basecamp)"
+      ],
+      addOns: [
+        "+ Sleeping Bags",
+        "₹3,500 Backpack Offloading"
+      ],
       info: [
         { label: "Trek Difficulty", value: "Easy-Moderate", icon: "difficulty" },
         { label: "Trek Duration", value: "5 days / 25 km", icon: "duration" },
@@ -163,6 +171,14 @@ export default function Trekking() {
       ],
       fullDescription:
         "Buran Ghati Trek offers a diverse Himalayan experience with ever-changing landscapes. The trail passes through charming villages, dense forests, and wide meadows before reaching the high-altitude pass. The highlight is the thrilling descent, often involving rappelling on snow walls. This trek is ideal for those seeking a mix of scenic beauty and adventure without extreme technical difficulty.",
+      sidebarInclusions: [
+        "+ ₹240 Trek Insurance",
+        "+ ₹3,000 Transport (to & from basecamp)"
+      ],
+      addOns: [
+        "+ Tents",
+        "₹4,800 Backpack Offloading"
+      ],
       info: [
         { label: "Trek Difficulty", value: "Moderate-Difficult", icon: "difficulty" },
         { label: "Trek Duration", value: "8 days / 40.5 km", icon: "duration" },
@@ -293,6 +309,14 @@ export default function Trekking() {
       inclusions: ["Guides", "Gear", "Meals", "Permits"],
       fullDescription:
         "Rupin Pass Trek is one of the most dynamic treks in the Himalayas. Each day presents a new landscape, from forest trails and riverside camps to waterfalls and snowfields. The climb to the pass is both challenging and rewarding, offering stunning high-altitude views. This trek is perfect for those who enjoy variety and dramatic scenery.",
+      sidebarInclusions: [
+        "+ ₹240 Trek Insurance",
+        "+ ₹2,500 Transport (to & from basecamp)"
+      ],
+      addOns: [
+        "+ Trekking Poles",
+        "₹4,000 Backpack Offloading"
+      ],
       info: [
         { label: "Trek Difficulty", value: "Moderate-Difficult", icon: "difficulty" },
         { label: "Trek Duration", value: "7 days / 38 km", icon: "duration" },
@@ -324,6 +348,14 @@ export default function Trekking() {
       inclusions: ["Expert Guides", "Meals", "Gear", "Permits"],
       fullDescription:
         "Bali Pass Trek is a challenging expedition suited for experienced trekkers. The route connects Har Ki Dun Valley to Yamunotri and involves steep climbs, glacier crossings, and rugged terrain. Along the way, trekkers witness spectacular views of Swargarohini peaks and untouched Himalayan wilderness. It offers both physical challenge and unmatched scenic rewards.",
+      sidebarInclusions: [
+        "+ ₹240 Trek Insurance",
+        "+ ₹3,500 Transport (to & from basecamp)"
+      ],
+      addOns: [
+        "+ Crampons",
+        "₹5,200 Backpack Offloading"
+      ],
       info: [
         { label: "Trek Difficulty", value: "Difficult", icon: "difficulty" },
         { label: "Trek Duration", value: "8 days / 45 km", icon: "duration" },
@@ -355,6 +387,14 @@ export default function Trekking() {
       inclusions: ["Guides", "Meals", "Gear", "Permits"],
       fullDescription:
         "Hampta Pass Trek is known for its dramatic contrast in landscapes. Starting from the lush green Kullu Valley, the trail gradually leads into the stark and barren terrain of Spiti. The trek includes river crossings, scenic campsites, and a moderate pass climb. It is ideal for beginners and intermediate trekkers seeking a visually rewarding experience.",
+      sidebarInclusions: [
+        "+ ₹240 Trek Insurance",
+        "+ ₹1,200 Transport (to & from basecamp)"
+      ],
+      addOns: [
+        "+ Tents",
+        "₹3,000 Backpack Offloading"
+      ],
       info: [
         { label: "Trek Difficulty", value: "Easy-Moderate", icon: "difficulty" },
         { label: "Trek Duration", value: "5 days / 28 km", icon: "duration" },
@@ -386,6 +426,14 @@ export default function Trekking() {
       inclusions: ["Guides", "Meals", "Camping", "Permits"],
       fullDescription:
         "The Kashmir Great Lakes Trek is considered one of the most beautiful treks in India. The trail takes you across multiple high-altitude lakes surrounded by snow-capped peaks and vast meadows. Each day reveals a new landscape, making the journey visually captivating. It is perfect for trekkers who want a balance of comfort and stunning natural beauty.",
+      sidebarInclusions: [
+        "+ ₹240 Trek Insurance",
+        "+ ₹2,000 Transport (to & from basecamp)"
+      ],
+      addOns: [
+        "+ Rain Poncho",
+        "₹4,200 Backpack Offloading"
+      ],
       info: [
         { label: "Trek Difficulty", value: "Moderate", icon: "difficulty" },
         { label: "Trek Duration", value: "7 days / 35 km", icon: "duration" },
@@ -417,6 +465,14 @@ export default function Trekking() {
       inclusions: ["Guides", "Meals", "Gear", "Permits"],
       fullDescription:
         "Pin Bhaba Pass Trek offers one of the most dramatic landscape transitions in the Himalayas. The journey begins in the green valleys of Kinnaur and gradually moves into the dry, rugged terrain of Spiti. The contrast in scenery, combined with moderate difficulty, makes it a favorite among trekkers seeking variety.",
+      sidebarInclusions: [
+        "+ ₹240 Trek Insurance",
+        "+ ₹2,800 Transport (to & from basecamp)"
+      ],
+      addOns: [
+        "+ Gaiters",
+        "₹4,500 Backpack Offloading"
+      ],
       info: [
         { label: "Trek Difficulty", value: "Moderate", icon: "difficulty" },
         { label: "Trek Duration", value: "7 days / 42 km", icon: "duration" },
@@ -448,6 +504,14 @@ export default function Trekking() {
       inclusions: ["Guides", "Stay", "Meals", "Permits"],
       fullDescription:
         "The Everest Base Camp Trek is a world-famous journey through the Khumbu region of Nepal. Trekkers pass through traditional Sherpa villages, monasteries, and scenic valleys while gradually ascending to base camp. The experience combines cultural immersion with breathtaking views of the world's highest peaks, making it a truly unforgettable adventure.",
+      sidebarInclusions: [
+        "+ Everest Permit Fees",
+        "+ Local Sherpa Guide"
+      ],
+      addOns: [
+        "+ Helicopter Return",
+        "₹15,000 Extra Oxygen"
+      ],
       info: [
         { label: "Trek Difficulty", value: "Difficult", icon: "difficulty" },
         { label: "Trek Duration", value: "12 days / 65 km", icon: "duration" },
