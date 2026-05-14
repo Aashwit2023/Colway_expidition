@@ -48,6 +48,12 @@ const TrekModal = ({ trek, isOpen, onClose }) => {
     users: Users,
     location: MapPin,
     tent: Home,
+    challange: Info,
+    distance: TrendingUp,
+    season: Calendar,
+    trail: Info,
+    rail: Info,
+    country: MapPin,
   };
 
   return (
@@ -113,28 +119,64 @@ const TrekModal = ({ trek, isOpen, onClose }) => {
                     {trek.title}
                   </h2>
                   {/* Inline Action Option - Directly after Title */}
-                  <div className="flex flex-col items-start md:items-end">
+
+                  <div className="bg-white shadow-lg rounded-2xl p-5 w-full max-w-xs border border-gray-100">
+
+                    {/* Price Header */}
+                    <p className="text-xs uppercase tracking-wider text-gray-500">
+                      Starting From
+                    </p>
+
+                    <h2 className="text-3xl font-bold text-gray-900 mt-1">
+                      {trek.price}
+                    </h2>
+
+                    {/* Divider */}
+                    <div className="my-3 border-t"></div>
+
+                    {/* Inclusions */}
+                    {trek.sidebarInclusions && trek.sidebarInclusions.length > 0 && (
+                      <div className="mb-4">
+                        <h4 className="text-sm font-semibold text-gray-700 mb-2">
+                          Includes
+                        </h4>
+                        <ul className="text-sm text-gray-600 space-y-1">
+                          {trek.sidebarInclusions.map((item, i) => (
+                            <li key={i}>{item}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {/* Optional Add-ons */}
+                    {trek.addOns && trek.addOns.length > 0 && (
+                      <div>
+                        <h4 className="text-sm font-semibold text-gray-700 mb-2">
+                          Optional Add-ons
+                        </h4>
+                        <ul className="text-sm text-gray-600 space-y-1">
+                          {trek.addOns.map((item, i) => (
+                            <li key={i}>{item}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {/* CTA Button */}
+                    <button className="w-full mt-5 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-xl transition-all shadow-md">
+                      BOOK NOW
+                    </button>
+                  </div>
+                  {/* <div className="flex flex-col items-start md:items-end">
                     <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-1">Starting from</p>
                     <p className="text-2xl font-black text-gray-900 mb-2">{trek.price}</p>
                     <button className="px-8 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-black text-xs tracking-widest shadow-lg shadow-orange-200 transition-all transform active:scale-95 uppercase">
                       Book Now
                     </button>
-                  </div>
+                  </div> */}
                 </div>
 
-                {/* <div className="flex flex-wrap gap-4 mb-8">
-                  <div className="flex items-center gap-2 px-4 py-2 bg-gray-50 border border-gray-100 rounded-2xl text-sm font-bold text-gray-600">
-                    <Calendar size={18} className="text-blue-500" />
-                    {trek.days}
-                  </div>
-                  <div className="flex items-center gap-2 px-4 py-2 bg-gray-50 border border-gray-100 rounded-2xl text-sm font-bold text-gray-600 uppercase">
-                    <TrendingUp size={18} className="text-orange-500" />
-                    {trek.difficulty}
-                  </div>
-                </div> */}
 
-
-                {/* Trek Info Grid */}
 
                 {trek.info && (
                   <div className="mb-12">
@@ -174,6 +216,92 @@ const TrekModal = ({ trek, isOpen, onClose }) => {
                   {trek.fullDescription || trek.description}
                 </p>
               </div>
+
+              {/* Trek Itinerary */}
+
+              {trek.itinerary && (
+                <div className="max-w-3xl mx-auto p-6">
+                  <h4 className="text-2xl font-black text-gray-900 mb-6 italic tracking-tight">
+                    Trek Itinerary
+                  </h4>
+                  {trek.itinerary?.map((item, index) => (
+                    <div key={index} className="flex gap-4 mb-8">
+
+                      {/* Dot */}
+                      <div className="flex flex-col items-center">
+                        <div className="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
+                          {item.day}
+                        </div>
+
+                        {index !== trek.itinerary.length - 1 && (
+                          <div className="w-1 bg-blue-200 flex-1 mt-1"></div>
+                        )}
+                      </div>
+
+                      {/* Content */}
+                      <div>
+                        <h2 className="text-xl font-bold mb-2">
+                          {item.title}
+                        </h2>
+
+                        <ul className="list-disc pl-5 text-gray-700 space-y-1">
+                          {item.details?.map((detail, i) => {
+                            if (typeof detail === "string") {
+                              return <li key={i}>{detail}</li>;
+                            }
+
+                            if (typeof detail === "object") {
+                              return (
+                                <li key={i}>
+                                  <span className="font-semibold">{detail.label}</span>
+
+                                  {detail.values && (
+                                    <ul className="list-disc pl-5 text-gray-600 mt-1 space-y-1">
+                                      {detail.values.map((v, idx) => (
+                                        <li key={idx}>{v}</li>
+                                      ))}
+                                    </ul>
+                                  )}
+
+                                  {detail.value && (
+                                    <span className="text-gray-600"> {detail.value}</span>
+                                  )}
+                                </li>
+                              );
+                            }
+
+                            return null;
+                          })}
+                        </ul>
+                      </div>
+
+                    </div>
+                  ))}
+
+
+
+                  {/* Notes Section */}
+                  <div className="mt-10">
+                    <h3 className="text-xl font-bold mb-3">Note:</h3>
+
+                    <ul className="list-disc pl-5 space-y-2 text-gray-700">
+                      <li>Keep a buffer day in your travel plan.</li>
+                      <li>
+                        If buffer day is not used in the travel then it can be used to
+                        explore Shimla.
+                      </li>
+                      <li>
+                        Distance, Altitude, and Trekking hours are approximate and rounded off.
+                      </li>
+                      <li>Keep the original and copy of ID proof handy.</li>
+                      <li>
+                        Come one day early if planning to come by flight.
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              )}
+
 
               {/* highlights */}
               {trek.highlights && (
@@ -229,8 +357,8 @@ const TrekModal = ({ trek, isOpen, onClose }) => {
                         </div>
                       ))}
                     </div>
-                    </div>
-                    </div>
+                  </div>
+                </div>
               )}
             </div>
           </div>
@@ -249,7 +377,7 @@ const TrekModal = ({ trek, isOpen, onClose }) => {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

@@ -40,6 +40,14 @@ export default function Trekking() {
       inclusions: ["Guides", "Camping Gear", "Meals", "Permits"],
       fullDescription:
         "The Sar Pass Trek is an ideal introduction to Himalayan trekking. Starting from Kasol, the trail winds through dense pine forests, scenic meadows, and seasonal snowfields. Trekkers experience a gradual altitude gain, making it comfortable yet adventurous. The summit rewards you with panoramic views of Parvati Valley, while the descent through snow adds an element of fun. It is perfect for beginners looking for a balanced mix of challenge and natural beauty.",
+      sidebarInclusions: [
+        "+ ₹240 Trek Insurance",
+        "+ ₹1,500 Transport (to & from basecamp)"
+      ],
+      addOns: [
+        "+ Sleeping Bags",
+        "₹3,500 Backpack Offloading"
+      ],
       info: [
         { label: "Trek Difficulty", value: "Easy-Moderate", icon: "difficulty" },
         { label: "Trek Duration", value: "5 days / 25 km", icon: "duration" },
@@ -49,7 +57,85 @@ export default function Trekking() {
         { label: "Trail Type", value: "Snow trek", icon: "trail" },
         { label: "Season", value: "June to September", icon: "season" },
         { label: "Start/ End Point", value: "Old bus stand, Shimla", icon: "location" },
-      ]
+      ],
+      itinerary: [
+        {
+          day: 1,
+          title: "Kasol To Grahan Village",
+          details: [
+            {
+            label: "Altitude: ",
+            values: [
+            "Kasol: 1,700 m / 5,600 ft",
+            "Grahan Stop: 2000 m / 6,500 ft",
+            "Grahan Village: 2,350 m / 7,700 ft",
+            ],
+          },
+            "Drive Distance: 8 km | 45 Minutes.",
+            "Trek Distance: 2 km | 1 hr.",
+          ],
+        },
+        {
+          day: 2,
+          title: "Grahan Village To Min Thach",
+          details: [
+
+            {
+            label: "Altitude: ",
+            values: [
+            "Grahan Village: 2,350 m / 7,700 ft",
+            "Min Thatch: 3,400 m / 11,150 ft",
+            ],
+          },
+            "Trek Distance: 8 km | 5-6 hr.",
+          ],
+        },
+        {
+          day: 3,
+          title: "Min Thach To Nagaru",
+          details: [
+            {
+            label: "Altitude: ",
+            values: [
+            "Min Thatch: 3,400 m / 11,150 ft",
+            "Nagaru: 3,800 m / 12,400 ft",
+            ],
+          },
+            "Trek Distance: 5 km | 4-5 hr.",
+          ],
+        },
+        {
+          day: 4,
+          title: "Nagaru To Biskeri Thach Via Sar Pass",
+          details: [
+            {
+            label: "Altitude: ",
+            values: [
+            "Nagaru: 3,800 m / 12,400 ft",
+            "Sar Pass: 4,200 m / 13,600 ft",
+            "Biskeri Thach: 3,350 m / 11,000 ft",
+            ],
+          },
+            "Trek Distance: 12 km | 7-8 hr.",
+          ],
+        },
+        {
+          day: 5,
+          title: "Biskeri Thach To Pulga And Drive Back To Kasol",
+          details: [
+            {
+            label: "Altitude: ",
+            values: [
+            "Biskeri Thach: 3,350 m / 11,000 ft",
+            "Pulga: 2,400 m / 7,800 ft",
+            ],
+          },
+            "Trek Distance: 6 km | 4-5 hr.",
+            "Drive Distance: 18 km | 1 hr"
+          ],
+        },
+      ],
+
     },
 
     {
@@ -85,16 +171,123 @@ export default function Trekking() {
       ],
       fullDescription:
         "Buran Ghati Trek offers a diverse Himalayan experience with ever-changing landscapes. The trail passes through charming villages, dense forests, and wide meadows before reaching the high-altitude pass. The highlight is the thrilling descent, often involving rappelling on snow walls. This trek is ideal for those seeking a mix of scenic beauty and adventure without extreme technical difficulty.",
+      sidebarInclusions: [
+        "+ ₹240 Trek Insurance",
+        "+ ₹3,000 Transport (to & from basecamp)"
+      ],
+      addOns: [
+        "+ Tents",
+        "₹4,800 Backpack Offloading"
+      ],
       info: [
         { label: "Trek Difficulty", value: "Moderate-Difficult", icon: "difficulty" },
         { label: "Trek Duration", value: "8 days / 40.5 km", icon: "duration" },
         { label: "Highest Altitude", value: "15,000 ft", icon: "altitude" },
+        { label: "Country", value: "India", icon: "country" },
         { label: "Suitable For", value: "12 to 62 years", icon: "users" },
         { label: "Basecamp", value: "Janglik, Himachal Pradesh", icon: "location" },
         { label: "Accommodation Type", value: "Tents", icon: "tent" },
         { label: "Season", value: "June to September", icon: "season" },
         { label: "Start/End Point", value: "Old bus stand, Shimla", icon: "location" },
-      ]
+        { label: "Trail Type", value: "Cross over with valley path", icon: "trail" },
+        { label: "Distance", value: "37 km", icon: "distance" },
+        { label: "Rail Head", value: "Kalka", icon: "rail" },
+      ],
+      itinerary: [
+        {
+          day: 1,
+          title: "Shimla to Janglik",
+          details: [
+            {
+            label: "Altitude: ",
+            values: [
+              " 2,800 m / 9,200 ft.",
+            ],
+          },
+            "Drive Distance: 160 km | 9-10 hr.",
+          ],
+        },
+        {
+          day: 2,
+          title: "Janglik to Dayara Thatch",
+          details: [
+            {
+            label: "Altitude: ",
+            values: [
+              "3,400 m / 11,150 ft.",
+            ],  
+          },
+            "Trek Distance: 6-7 km | 5-6 hr.",
+          ],
+        },
+        {
+          day: 3,
+          title: "Dayara Thatch to Litham",
+          details: [
+            {
+            label: "Altitude: ",
+            values: [
+              "3,600 m / 11,800 ft.",
+            ],
+          },
+            "Trek Distance: 4-5 km | 3-4 hrs.",
+          ],
+        },
+        {
+          day: 4,
+          title: "Acclimatization day, visit to Chandranahan Lake",
+          details: [
+            {
+            label: "Altitude: ",
+            values: [
+              "4,023 m / 13,200 ft.",
+            ],
+          },
+            "Trek Distance: 6 km Both side | 6-7 hr.",
+          ],
+        },
+        {
+          day: 5,
+          title: "Litham to Dhunda",
+          details: [
+            {
+            label: "Altitude: ",
+            values: [
+              "4,000 m / 13,100 ft.",
+            ],
+          },
+            "Trek Distance: 4-5 km | 4-5 hrs.",
+          ],
+        },
+        {
+          day: 6,
+          title: "Dhunda to Munirang (River camp) via Buran Ghati Pass",
+          details: [
+            {
+            label: "Altitude: ",
+            values: [
+            "Munirang Campsite Altitude: 3,400 m / 11,100 ft.",
+            "Buran Ghati Pass: 4,550 m / 15,000 ft.",
+            ],  
+          },
+            "Trek Distance: 8 km (10 - 11 hrs approx).",
+          ],
+        },
+        {
+          day: 7,
+          title: "Munirang to Barua village & Drive to Shimla",
+          details: [
+            {
+            label: "Altitude: ",
+            values: [
+              "2,300 m / 7,700 ft.",
+            ],
+          },
+            "Trek Distance: 5-6 km | 2-3 hr.",
+          ],
+        },
+      ],
+
     },
 
     {
@@ -116,6 +309,14 @@ export default function Trekking() {
       inclusions: ["Guides", "Gear", "Meals", "Permits"],
       fullDescription:
         "Rupin Pass Trek is one of the most dynamic treks in the Himalayas. Each day presents a new landscape, from forest trails and riverside camps to waterfalls and snowfields. The climb to the pass is both challenging and rewarding, offering stunning high-altitude views. This trek is perfect for those who enjoy variety and dramatic scenery.",
+      sidebarInclusions: [
+        "+ ₹240 Trek Insurance",
+        "+ ₹2,500 Transport (to & from basecamp)"
+      ],
+      addOns: [
+        "+ Trekking Poles",
+        "₹4,000 Backpack Offloading"
+      ],
       info: [
         { label: "Trek Difficulty", value: "Moderate-Difficult", icon: "difficulty" },
         { label: "Trek Duration", value: "7 days / 38 km", icon: "duration" },
@@ -147,6 +348,14 @@ export default function Trekking() {
       inclusions: ["Expert Guides", "Meals", "Gear", "Permits"],
       fullDescription:
         "Bali Pass Trek is a challenging expedition suited for experienced trekkers. The route connects Har Ki Dun Valley to Yamunotri and involves steep climbs, glacier crossings, and rugged terrain. Along the way, trekkers witness spectacular views of Swargarohini peaks and untouched Himalayan wilderness. It offers both physical challenge and unmatched scenic rewards.",
+      sidebarInclusions: [
+        "+ ₹240 Trek Insurance",
+        "+ ₹3,500 Transport (to & from basecamp)"
+      ],
+      addOns: [
+        "+ Crampons",
+        "₹5,200 Backpack Offloading"
+      ],
       info: [
         { label: "Trek Difficulty", value: "Difficult", icon: "difficulty" },
         { label: "Trek Duration", value: "8 days / 45 km", icon: "duration" },
@@ -178,6 +387,14 @@ export default function Trekking() {
       inclusions: ["Guides", "Meals", "Gear", "Permits"],
       fullDescription:
         "Hampta Pass Trek is known for its dramatic contrast in landscapes. Starting from the lush green Kullu Valley, the trail gradually leads into the stark and barren terrain of Spiti. The trek includes river crossings, scenic campsites, and a moderate pass climb. It is ideal for beginners and intermediate trekkers seeking a visually rewarding experience.",
+      sidebarInclusions: [
+        "+ ₹240 Trek Insurance",
+        "+ ₹1,200 Transport (to & from basecamp)"
+      ],
+      addOns: [
+        "+ Tents",
+        "₹3,000 Backpack Offloading"
+      ],
       info: [
         { label: "Trek Difficulty", value: "Easy-Moderate", icon: "difficulty" },
         { label: "Trek Duration", value: "5 days / 28 km", icon: "duration" },
@@ -209,6 +426,14 @@ export default function Trekking() {
       inclusions: ["Guides", "Meals", "Camping", "Permits"],
       fullDescription:
         "The Kashmir Great Lakes Trek is considered one of the most beautiful treks in India. The trail takes you across multiple high-altitude lakes surrounded by snow-capped peaks and vast meadows. Each day reveals a new landscape, making the journey visually captivating. It is perfect for trekkers who want a balance of comfort and stunning natural beauty.",
+      sidebarInclusions: [
+        "+ ₹240 Trek Insurance",
+        "+ ₹2,000 Transport (to & from basecamp)"
+      ],
+      addOns: [
+        "+ Rain Poncho",
+        "₹4,200 Backpack Offloading"
+      ],
       info: [
         { label: "Trek Difficulty", value: "Moderate", icon: "difficulty" },
         { label: "Trek Duration", value: "7 days / 35 km", icon: "duration" },
@@ -240,6 +465,14 @@ export default function Trekking() {
       inclusions: ["Guides", "Meals", "Gear", "Permits"],
       fullDescription:
         "Pin Bhaba Pass Trek offers one of the most dramatic landscape transitions in the Himalayas. The journey begins in the green valleys of Kinnaur and gradually moves into the dry, rugged terrain of Spiti. The contrast in scenery, combined with moderate difficulty, makes it a favorite among trekkers seeking variety.",
+      sidebarInclusions: [
+        "+ ₹240 Trek Insurance",
+        "+ ₹2,800 Transport (to & from basecamp)"
+      ],
+      addOns: [
+        "+ Gaiters",
+        "₹4,500 Backpack Offloading"
+      ],
       info: [
         { label: "Trek Difficulty", value: "Moderate", icon: "difficulty" },
         { label: "Trek Duration", value: "7 days / 42 km", icon: "duration" },
@@ -271,6 +504,14 @@ export default function Trekking() {
       inclusions: ["Guides", "Stay", "Meals", "Permits"],
       fullDescription:
         "The Everest Base Camp Trek is a world-famous journey through the Khumbu region of Nepal. Trekkers pass through traditional Sherpa villages, monasteries, and scenic valleys while gradually ascending to base camp. The experience combines cultural immersion with breathtaking views of the world's highest peaks, making it a truly unforgettable adventure.",
+      sidebarInclusions: [
+        "+ Everest Permit Fees",
+        "+ Local Sherpa Guide"
+      ],
+      addOns: [
+        "+ Helicopter Return",
+        "₹15,000 Extra Oxygen"
+      ],
       info: [
         { label: "Trek Difficulty", value: "Difficult", icon: "difficulty" },
         { label: "Trek Duration", value: "12 days / 65 km", icon: "duration" },
@@ -283,6 +524,10 @@ export default function Trekking() {
       ]
     }
   ];
+
+
+
+
 
   return (
     <div className="bg-white min-h-screen pb-32">
