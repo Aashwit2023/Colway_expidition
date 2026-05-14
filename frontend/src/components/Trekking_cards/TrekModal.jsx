@@ -119,13 +119,53 @@ const TrekModal = ({ trek, isOpen, onClose }) => {
                     {trek.title}
                   </h2>
                   {/* Inline Action Option - Directly after Title */}
-                  <div className="flex flex-col items-start md:items-end">
+
+                  <div className="bg-white shadow-lg rounded-2xl p-5 w-full max-w-xs border border-gray-100">
+
+                    {/* Price Header */}
+                    <p className="text-xs uppercase tracking-wider text-gray-500">
+                      Starting From
+                    </p>
+
+                    <h2 className="text-3xl font-bold text-gray-900 mt-1">
+                      ₹16,750
+                    </h2>
+
+                    {/* Divider */}
+                    <div className="my-3 border-t"></div>
+
+                    {/* Inclusions */}
+                    <h4 className="text-sm font-semibold text-gray-700 mb-2">
+                      Includes
+                    </h4>
+
+                    <ul className="text-sm text-gray-600 space-y-1">
+                      <li>+ ₹240 Trek Insurance</li>
+                      <li>+ ₹3,000 Transport (to & from basecamp)</li>
+                    </ul>
+
+                    {/* Optional Add-ons */}
+                    <h4 className="text-sm font-semibold text-gray-700 mt-4 mb-2">
+                      Optional Add-ons
+                    </h4>
+
+                    <ul className="text-sm text-gray-600 space-y-1">
+                      <li>+ Tents</li>
+                      <li>₹4,800 Backpack Offloading</li>
+                    </ul>
+
+                    {/* CTA Button */}
+                    <button className="w-full mt-5 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-xl transition-all shadow-md">
+                      BOOK NOW
+                    </button>
+                  </div>
+                  {/* <div className="flex flex-col items-start md:items-end">
                     <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-1">Starting from</p>
                     <p className="text-2xl font-black text-gray-900 mb-2">{trek.price}</p>
                     <button className="px-8 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-black text-xs tracking-widest shadow-lg shadow-orange-200 transition-all transform active:scale-95 uppercase">
                       Book Now
                     </button>
-                  </div>
+                  </div> */}
                 </div>
 
 
@@ -169,120 +209,91 @@ const TrekModal = ({ trek, isOpen, onClose }) => {
                 </p>
               </div>
 
-              {/* Buran Ghati Trek Itinerary */}
-              <h4 className="text-2xl font-black text-gray-900 mb-6 italic tracking-tight">
-                Buran Ghati Trek Itinerary
-              </h4>
+              {/* Trek Itinerary */}
 
-              <div className="max-w-3xl mx-auto p-6">
-                {[
-                  {
-                    day: 1,
-                    title: "Shimla to Janglik",
-                    details: [
-                      "Altitude: 2,800 m / 9,200 ft.",
-                      "Drive Distance: 160 km | 9-10 hr.",
-                    ],
-                  },
-                  {
-                    day: 2,
-                    title: "Janglik to Dayara Thatch",
-                    details: [
-                      "Altitude: 3,400 m / 11,150 ft.",
-                      "Trek Distance: 6-7 km | 5-6 hr.",
-                    ],
-                  },
-                  {
-                    day: 3,
-                    title: "Dayara Thatch to Litham",
-                    details: [
-                      "Altitude: 3,600 m / 11,800 ft.",
-                      "Trek Distance: 4-5 km | 3-4 hrs.",
-                    ],
-                  },
-                  {
-                    day: 4,
-                    title: "Acclimatization day, visit to Chandranahan Lake",
-                    details: [
-                      "Altitude: 4,023 m / 13,200 ft.",
-                      "Trek Distance: 6 km Both side | 6-7 hr.",
-                    ],
-                  },
-                  {
-                    day: 5,
-                    title: "Litham to Dhunda",
-                    details: [
-                      "Altitude: 4,000 m / 13,100 ft.",
-                      "Trek Distance: 4-5 km | 4-5 hrs.",
-                    ],
-                  },
-                  {
-                    day: 6,
-                    title: "Dhunda to Munirang (River camp) via Buran Ghati Pass",
-                    details: [
-                      "Munirang Campsite Altitude: 3,400 m / 11,100 ft.",
-                      "Buran Ghati Pass: 4,550 m / 15,000 ft.",
-                      "Trek Distance: 8 km (10 - 11 hrs approx).",
-                    ],
-                  },
-                  {
-                    day: 7,
-                    title: "Munirang to Barua village & Drive to Shimla",
-                    details: [
-                      "Altitude: 2,300 m / 7,700 ft.",
-                      "Trek Distance: 5-6 km | 2-3 hr.",
-                    ],
-                  },
-                ].map((item, index) => (
-                  <div key={index} className="flex gap-4 mb-8">
+              {trek.itinerary && (
+                <div className="max-w-3xl mx-auto p-6">
+                  <h4 className="text-2xl font-black text-gray-900 mb-6 italic tracking-tight">
+                    Trek Itinerary
+                  </h4>
+                  {trek.itinerary?.map((item, index) => (
+                    <div key={index} className="flex gap-4 mb-8">
 
-                    {/* Number Circle */}
-                    <div className="flex flex-col items-center">
-                      <div className="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
-                        {item.day}
+                      {/* Dot */}
+                      <div className="flex flex-col items-center">
+                        <div className="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
+                          {item.day}
+                        </div>
+
+                        {index !== trek.itinerary.length - 1 && (
+                          <div className="w-1 bg-blue-200 flex-1 mt-1"></div>
+                        )}
                       </div>
 
-                      {/* Vertical Line */}
-                      {index !== 6 && (
-                        <div className="w-1 bg-blue-200 flex-1 mt-1"></div>
-                      )}
-                    </div>
+                      {/* Content */}
+                      <div>
+                        <h2 className="text-xl font-bold mb-2">
+                          {item.title}
+                        </h2>
 
-                    {/* Content */}
-                    <div>
-                      <h2 className="text-xl font-bold text-gray-800 mb-2">
-                        {item.title}
-                      </h2>
+                        <ul className="list-disc pl-5 text-gray-700 space-y-1">
+                          {item.details?.map((detail, i) => {
+                            if (typeof detail === "string") {
+                              return <li key={i}>{detail}</li>;
+                            }
 
-                      <ul className="list-disc pl-5 space-y-1 text-gray-700">
-                        {item.details.map((detail, i) => (
-                          <li key={i}>{detail}</li>
-                        ))}
-                      </ul>
+                            if (typeof detail === "object") {
+                              return (
+                                <li key={i}>
+                                  <span className="font-semibold">{detail.label}</span>
+
+                                  {detail.values && (
+                                    <ul className="list-disc pl-5 text-gray-600 mt-1 space-y-1">
+                                      {detail.values.map((v, idx) => (
+                                        <li key={idx}>{v}</li>
+                                      ))}
+                                    </ul>
+                                  )}
+
+                                  {detail.value && (
+                                    <span className="text-gray-600"> {detail.value}</span>
+                                  )}
+                                </li>
+                              );
+                            }
+
+                            return null;
+                          })}
+                        </ul>
+                      </div>
+
                     </div>
+                  ))}
+
+
+
+                  {/* Notes Section */}
+                  <div className="mt-10">
+                    <h3 className="text-xl font-bold mb-3">Note:</h3>
+
+                    <ul className="list-disc pl-5 space-y-2 text-gray-700">
+                      <li>Keep a buffer day in your travel plan.</li>
+                      <li>
+                        If buffer day is not used in the travel then it can be used to
+                        explore Shimla.
+                      </li>
+                      <li>
+                        Distance, Altitude, and Trekking hours are approximate and rounded off.
+                      </li>
+                      <li>Keep the original and copy of ID proof handy.</li>
+                      <li>
+                        Come one day early if planning to come by flight.
+                      </li>
+                    </ul>
                   </div>
-                ))}
-
-                {/* Notes Section */}
-                <div className="mt-10">
-                  <h3 className="text-xl font-bold mb-3">Note:</h3>
-
-                  <ul className="list-disc pl-5 space-y-2 text-gray-700">
-                    <li>Keep a buffer day in your travel plan.</li>
-                    <li>
-                      If buffer day is not used in the travel then it can be used to
-                      explore Shimla.
-                    </li>
-                    <li>
-                      Distance, Altitude, and Trekking hours are approximate and rounded off.
-                    </li>
-                    <li>Keep the original and copy of ID proof handy.</li>
-                    <li>
-                      Come one day early if planning to come by flight.
-                    </li>
-                  </ul>
                 </div>
-              </div>
+              )}
+
 
               {/* highlights */}
               {trek.highlights && (
@@ -358,7 +369,7 @@ const TrekModal = ({ trek, isOpen, onClose }) => {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

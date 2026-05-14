@@ -49,7 +49,85 @@ export default function Trekking() {
         { label: "Trail Type", value: "Snow trek", icon: "trail" },
         { label: "Season", value: "June to September", icon: "season" },
         { label: "Start/ End Point", value: "Old bus stand, Shimla", icon: "location" },
-      ]
+      ],
+      itinerary: [
+        {
+          day: 1,
+          title: "Kasol To Grahan Village",
+          details: [
+            {
+            label: "Altitude: ",
+            values: [
+            "Kasol: 1,700 m / 5,600 ft",
+            "Grahan Stop: 2000 m / 6,500 ft",
+            "Grahan Village: 2,350 m / 7,700 ft",
+            ],
+          },
+            "Drive Distance: 8 km | 45 Minutes.",
+            "Trek Distance: 2 km | 1 hr.",
+          ],
+        },
+        {
+          day: 2,
+          title: "Grahan Village To Min Thach",
+          details: [
+
+            {
+            label: "Altitude: ",
+            values: [
+            "Grahan Village: 2,350 m / 7,700 ft",
+            "Min Thatch: 3,400 m / 11,150 ft",
+            ],
+          },
+            "Trek Distance: 8 km | 5-6 hr.",
+          ],
+        },
+        {
+          day: 3,
+          title: "Min Thach To Nagaru",
+          details: [
+            {
+            label: "Altitude: ",
+            values: [
+            "Min Thatch: 3,400 m / 11,150 ft",
+            "Nagaru: 3,800 m / 12,400 ft",
+            ],
+          },
+            "Trek Distance: 5 km | 4-5 hr.",
+          ],
+        },
+        {
+          day: 4,
+          title: "Nagaru To Biskeri Thach Via Sar Pass",
+          details: [
+            {
+            label: "Altitude: ",
+            values: [
+            "Nagaru: 3,800 m / 12,400 ft",
+            "Sar Pass: 4,200 m / 13,600 ft",
+            "Biskeri Thach: 3,350 m / 11,000 ft",
+            ],
+          },
+            "Trek Distance: 12 km | 7-8 hr.",
+          ],
+        },
+        {
+          day: 5,
+          title: "Biskeri Thach To Pulga And Drive Back To Kasol",
+          details: [
+            {
+            label: "Altitude: ",
+            values: [
+            "Biskeri Thach: 3,350 m / 11,000 ft",
+            "Pulga: 2,400 m / 7,800 ft",
+            ],
+          },
+            "Trek Distance: 6 km | 4-5 hr.",
+            "Drive Distance: 18 km | 1 hr"
+          ],
+        },
+      ],
+
     },
 
     {
@@ -98,7 +176,102 @@ export default function Trekking() {
         { label: "Trail Type", value: "Cross over with valley path", icon: "trail" },
         { label: "Distance", value: "37 km", icon: "distance" },
         { label: "Rail Head", value: "Kalka", icon: "rail" },
-      ]
+      ],
+      itinerary: [
+        {
+          day: 1,
+          title: "Shimla to Janglik",
+          details: [
+            {
+            label: "Altitude: ",
+            values: [
+              " 2,800 m / 9,200 ft.",
+            ],
+          },
+            "Drive Distance: 160 km | 9-10 hr.",
+          ],
+        },
+        {
+          day: 2,
+          title: "Janglik to Dayara Thatch",
+          details: [
+            {
+            label: "Altitude: ",
+            values: [
+              "3,400 m / 11,150 ft.",
+            ],  
+          },
+            "Trek Distance: 6-7 km | 5-6 hr.",
+          ],
+        },
+        {
+          day: 3,
+          title: "Dayara Thatch to Litham",
+          details: [
+            {
+            label: "Altitude: ",
+            values: [
+              "3,600 m / 11,800 ft.",
+            ],
+          },
+            "Trek Distance: 4-5 km | 3-4 hrs.",
+          ],
+        },
+        {
+          day: 4,
+          title: "Acclimatization day, visit to Chandranahan Lake",
+          details: [
+            {
+            label: "Altitude: ",
+            values: [
+              "4,023 m / 13,200 ft.",
+            ],
+          },
+            "Trek Distance: 6 km Both side | 6-7 hr.",
+          ],
+        },
+        {
+          day: 5,
+          title: "Litham to Dhunda",
+          details: [
+            {
+            label: "Altitude: ",
+            values: [
+              "4,000 m / 13,100 ft.",
+            ],
+          },
+            "Trek Distance: 4-5 km | 4-5 hrs.",
+          ],
+        },
+        {
+          day: 6,
+          title: "Dhunda to Munirang (River camp) via Buran Ghati Pass",
+          details: [
+            {
+            label: "Altitude: ",
+            values: [
+            "Munirang Campsite Altitude: 3,400 m / 11,100 ft.",
+            "Buran Ghati Pass: 4,550 m / 15,000 ft.",
+            ],  
+          },
+            "Trek Distance: 8 km (10 - 11 hrs approx).",
+          ],
+        },
+        {
+          day: 7,
+          title: "Munirang to Barua village & Drive to Shimla",
+          details: [
+            {
+            label: "Altitude: ",
+            values: [
+              "2,300 m / 7,700 ft.",
+            ],
+          },
+            "Trek Distance: 5-6 km | 2-3 hr.",
+          ],
+        },
+      ],
+
     },
 
     {
@@ -287,6 +460,10 @@ export default function Trekking() {
       ]
     }
   ];
+
+
+
+
 
   return (
     <div className="bg-white min-h-screen pb-32">
