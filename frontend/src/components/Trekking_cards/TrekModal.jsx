@@ -1,10 +1,54 @@
 import React, { useEffect, useState } from 'react';
+import * as QRCode from 'qrcode';
 import { X, Calendar, MapPin, TrendingUp, Info, CheckCircle2, Users, Mountain, Home } from 'lucide-react';
 
 const TrekModal = ({ trek, isOpen, onClose }) => {
   const [activeImage, setActiveImage] = useState(trek?.image);
   const [showSticky, setShowSticky] = useState(false);
   const scrollRef = React.useRef(null);
+
+  // Booking flow state local to modal
+  const [bookingOpen, setBookingOpen] = useState(false);
+  const [bookingStep, setBookingStep] = useState(1);
+  const [bookingData, setBookingData] = useState({ date: null, name: '', email: '', count: 1 });
+  const [paymentStatus, setPaymentStatus] = useState('unpaid');
+  const [qrCode, setQrCode] = useState(null);
+  const [isGeneratingQr, setIsGeneratingQr] = useState(false);
+
+  useEffect(() => {
+    if (bookingStep === 3 && !qrCode && bookingData.date) {
+      const generate = async () => {
+        setIsGeneratingQr(true);
+        const payload = JSON.stringify({
+          trek: trek.title,
+          date: bookingData.date,
+          name: bookingData.name || bookingData.email,
+          count: bookingData.count,
+          bookedAt: new Date().toISOString(),
+        });
+        try {
+          const qrDataUrl = await QRCode.toDataURL(payload, { margin: 2, width: 240 });
+          setQrCode(qrDataUrl);
+        } catch (error) {
+          console.error('QR generation failed', error);
+          setQrCode(null);
+        } finally {
+          setIsGeneratingQr(false);
+        }
+      };
+
+      generate();
+    }
+  }, [bookingStep, qrCode, bookingData, trek.title]);
+
+  const openBooking = (initialDate) => {
+    const firstDate = initialDate || (trek?.dates && Object.values(trek.dates)[0] && Object.values(trek.dates)[0][0]) || null;
+    setBookingData({ date: firstDate, name: '', email: '', count: 1 });
+    setBookingStep(1);
+    setPaymentStatus('unpaid');
+    setQrCode(null);
+    setBookingOpen(true);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -163,7 +207,7 @@ const TrekModal = ({ trek, isOpen, onClose }) => {
                     )}
 
                     {/* CTA Button */}
-                    <button className="w-full mt-5 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-xl transition-all shadow-md">
+                    <button onClick={() => openBooking()} className="w-full mt-5 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-xl transition-all shadow-md">
                       BOOK NOW
                     </button>
                   </div>
@@ -371,11 +415,140 @@ const TrekModal = ({ trek, isOpen, onClose }) => {
               <p className="text-white/50 text-[10px] font-bold uppercase tracking-widest mb-0.5">{trek.title}</p>
               <p className="text-white text-xl font-black tracking-tight">{trek.price}</p>
             </div>
-            <button className="px-8 py-4 bg-orange-500 hover:bg-orange-600 text-white rounded-2xl font-black text-xs tracking-widest shadow-xl shadow-orange-500/20 transition-all transform active:scale-95 uppercase">
+            <button onClick={() => openBooking()} className="px-8 py-4 bg-orange-500 hover:bg-orange-600 text-white rounded-2xl font-black text-xs tracking-widest shadow-xl shadow-orange-500/20 transition-all transform active:scale-95 uppercase">
               Book This Trek
             </button>
           </div>
         </div>
+
+        {/* Booking Flow Modal inside TrekModal */}
+        {bookingOpen && (
+          <div className="fixed inset-0 z-[2100] flex items-center justify-center bg-black/20 p-4">
+            <div className="w-full max-w-2xl bg-white rounded-2xl shadow-xl overflow-hidden">
+              <div className="px-6 py-4 border-b flex items-center justify-between">
+                <h3 className="text-lg font-bold">Booking — {trek.title}</h3>
+                <button onClick={() => setBookingOpen(false)} className="w-9 h-9 rounded-full bg-gray-100">✕</button>
+              </div>
+
+              <div className="p-6">
+                <div className="mb-4">
+                  <div className="text-sm text-gray-500">Selected date</div>
+                  <div className="font-semibold">{bookingData.date || '—'}</div>
+                </div>
+
+                {bookingStep === 1 && (
+                  <div>
+                    <div className="mb-3 font-semibold">1. Login / Signup</div>
+                    <input
+                      value={bookingData.email}
+                      onChange={(e) => setBookingData((b) => ({ ...b, email: e.target.value }))}
+                      placeholder="Email"
+                      className="w-full border rounded p-2 mb-2"
+                    />
+                    <div className="text-sm text-gray-500 mb-4">(We'll treat any email as logged in for demo.)</div>
+                    <div className="flex justify-end gap-2">
+                      <button onClick={() => setBookingStep(2)} className="px-4 py-2 bg-blue-600 text-white rounded">Next</button>
+                    </div>
+                  </div>
+                )}
+
+                {bookingStep === 2 && (
+                  <div>
+                    <div className="mb-3 font-semibold">2. Enter People Details</div>
+                    <input
+                      value={bookingData.name}
+                      onChange={(e) => setBookingData((b) => ({ ...b, name: e.target.value }))}
+                      placeholder="Full name"
+                      className="w-full border rounded p-2 mb-2"
+                    />
+                    <input
+                      type="number"
+                      value={bookingData.count}
+                      min={1}
+                      onChange={(e) => setBookingData((b) => ({ ...b, count: Number(e.target.value) }))}
+                      className="w-32 border rounded p-2 mb-2"
+                    />
+                    <div className="flex justify-between mt-4">
+                      <button onClick={() => setBookingStep(1)} className="px-4 py-2 bg-gray-200 rounded">Back</button>
+                      <button onClick={() => setBookingStep(3)} className="px-4 py-2 bg-blue-600 text-white rounded">Next</button>
+                    </div>
+                  </div>
+                )}
+
+                {bookingStep === 3 && (
+                  <div>
+                    <div className="mb-3 font-semibold">3. Show QR</div>
+                    <div className="mb-4">This QR represents your booking — valid for a short time.</div>
+                    {qrCode ? (
+                      <div className="flex flex-col items-center gap-4">
+                        <img src={qrCode} alt="Booking QR" className="w-48 h-48 bg-white rounded-xl border p-2" />
+                        <div className="text-center">
+                          <div className="font-semibold">{bookingData.name || bookingData.email}</div>
+                          <div className="text-sm text-gray-500">People: {bookingData.count}</div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="mb-4 text-sm text-gray-500">Generating QR code…</div>
+                    )}
+
+                    <div className="flex justify-between mt-4">
+                      <button onClick={() => setBookingStep(2)} className="px-4 py-2 bg-gray-200 rounded">Back</button>
+                      <div className="flex gap-2">
+                        <button onClick={async () => {
+                          setIsGeneratingQr(true);
+                          const payload = JSON.stringify({
+                            trek: trek.title,
+                            date: bookingData.date,
+                            name: bookingData.name || bookingData.email,
+                            count: bookingData.count,
+                            bookedAt: new Date().toISOString(),
+                          });
+                          try {
+                            const qrDataUrl = await QRCode.toDataURL(payload, { margin: 2, width: 240 });
+                            setQrCode(qrDataUrl);
+                          } catch (error) {
+                            console.error('QR generation failed', error);
+                            setQrCode(null);
+                          } finally {
+                            setIsGeneratingQr(false);
+                          }
+                        }} className="px-4 py-2 bg-green-600 text-white rounded">
+                          {isGeneratingQr ? 'Generating...' : 'Generate QR'}
+                        </button>
+                        <button onClick={() => setBookingStep(4)} className="px-4 py-2 bg-blue-600 text-white rounded">Proceed to Payment</button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {bookingStep === 4 && (
+                  <div>
+                    <div className="mb-3 font-semibold">4. Payment</div>
+                    <div className="mb-4 text-sm text-gray-600">Simulated payment step. Mark paid to complete booking.</div>
+                    <div className="flex items-center gap-3 mb-4">
+                      <button onClick={() => setPaymentStatus('paid')} className="px-4 py-2 bg-green-600 text-white rounded">Mark Paid</button>
+                      <button onClick={() => setPaymentStatus('unpaid')} className="px-4 py-2 bg-red-100 rounded">Mark Unpaid</button>
+                      <div className={`ml-4 font-semibold ${paymentStatus === 'paid' ? 'text-green-600' : 'text-red-600'}`}>{paymentStatus.toUpperCase()}</div>
+                    </div>
+
+                    <div className="flex justify-between">
+                      <button onClick={() => setBookingStep(3)} className="px-4 py-2 bg-gray-200 rounded">Back</button>
+                      <button onClick={() => {
+                        if (paymentStatus === 'paid') {
+                          setTimeout(() => { setBookingOpen(false); }, 900);
+                        } else {
+                          alert('Payment not completed. Keep booking open.');
+                        }
+                      }} className="px-4 py-2 bg-blue-600 text-white rounded">Finish</button>
+                    </div>
+                  </div>
+                )}
+
+              </div>
+            </div>
+          </div>
+        )}
+
       </div>
     </div >
   );

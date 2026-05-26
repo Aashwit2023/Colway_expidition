@@ -37,6 +37,18 @@ export default function Trekking() {
         "Forest Camping",
         "Easy Summit Experience"
       ],
+      dates: {
+      "May-2026": [
+        "May 2 - May 14",
+        "May 10 - May 22",
+      ],
+
+      "October-2026": [
+        "Oct 2 - Oct 14",
+        "Oct 10 - Oct 22",
+        "Oct 15 - Oct 27",
+      ]
+      },
       inclusions: ["Guides", "Camping Gear", "Meals", "Permits"],
       fullDescription:
         "The Sar Pass Trek is an ideal introduction to Himalayan trekking. Starting from Kasol, the trail winds through dense pine forests, scenic meadows, and seasonal snowfields. Trekkers experience a gradual altitude gain, making it comfortable yet adventurous. The summit rewards you with panoramic views of Parvati Valley, while the descent through snow adds an element of fun. It is perfect for beginners looking for a balanced mix of challenge and natural beauty.",
@@ -186,7 +198,7 @@ export default function Trekking() {
         { label: "Country", value: "India", icon: "country" },
         { label: "Suitable For", value: "12 to 62 years", icon: "users" },
         { label: "Basecamp", value: "Janglik, Himachal Pradesh", icon: "location" },
-        { label: "Accommodation Type", value: "Tents", icon: "tent" },
+        { label: "Accommod  -ation Type", value: "Tents", icon: "tent" },
         { label: "Season", value: "June to September", icon: "season" },
         { label: "Start/End Point", value: "Old bus stand, Shimla", icon: "location" },
         { label: "Trail Type", value: "Cross over with valley path", icon: "trail" },
