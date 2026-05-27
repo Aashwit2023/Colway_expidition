@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import HeroSection from '../components/HeroSection';
 import Trekking_cards from '../components/Trekking_cards/Trekking_cards.jsx';
 import TrekModal from '../components/Trekking_cards/TrekModal.jsx';
@@ -19,6 +19,14 @@ import frndship from "../assets/friendship_peak.jpg";
 export default function Trekking() {
   const trekImages = [trekking2, trekking1, trekking33];
   const [selectedTrek, setSelectedTrek] = useState(null);
+  const trekkingCardsRef = useRef(null);
+
+  const handleOpenViewDates = (trek) => {
+    setSelectedTrek(null);
+    if (trekkingCardsRef.current?.openViewDates) {
+      trekkingCardsRef.current.openViewDates(trek);
+    }
+  };
 
   const themes = [
     {
@@ -572,7 +580,8 @@ export default function Trekking() {
                   <div className="w-24 h-1 bg-blue-600 mx-auto rounded-full mb-8"></div>
                 </>
               }
-              onOpenModal={setSelectedTrek}
+                ref={trekkingCardsRef}
+                onOpenModal={setSelectedTrek}
             />
 
           </div>
@@ -583,6 +592,7 @@ export default function Trekking() {
         trek={selectedTrek}
         isOpen={!!selectedTrek}
         onClose={() => setSelectedTrek(null)}
+        onViewDates={handleOpenViewDates}
       />
     </div>
   );

@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { Link } from "react-router-dom";
 import * as QRCode from 'qrcode';
 
-export default function Trekking_cards({ items, heading, onOpenModal }) {
+function Trekking_cards({ items, heading, onOpenModal }, ref) {
   const cardsRef = useRef([]);
   const [selectedDates, setSelectedDates] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(null);
@@ -29,7 +29,18 @@ export default function Trekking_cards({ items, heading, onOpenModal }) {
   const [bookingData, setBookingData] = useState({ date: null, name: '', email: '', count: 1 });
   const [paymentStatus, setPaymentStatus] = useState('unpaid');
   const [qrCode, setQrCode] = useState(null);
+  const [qrExpiration, setQrExpiration] = useState(null);
+  const [qrCountdown, setQrCountdown] = useState(0);
   const [isGeneratingQr, setIsGeneratingQr] = useState(false);
+
+  const qrLocked = qrExpiration !== null && Date.now() < qrExpiration;
+  const isLoginValid = bookingData.email.trim().length > 0;
+  const isPeopleValid = bookingData.name.trim().length > 0 && bookingData.count > 0;
+  const isQrGenerated = Boolean(qrCode);
+  const canAdvanceFromStep1 = isLoginValid;
+  const canAdvanceFromStep2 = isPeopleValid;
+  const canAdvanceFromStep3 = isQrGenerated;
+  const canFinishBooking = paymentStatus === 'paid';
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -51,6 +62,42 @@ export default function Trekking_cards({ items, heading, onOpenModal }) {
 
     return () => observer.disconnect();
   }, [items]);
+
+  const openViewDates = (theme) => {
+    const datesObj = theme.dates || sampleDates;
+    const months = Object.keys(datesObj);
+    setSelectedDates({ ...theme, dates: datesObj });
+    setSelectedMonth(months[0] || null);
+    setExpandedMonths(months.slice(0, 1));
+  };
+
+  useImperativeHandle(ref, () => ({ openViewDates }));
+
+  const formatTimer = (seconds) => {
+    const minutes = String(Math.floor(seconds / 60)).padStart(2, '0');
+    const secs = String(seconds % 60).padStart(2, '0');
+    return `${minutes}:${secs}`;
+  };
+
+  useEffect(() => {
+    if (!qrExpiration) {
+      setQrCountdown(0);
+      return;
+    }
+
+    const interval = setInterval(() => {
+      const remaining = Math.max(0, Math.ceil((qrExpiration - Date.now()) / 1000));
+      setQrCountdown(remaining);
+
+      if (remaining <= 0) {
+        setQrExpiration(null);
+        setQrCode(null);
+        clearInterval(interval);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [qrExpiration]);
 
   return (
     <section className="py-12 bg-transparent">
@@ -129,19 +176,19 @@ export default function Trekking_cards({ items, heading, onOpenModal }) {
         </div>
         {/* Global Dates Modal (renders once for selected trek) */}
         {selectedDates && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/10 p-2">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/25 p-2">
 
             <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden animate-fadeIn">
 
               {/* Header */}
               <div className="flex items-center justify-between px-6 py-4 border-b">
-                <h2 className="text-2xl font-bold text-gray-800">
+                <h2 className="text-xl font-bold text-gray-800">
                   Fixed Departures
                 </h2>
 
                 <button
                   onClick={() => setSelectedDates(null)}
-                  className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 text-xl"
+                  className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-300 text-xl"
                 >
                   ✕
                 </button>
@@ -166,11 +213,9 @@ export default function Trekking_cards({ items, heading, onOpenModal }) {
                     <div key={i}>
                       <button
                         onClick={() => {
-                          setExpandedMonths((prev) =>
-                            prev.includes(month)
-                              ? prev.filter((m) => m !== month)
-                              : [...prev, month]
-                          );
+                          setExpandedMonths((prev) => (
+                            prev.includes(month) ? [] : [month]
+                          ));
                           setSelectedMonth(month);
                         }}
                         className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl mb-3 ${selectedMonth === month ? 'bg-[#ff7a18] text-white' : 'bg-gray-100 text-gray-800'} font-bold text-lg`}
@@ -236,7 +281,21 @@ export default function Trekking_cards({ items, heading, onOpenModal }) {
                   <div className="font-semibold">{bookingData.date || '—'}</div>
                 </div>
 
-                {/* Steps */}
+                <div className="grid grid-cols-2 gap-2 mb-6 text-xs">
+                  <div className={`rounded-2xl px-3 py-2 border ${bookingStep === 1 ? 'border-orange-500 bg-orange-50 text-orange-700' : 'border-gray-200 bg-gray-50 text-gray-600'}`}>
+                    1. Login / Signup <span className="text-red-500">*</span>
+                  </div>
+                  <div className={`rounded-2xl px-3 py-2 border ${bookingStep === 2 ? 'border-orange-500 bg-orange-50 text-orange-700' : 'border-gray-200 bg-gray-50 text-gray-600'}`}>
+                    2. People Details <span className="text-red-500">*</span>
+                  </div>
+                  <div className={`rounded-2xl px-3 py-2 border ${bookingStep === 3 ? 'border-orange-500 bg-orange-50 text-orange-700' : 'border-gray-200 bg-gray-50 text-gray-600'}`}>
+                    3. QR Confirmation <span className="text-red-500">*</span>
+                  </div>
+                  <div className={`rounded-2xl px-3 py-2 border ${bookingStep === 4 ? 'border-orange-500 bg-orange-50 text-orange-700' : 'border-gray-200 bg-gray-50 text-gray-600'}`}>
+                    4. Payment <span className="text-red-500">*</span>
+                  </div>
+                </div>
+
                 {bookingStep === 1 && (
                   <div>
                     <div className="mb-3 font-semibold">1. Login / Signup</div>
@@ -245,10 +304,18 @@ export default function Trekking_cards({ items, heading, onOpenModal }) {
                       onChange={(e) => setBookingData((b) => ({ ...b, email: e.target.value }))}
                       placeholder="Email"
                       className="w-full border rounded p-2 mb-2"
+                      required
                     />
-                    <div className="text-sm text-gray-500 mb-4">(We'll treat any email as logged in for demo.)</div>
+                    <div className="text-sm text-gray-500 mb-2">(We'll treat any email as logged in.)</div>
+                    {!isLoginValid && <div className="text-sm text-red-600 mb-4">Email is required to proceed.</div>}
                     <div className="flex justify-end gap-2">
-                      <button onClick={() => setBookingStep(2)} className="px-4 py-2 bg-blue-600 text-white rounded">Next</button>
+                      <button
+                        onClick={() => setBookingStep(2)}
+                        disabled={!canAdvanceFromStep1}
+                        className={`px-4 py-2 rounded ${canAdvanceFromStep1 ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-200 text-gray-500 cursor-not-allowed'}`}
+                      >
+                        Next
+                      </button>
                     </div>
                   </div>
                 )}
@@ -261,6 +328,7 @@ export default function Trekking_cards({ items, heading, onOpenModal }) {
                       onChange={(e) => setBookingData((b) => ({ ...b, name: e.target.value }))}
                       placeholder="Full name"
                       className="w-full border rounded p-2 mb-2"
+                      required
                     />
                     <input
                       type="number"
@@ -269,9 +337,16 @@ export default function Trekking_cards({ items, heading, onOpenModal }) {
                       onChange={(e) => setBookingData((b) => ({ ...b, count: Number(e.target.value) }))}
                       className="w-32 border rounded p-2 mb-2"
                     />
+                    {!isPeopleValid && <div className="text-sm text-red-600 mb-2">Name and people count are required.</div>}
                     <div className="flex justify-between mt-4">
                       <button onClick={() => setBookingStep(1)} className="px-4 py-2 bg-gray-200 rounded">Back</button>
-                      <button onClick={() => setBookingStep(3)} className="px-4 py-2 bg-blue-600 text-white rounded">Next</button>
+                      <button
+                        onClick={() => setBookingStep(3)}
+                        disabled={!canAdvanceFromStep2}
+                        className={`px-4 py-2 rounded ${canAdvanceFromStep2 ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-200 text-gray-500 cursor-not-allowed'}`}
+                      >
+                        Next
+                      </button>
                     </div>
                   </div>
                 )}
@@ -289,31 +364,51 @@ export default function Trekking_cards({ items, heading, onOpenModal }) {
                         </div>
                       </div>
                     ) : (
-                      <div className="mb-4 text-sm text-gray-500">Generating QR code…</div>
+                      <div className="mb-4 text-sm text-gray-500">No QR generated yet. Click the button below when you're ready.</div>
+                    )}
+
+                    {qrLocked && (
+                      <div className="mb-4 text-sm text-orange-600">QR code is locked for {formatTimer(qrCountdown)} after generation. Regeneration is available after the timer ends.</div>
                     )}
 
                     <div className="flex justify-between mt-4">
                       <button onClick={() => setBookingStep(2)} className="px-4 py-2 bg-gray-200 rounded">Back</button>
                       <div className="flex gap-2">
-                        <button onClick={async () => {
-                          setIsGeneratingQr(true);
-                          const payload = JSON.stringify({
-                            date: bookingData.date,
-                            name: bookingData.name || bookingData.email,
-                            count: bookingData.count,
-                            bookedAt: new Date().toISOString(),
-                          });
-                          try {
-                            const qrDataUrl = await QRCode.toDataURL(payload, { margin: 2, width: 240 });
-                            setQrCode(qrDataUrl);
-                          } catch (error) {
-                            console.error('QR generation failed', error);
-                            setQrCode(null);
-                          } finally {
-                            setIsGeneratingQr(false);
-                          }
-                        }} className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition" disabled={isGeneratingQr}>{isGeneratingQr ? 'Generating...' : 'Generate QR'}</button>
-                        <button onClick={() => setBookingStep(4)} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">Proceed to Payment</button>
+                        <button
+                          onClick={async () => {
+                            if (qrLocked) return;
+                            setIsGeneratingQr(true);
+                            const expirationTime = Date.now() + 5 * 60 * 1000;
+                            const payload = JSON.stringify({
+                              date: bookingData.date,
+                              name: bookingData.name || bookingData.email,
+                              count: bookingData.count,
+                              bookedAt: new Date().toISOString(),
+                            });
+                            try {
+                              const qrDataUrl = await QRCode.toDataURL(payload, { margin: 2, width: 240 });
+                              setQrCode(qrDataUrl);
+                              setQrExpiration(expirationTime);
+                              setQrCountdown(5 * 60);
+                            } catch (error) {
+                              console.error('QR generation failed', error);
+                              setQrCode(null);
+                            } finally {
+                              setIsGeneratingQr(false);
+                            }
+                          }}
+                          className={`px-4 py-2 rounded ${qrLocked || isGeneratingQr ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-green-600 text-white hover:bg-green-700'}`}
+                          disabled={isGeneratingQr || qrLocked}
+                        >
+                          {isGeneratingQr ? 'Generating...' : qrLocked ? `Wait ${formatTimer(qrCountdown)}` : 'Generate QR'}
+                        </button>
+                        <button
+                          onClick={() => setBookingStep(4)}
+                          disabled={!canAdvanceFromStep3}
+                          className={`px-4 py-2 rounded ${canAdvanceFromStep3 ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-200 text-gray-500 cursor-not-allowed'}`}
+                        >
+                          Proceed to Payment
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -322,7 +417,7 @@ export default function Trekking_cards({ items, heading, onOpenModal }) {
                 {bookingStep === 4 && (
                   <div>
                     <div className="mb-3 font-semibold">4. Payment</div>
-                    <div className="mb-4 text-sm text-gray-600">Simulated payment step. Mark paid to complete booking.</div>
+                    <div className="mb-4 text-sm text-gray-600">Simulated payment step. Complete payment to finish your booking.</div>
                     <div className="flex items-center gap-3 mb-4">
                       <button onClick={() => setPaymentStatus('paid')} className="px-4 py-2 bg-green-600 text-white rounded">Mark Paid</button>
                       <button onClick={() => setPaymentStatus('unpaid')} className="px-4 py-2 bg-red-100 rounded">Mark Unpaid</button>
@@ -331,15 +426,19 @@ export default function Trekking_cards({ items, heading, onOpenModal }) {
 
                     <div className="flex justify-between">
                       <button onClick={() => setBookingStep(3)} className="px-4 py-2 bg-gray-200 rounded">Back</button>
-                      <button onClick={() => {
-                        if (paymentStatus === 'paid') {
-                          // finalize booking: keep QR visible and close after short delay
-                          setTimeout(() => { setBookingOpen(false); }, 900);
-                        } else {
-                          // keep open so user can pay
-                          alert('Payment not completed. Keep booking open.');
-                        }
-                      }} className="px-4 py-2 bg-blue-600 text-white rounded">Finish</button>
+                      <button
+                        onClick={() => {
+                          if (canFinishBooking) {
+                            setTimeout(() => { setBookingOpen(false); }, 900);
+                          } else {
+                            alert('Payment must be completed before finishing the booking.');
+                          }
+                        }}
+                        disabled={!canFinishBooking}
+                        className={`px-4 py-2 rounded ${canFinishBooking ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-200 text-gray-500 cursor-not-allowed'}`}
+                      >
+                        Finish
+                      </button>
                     </div>
                   </div>
                 )}
@@ -352,3 +451,5 @@ export default function Trekking_cards({ items, heading, onOpenModal }) {
     </section>
   );
 }
+
+export default forwardRef(Trekking_cards);

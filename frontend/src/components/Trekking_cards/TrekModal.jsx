@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import * as QRCode from 'qrcode';
 import { X, Calendar, MapPin, TrendingUp, Info, CheckCircle2, Users, Mountain, Home } from 'lucide-react';
 
-const TrekModal = ({ trek, isOpen, onClose }) => {
+const TrekModal = ({ trek, isOpen, onClose, onViewDates }) => {
   const [activeImage, setActiveImage] = useState(trek?.image);
   const [showSticky, setShowSticky] = useState(false);
   const scrollRef = React.useRef(null);
@@ -13,33 +13,44 @@ const TrekModal = ({ trek, isOpen, onClose }) => {
   const [bookingData, setBookingData] = useState({ date: null, name: '', email: '', count: 1 });
   const [paymentStatus, setPaymentStatus] = useState('unpaid');
   const [qrCode, setQrCode] = useState(null);
+  const [qrExpiration, setQrExpiration] = useState(null);
+  const [qrCountdown, setQrCountdown] = useState(0);
   const [isGeneratingQr, setIsGeneratingQr] = useState(false);
 
-  useEffect(() => {
-    if (bookingStep === 3 && !qrCode && bookingData.date && trek) {
-      const generate = async () => {
-        setIsGeneratingQr(true);
-        const payload = JSON.stringify({
-          trek: trek.title,
-          date: bookingData.date,
-          name: bookingData.name || bookingData.email,
-          count: bookingData.count,
-          bookedAt: new Date().toISOString(),
-        });
-        try {
-          const qrDataUrl = await QRCode.toDataURL(payload, { margin: 2, width: 240 });
-          setQrCode(qrDataUrl);
-        } catch (error) {
-          console.error('QR generation failed', error);
-          setQrCode(null);
-        } finally {
-          setIsGeneratingQr(false);
-        }
-      };
+  const qrLocked = qrExpiration !== null && Date.now() < qrExpiration;
+  const isLoginValid = bookingData.email.trim().length > 0;
+  const isPeopleValid = bookingData.name.trim().length > 0 && bookingData.count > 0;
+  const isQrGenerated = Boolean(qrCode);
+  const canAdvanceFromStep1 = isLoginValid;
+  const canAdvanceFromStep2 = isPeopleValid;
+  const canAdvanceFromStep3 = isQrGenerated;
+  const canFinishBooking = paymentStatus === 'paid';
 
-      generate();
+  const formatTimer = (seconds) => {
+    const minutes = String(Math.floor(seconds / 60)).padStart(2, '0');
+    const secs = String(seconds % 60).padStart(2, '0');
+    return `${minutes}:${secs}`;
+  };
+
+  useEffect(() => {
+    if (!qrExpiration) {
+      setQrCountdown(0);
+      return;
     }
-  }, [bookingStep, qrCode, bookingData, trek?.title]);
+
+    const interval = setInterval(() => {
+      const remaining = Math.max(0, Math.ceil((qrExpiration - Date.now()) / 1000));
+      setQrCountdown(remaining);
+
+      if (remaining <= 0) {
+        setQrExpiration(null);
+        setQrCode(null);
+        clearInterval(interval);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [qrExpiration]);
 
   const openBooking = (initialDate) => {
     const firstDate = initialDate || (trek?.dates && Object.values(trek.dates)[0] && Object.values(trek.dates)[0][0]) || null;
@@ -47,7 +58,18 @@ const TrekModal = ({ trek, isOpen, onClose }) => {
     setBookingStep(1);
     setPaymentStatus('unpaid');
     setQrCode(null);
+    setQrExpiration(null);
+    setQrCountdown(0);
     setBookingOpen(true);
+  };
+
+  const handleBookNow = () => {
+    if (onViewDates) {
+      onClose();
+      onViewDates(trek);
+      return;
+    }
+    openBooking();
   };
 
   useEffect(() => {
@@ -207,7 +229,7 @@ const TrekModal = ({ trek, isOpen, onClose }) => {
                     )}
 
                     {/* CTA Button */}
-                    <button onClick={() => openBooking()} className="w-full mt-5 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-xl transition-all shadow-md">
+                    <button onClick={handleBookNow} className="w-full mt-5 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-xl transition-all shadow-md">
                       BOOK NOW
                     </button>
                   </div>
@@ -415,7 +437,7 @@ const TrekModal = ({ trek, isOpen, onClose }) => {
               <p className="text-white/50 text-[10px] font-bold uppercase tracking-widest mb-0.5">{trek.title}</p>
               <p className="text-white text-xl font-black tracking-tight">{trek.price}</p>
             </div>
-            <button onClick={() => openBooking()} className="px-8 py-4 bg-orange-500 hover:bg-orange-600 text-white rounded-2xl font-black text-xs tracking-widest shadow-xl shadow-orange-500/20 transition-all transform active:scale-95 uppercase">
+            <button onClick={handleBookNow} className="px-8 py-4 bg-orange-500 hover:bg-orange-600 text-white rounded-2xl font-black text-xs tracking-widest shadow-xl shadow-orange-500/20 transition-all transform active:scale-95 uppercase">
               Book This Trek
             </button>
           </div>
@@ -436,6 +458,36 @@ const TrekModal = ({ trek, isOpen, onClose }) => {
                   <div className="font-semibold">{bookingData.date || '—'}</div>
                 </div>
 
+                <div className="grid grid-cols-2 gap-2 mb-6 text-xs">
+                  <div className={`rounded-2xl px-3 py-2 border ${bookingStep === 1 ? 'border-orange-500 bg-orange-50 text-orange-700' : 'border-gray-200 bg-gray-50 text-gray-600'}`}>
+                    1. Login / Signup <span className="text-red-500">*</span>
+                  </div>
+                  <div className={`rounded-2xl px-3 py-2 border ${bookingStep === 2 ? 'border-orange-500 bg-orange-50 text-orange-700' : 'border-gray-200 bg-gray-50 text-gray-600'}`}>
+                    2. People Details <span className="text-red-500">*</span>
+                  </div>
+                  <div className={`rounded-2xl px-3 py-2 border ${bookingStep === 3 ? 'border-orange-500 bg-orange-50 text-orange-700' : 'border-gray-200 bg-gray-50 text-gray-600'}`}>
+                    3. QR Confirmation <span className="text-red-500">*</span>
+                  </div>
+                  <div className={`rounded-2xl px-3 py-2 border ${bookingStep === 4 ? 'border-orange-500 bg-orange-50 text-orange-700' : 'border-gray-200 bg-gray-50 text-gray-600'}`}>
+                    4. Payment <span className="text-red-500">*</span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 mb-6 text-xs">
+                  <div className={`rounded-2xl px-3 py-2 border ${bookingStep === 1 ? 'border-orange-500 bg-orange-50 text-orange-700' : 'border-gray-200 bg-gray-50 text-gray-600'}`}>
+                    1. Login / Signup <span className="text-red-500">*</span>
+                  </div>
+                  <div className={`rounded-2xl px-3 py-2 border ${bookingStep === 2 ? 'border-orange-500 bg-orange-50 text-orange-700' : 'border-gray-200 bg-gray-50 text-gray-600'}`}>
+                    2. People Details <span className="text-red-500">*</span>
+                  </div>
+                  <div className={`rounded-2xl px-3 py-2 border ${bookingStep === 3 ? 'border-orange-500 bg-orange-50 text-orange-700' : 'border-gray-200 bg-gray-50 text-gray-600'}`}>
+                    3. QR Confirmation <span className="text-red-500">*</span>
+                  </div>
+                  <div className={`rounded-2xl px-3 py-2 border ${bookingStep === 4 ? 'border-orange-500 bg-orange-50 text-orange-700' : 'border-gray-200 bg-gray-50 text-gray-600'}`}>
+                    4. Payment <span className="text-red-500">*</span>
+                  </div>
+                </div>
+
                 {bookingStep === 1 && (
                   <div>
                     <div className="mb-3 font-semibold">1. Login / Signup</div>
@@ -445,9 +497,16 @@ const TrekModal = ({ trek, isOpen, onClose }) => {
                       placeholder="Email"
                       className="w-full border rounded p-2 mb-2"
                     />
-                    <div className="text-sm text-gray-500 mb-4">(We'll treat any email as logged in for demo.)</div>
+                    <div className="text-sm text-gray-500 mb-2">(We'll treat any email as logged in for demo.)</div>
+                    {!isLoginValid && <div className="text-sm text-red-600 mb-4">Email is required to proceed.</div>}
                     <div className="flex justify-end gap-2">
-                      <button onClick={() => setBookingStep(2)} className="px-4 py-2 bg-blue-600 text-white rounded">Next</button>
+                      <button
+                        onClick={() => setBookingStep(2)}
+                        disabled={!canAdvanceFromStep1}
+                        className={`px-4 py-2 rounded ${canAdvanceFromStep1 ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-200 text-gray-500 cursor-not-allowed'}`}
+                      >
+                        Next
+                      </button>
                     </div>
                   </div>
                 )}
@@ -468,9 +527,16 @@ const TrekModal = ({ trek, isOpen, onClose }) => {
                       onChange={(e) => setBookingData((b) => ({ ...b, count: Number(e.target.value) }))}
                       className="w-32 border rounded p-2 mb-2"
                     />
+                    {!isPeopleValid && <div className="text-sm text-red-600 mb-2">Name and people count are required.</div>}
                     <div className="flex justify-between mt-4">
                       <button onClick={() => setBookingStep(1)} className="px-4 py-2 bg-gray-200 rounded">Back</button>
-                      <button onClick={() => setBookingStep(3)} className="px-4 py-2 bg-blue-600 text-white rounded">Next</button>
+                      <button
+                        onClick={() => setBookingStep(3)}
+                        disabled={!canAdvanceFromStep2}
+                        className={`px-4 py-2 rounded ${canAdvanceFromStep2 ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-200 text-gray-500 cursor-not-allowed'}`}
+                      >
+                        Next
+                      </button>
                     </div>
                   </div>
                 )}
@@ -488,34 +554,52 @@ const TrekModal = ({ trek, isOpen, onClose }) => {
                         </div>
                       </div>
                     ) : (
-                      <div className="mb-4 text-sm text-gray-500">Generating QR code…</div>
+                      <div className="mb-4 text-sm text-gray-500">No QR generated yet. Click below when ready.</div>
+                    )}
+
+                    {qrLocked && (
+                      <div className="mb-4 text-sm text-orange-600">Current QR is locked for {formatTimer(qrCountdown)} and cannot be regenerated until the timer ends.</div>
                     )}
 
                     <div className="flex justify-between mt-4">
                       <button onClick={() => setBookingStep(2)} className="px-4 py-2 bg-gray-200 rounded">Back</button>
                       <div className="flex gap-2">
-                        <button onClick={async () => {
-                          setIsGeneratingQr(true);
-                          const payload = JSON.stringify({
-                            trek: trek.title,
-                            date: bookingData.date,
-                            name: bookingData.name || bookingData.email,
-                            count: bookingData.count,
-                            bookedAt: new Date().toISOString(),
-                          });
-                          try {
-                            const qrDataUrl = await QRCode.toDataURL(payload, { margin: 2, width: 240 });
-                            setQrCode(qrDataUrl);
-                          } catch (error) {
-                            console.error('QR generation failed', error);
-                            setQrCode(null);
-                          } finally {
-                            setIsGeneratingQr(false);
-                          }
-                        }} className="px-4 py-2 bg-green-600 text-white rounded">
-                          {isGeneratingQr ? 'Generating...' : 'Generate QR'}
+                        <button
+                          onClick={async () => {
+                            if (qrLocked) return;
+                            setIsGeneratingQr(true);
+                            const expirationTime = Date.now() + 5 * 60 * 1000;
+                            const payload = JSON.stringify({
+                              trek: trek.title,
+                              date: bookingData.date,
+                              name: bookingData.name || bookingData.email,
+                              count: bookingData.count,
+                              bookedAt: new Date().toISOString(),
+                            });
+                            try {
+                              const qrDataUrl = await QRCode.toDataURL(payload, { margin: 2, width: 240 });
+                              setQrCode(qrDataUrl);
+                              setQrExpiration(expirationTime);
+                              setQrCountdown(5 * 60);
+                            } catch (error) {
+                              console.error('QR generation failed', error);
+                              setQrCode(null);
+                            } finally {
+                              setIsGeneratingQr(false);
+                            }
+                          }}
+                          className={`px-4 py-2 rounded ${qrLocked || isGeneratingQr ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-green-600 text-white hover:bg-green-700'}`}
+                          disabled={isGeneratingQr || qrLocked}
+                        >
+                          {isGeneratingQr ? 'Generating...' : qrLocked ? `Wait ${formatTimer(qrCountdown)}` : 'Generate QR'}
                         </button>
-                        <button onClick={() => setBookingStep(4)} className="px-4 py-2 bg-blue-600 text-white rounded">Proceed to Payment</button>
+                        <button
+                          onClick={() => setBookingStep(4)}
+                          disabled={!canAdvanceFromStep3}
+                          className={`px-4 py-2 rounded ${canAdvanceFromStep3 ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-200 text-gray-500 cursor-not-allowed'}`}
+                        >
+                          Proceed to Payment
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -533,13 +617,19 @@ const TrekModal = ({ trek, isOpen, onClose }) => {
 
                     <div className="flex justify-between">
                       <button onClick={() => setBookingStep(3)} className="px-4 py-2 bg-gray-200 rounded">Back</button>
-                      <button onClick={() => {
-                        if (paymentStatus === 'paid') {
-                          setTimeout(() => { setBookingOpen(false); }, 900);
-                        } else {
-                          alert('Payment not completed. Keep booking open.');
-                        }
-                      }} className="px-4 py-2 bg-blue-600 text-white rounded">Finish</button>
+                      <button
+                        onClick={() => {
+                          if (canFinishBooking) {
+                            setTimeout(() => { setBookingOpen(false); }, 900);
+                          } else {
+                            alert('Payment must be completed before finishing the booking.');
+                          }
+                        }}
+                        disabled={!canFinishBooking}
+                        className={`px-4 py-2 rounded ${canFinishBooking ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-200 text-gray-500 cursor-not-allowed'}`}
+                      >
+                        Finish
+                      </button>
                     </div>
                   </div>
                 )}
