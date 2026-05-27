@@ -55,9 +55,9 @@ export default function Trekking_cards({ items, heading, onOpenModal }) {
   return (
     <section className="py-12 bg-transparent">
       <div className="max-w-[1300px] mx-auto px-4 md:px-6">
-        <h2 className="text-3xl md:text-5xl font-black text-center mb-10 text-gray-900 tracking-tighter italic">
+        <div className="text-center mb-10">
           {heading}
-        </h2>
+        </div>
 
         {/* Balanced 3-Column Grid - Responsive Spacing */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">

@@ -16,7 +16,7 @@ const TrekModal = ({ trek, isOpen, onClose }) => {
   const [isGeneratingQr, setIsGeneratingQr] = useState(false);
 
   useEffect(() => {
-    if (bookingStep === 3 && !qrCode && bookingData.date) {
+    if (bookingStep === 3 && !qrCode && bookingData.date && trek) {
       const generate = async () => {
         setIsGeneratingQr(true);
         const payload = JSON.stringify({
@@ -39,7 +39,7 @@ const TrekModal = ({ trek, isOpen, onClose }) => {
 
       generate();
     }
-  }, [bookingStep, qrCode, bookingData, trek.title]);
+  }, [bookingStep, qrCode, bookingData, trek?.title]);
 
   const openBooking = (initialDate) => {
     const firstDate = initialDate || (trek?.dates && Object.values(trek.dates)[0] && Object.values(trek.dates)[0][0]) || null;
