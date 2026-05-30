@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import * as QRCode from 'qrcode';
 import { X, Calendar, MapPin, TrendingUp, Info, CheckCircle2, Users, Mountain, Home } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import ParticipantDetailsForm from '../ParticipantDetailsForm';
 
 const TrekModal = ({ trek, isOpen, onClose, onViewDates }) => {
   const [activeImage, setActiveImage] = useState(trek?.image);
@@ -10,7 +12,7 @@ const TrekModal = ({ trek, isOpen, onClose, onViewDates }) => {
   // Booking flow state local to modal
   const [bookingOpen, setBookingOpen] = useState(false);
   const [bookingStep, setBookingStep] = useState(1);
-  const [bookingData, setBookingData] = useState({ date: null, name: '', email: '', count: 1 });
+  const [bookingData, setBookingData] = useState({ date: null, email: '', count: 1, participants: [{ name: '', age: '' }] });
   const [paymentStatus, setPaymentStatus] = useState('unpaid');
   const [qrCode, setQrCode] = useState(null);
   const [qrExpiration, setQrExpiration] = useState(null);
@@ -19,7 +21,9 @@ const TrekModal = ({ trek, isOpen, onClose, onViewDates }) => {
 
   const qrLocked = qrExpiration !== null && Date.now() < qrExpiration;
   const isLoginValid = bookingData.email.trim().length > 0;
-  const isPeopleValid = bookingData.name.trim().length > 0 && bookingData.count > 0;
+  const isPeopleValid = bookingData.participants.every(
+    (participant) => participant?.name?.trim().length > 0 && participant?.age > 0
+  );
   const isQrGenerated = Boolean(qrCode);
   const canAdvanceFromStep1 = isLoginValid;
   const canAdvanceFromStep2 = isPeopleValid;
@@ -54,7 +58,7 @@ const TrekModal = ({ trek, isOpen, onClose, onViewDates }) => {
 
   const openBooking = (initialDate) => {
     const firstDate = initialDate || (trek?.dates && Object.values(trek.dates)[0] && Object.values(trek.dates)[0][0]) || null;
-    setBookingData({ date: firstDate, name: '', email: '', count: 1 });
+    setBookingData({ date: firstDate, email: '', count: 1, participants: [{ name: '', age: '' }] });
     setBookingStep(1);
     setPaymentStatus('unpaid');
     setQrCode(null);
@@ -63,13 +67,23 @@ const TrekModal = ({ trek, isOpen, onClose, onViewDates }) => {
     setBookingOpen(true);
   };
 
+  const isLoggedIn = () => Boolean(localStorage.getItem('colwayAuthEmail'));
+
   const handleBookNow = () => {
-    if (onViewDates) {
-      onClose();
-      onViewDates(trek);
+    const firstDate = trek?.dates && Object.values(trek.dates)[0] && Object.values(trek.dates)[0][0];
+    const bookingState = {
+      trek: trek?.title || 'Booked Trek',
+      date: firstDate || 'TBD',
+      count: 1,
+      participants: [{ name: '', age: '' }],
+    };
+
+    if (isLoggedIn()) {
+      navigate('/participant-details', { state: { bookingState } });
       return;
     }
-    openBooking();
+
+    navigate('/login', { state: { from: '/participant-details', bookingState } });
   };
 
   useEffect(() => {
@@ -512,33 +526,12 @@ const TrekModal = ({ trek, isOpen, onClose, onViewDates }) => {
                 )}
 
                 {bookingStep === 2 && (
-                  <div>
-                    <div className="mb-3 font-semibold">2. Enter People Details</div>
-                    <input
-                      value={bookingData.name}
-                      onChange={(e) => setBookingData((b) => ({ ...b, name: e.target.value }))}
-                      placeholder="Full name"
-                      className="w-full border rounded p-2 mb-2"
-                    />
-                    <input
-                      type="number"
-                      value={bookingData.count}
-                      min={1}
-                      onChange={(e) => setBookingData((b) => ({ ...b, count: Number(e.target.value) }))}
-                      className="w-32 border rounded p-2 mb-2"
-                    />
-                    {!isPeopleValid && <div className="text-sm text-red-600 mb-2">Name and people count are required.</div>}
-                    <div className="flex justify-between mt-4">
-                      <button onClick={() => setBookingStep(1)} className="px-4 py-2 bg-gray-200 rounded">Back</button>
-                      <button
-                        onClick={() => setBookingStep(3)}
-                        disabled={!canAdvanceFromStep2}
-                        className={`px-4 py-2 rounded ${canAdvanceFromStep2 ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-200 text-gray-500 cursor-not-allowed'}`}
-                      >
-                        Next
-                      </button>
-                    </div>
-                  </div>
+                  <ParticipantDetailsForm
+                    bookingData={bookingData}
+                    setBookingData={setBookingData}
+                    onBack={() => setBookingStep(1)}
+                    onNext={() => setBookingStep(3)}
+                  />
                 )}
 
                 {bookingStep === 3 && (
@@ -549,7 +542,7 @@ const TrekModal = ({ trek, isOpen, onClose, onViewDates }) => {
                       <div className="flex flex-col items-center gap-4">
                         <img src={qrCode} alt="Booking QR" className="w-48 h-48 bg-white rounded-xl border p-2" />
                         <div className="text-center">
-                          <div className="font-semibold">{bookingData.name || bookingData.email}</div>
+                          <div className="font-semibold">{bookingData.participants[0]?.name || bookingData.email}</div>
                           <div className="text-sm text-gray-500">People: {bookingData.count}</div>
                         </div>
                       </div>
@@ -572,8 +565,9 @@ const TrekModal = ({ trek, isOpen, onClose, onViewDates }) => {
                             const payload = JSON.stringify({
                               trek: trek.title,
                               date: bookingData.date,
-                              name: bookingData.name || bookingData.email,
+                              name: bookingData.participants[0]?.name || bookingData.email,
                               count: bookingData.count,
+                              participants: bookingData.participants,
                               bookedAt: new Date().toISOString(),
                             });
                             try {

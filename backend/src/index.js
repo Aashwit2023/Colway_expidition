@@ -6,7 +6,7 @@ import connectDB from "./config/db.js";
 import cors from "cors";
 const app = express();
 
-const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+const frontendUrl = process.env.FRONTEND_URL;
 
 app.use(express.json());
 app.use(cors({

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useState } from 'react'
 import { loginUser } from '../api/api';
 import loginimg from '../assets/loginimg.jpg';
@@ -6,6 +6,8 @@ import toast from 'react-hot-toast';
 
 
 export default function Login() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [user, setUser] = useState({
     email: "",
     password : ""     
@@ -32,11 +34,15 @@ export default function Login() {
       const {response, data} = await  loginUser(user.email, user.password);
 
       if (response.ok) {
+        localStorage.setItem('colwayAuthEmail', user.email);
         toast.success(data.message || "Logged in successfully!");
+        const destination = location.state?.from || '/trekking';
+        const bookingState = location.state?.bookingState;
         setUser({
           email: "",
           password: "",
         });
+        navigate(destination, { state: { bookingState } });
       } else {
         toast.error(data.message || "Login failed. Please check your Credentials.");
       }

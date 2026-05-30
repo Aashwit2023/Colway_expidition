@@ -1,8 +1,27 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import * as QRCode from 'qrcode';
+import ParticipantDetailsForm from '../ParticipantDetailsForm';
 
 function Trekking_cards({ items, heading, onOpenModal }, ref) {
+  const navigate = useNavigate();
+  const isLoggedIn = () => Boolean(localStorage.getItem('colwayAuthEmail'));
+
+  const beginBooking = (date) => {
+    const bookingState = {
+      trek: selectedDates?.title || 'Booked Trek',
+      date,
+      count: 1,
+      participants: [{ name: '', age: '' }],
+    };
+
+    if (isLoggedIn()) {
+      navigate('/participant-details', { state: { bookingState } });
+      return;
+    }
+
+    navigate('/login', { state: { from: '/participant-details', bookingState } });
+  };
   const cardsRef = useRef([]);
   const [selectedDates, setSelectedDates] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(null);
@@ -26,7 +45,7 @@ function Trekking_cards({ items, heading, onOpenModal }, ref) {
   // Booking flow state
   const [bookingOpen, setBookingOpen] = useState(false);
   const [bookingStep, setBookingStep] = useState(1);
-  const [bookingData, setBookingData] = useState({ date: null, name: '', email: '', count: 1 });
+  const [bookingData, setBookingData] = useState({ date: null, email: '', count: 1, participants: [{ name: '', age: '' }] });
   const [paymentStatus, setPaymentStatus] = useState('unpaid');
   const [qrCode, setQrCode] = useState(null);
   const [qrExpiration, setQrExpiration] = useState(null);
@@ -35,7 +54,9 @@ function Trekking_cards({ items, heading, onOpenModal }, ref) {
 
   const qrLocked = qrExpiration !== null && Date.now() < qrExpiration;
   const isLoginValid = bookingData.email.trim().length > 0;
-  const isPeopleValid = bookingData.name.trim().length > 0 && bookingData.count > 0;
+  const isPeopleValid = bookingData.participants.every(
+    (participant) => participant?.name?.trim().length > 0 && participant?.age > 0
+  );
   const isQrGenerated = Boolean(qrCode);
   const canAdvanceFromStep1 = isLoginValid;
   const canAdvanceFromStep2 = isPeopleValid;
@@ -176,9 +197,9 @@ function Trekking_cards({ items, heading, onOpenModal }, ref) {
         </div>
         {/* Global Dates Modal (renders once for selected trek) */}
         {selectedDates && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/25 p-2">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 p-4">
 
-            <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden animate-fadeIn">
+            <div className="relative w-full max-w-3xl mx-4 md:mx-0 bg-white rounded-3xl shadow-2xl overflow-hidden animate-fadeIn">
 
               {/* Header */}
               <div className="flex items-center justify-between px-6 py-4 border-b">
@@ -188,78 +209,75 @@ function Trekking_cards({ items, heading, onOpenModal }, ref) {
 
                 <button
                   onClick={() => setSelectedDates(null)}
-                  className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-300 text-xl"
+                  aria-label="Close departures"
+                  className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 text-xl flex items-center justify-center"
                 >
                   ✕
                 </button>
               </div>
 
               {/* Content */}
-              <div className="max-h-[500px] overflow-y-auto p-5 space-y-5">
+              <div className="max-h-[80vh] overflow-y-auto p-6 space-y-6">
 
                 {/* Trek title */}
                 {selectedDates.title && (
                   <div className="px-2">
-                    <div className="text-lg font-semibold text-gray-800 mb-2">{selectedDates.title}</div>
+                    <div className="text-lg font-semibold text-gray-800 mb-1">{selectedDates.title}</div>
+                    {selectedDates.location && <div className="text-sm text-gray-500">{selectedDates.location}</div>}
                   </div>
                 )}
 
-                {/* no select - collapsed months only */}
-
                 {/* Collapsible months list */}
-                {Object.entries(selectedDates.dates).map(([month, dates], i) => {
-                  const isExpanded = expandedMonths.includes(month);
-                  return (
-                    <div key={i}>
-                      <button
-                        onClick={() => {
-                          setExpandedMonths((prev) => (
-                            prev.includes(month) ? [] : [month]
-                          ));
-                          setSelectedMonth(month);
-                        }}
-                        className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl mb-3 ${selectedMonth === month ? 'bg-[#ff7a18] text-white' : 'bg-gray-100 text-gray-800'} font-bold text-lg`}
-                      >
-                        <span>{month}</span>
-                        <span className="text-xl">{isExpanded ? '▾' : '▸'}</span>
-                      </button>
+                <div className="space-y-4">
+                  {Object.entries(selectedDates.dates).map(([month, dates], i) => {
+                    const isExpanded = expandedMonths.includes(month);
+                    return (
+                      <div key={i} className="">
+                        <button
+                          onClick={() => {
+                            setExpandedMonths((prev) => (
+                              prev.includes(month) ? [] : [month]
+                            ));
+                            setSelectedMonth(month);
+                          }}
+                          className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl mb-2 ${selectedMonth === month ? 'bg-[#ff7a18] text-white' : 'bg-gray-100 text-gray-800'} font-bold text-lg`}
+                        >
+                          <span className="text-left">{month}</span>
+                          <span className="text-xl">{isExpanded ? '▾' : '▸'}</span>
+                        </button>
 
-                      {isExpanded && (
-                        <div className="space-y-3">
-                                    {dates.map((date, idx) => (
-                                      <div
-                                        key={idx}
-                                        className="flex justify-between items-center border border-gray-200 rounded-2xl px-4 py-4 hover:shadow-md transition"
-                                      >
-                                        <span className="font-semibold text-gray-700">
-                                          {date}
-                                        </span>
+                        {isExpanded && (
+                          <div className="space-y-3">
+                            {dates.map((date, idx) => (
+                              <div
+                                key={idx}
+                                className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border border-gray-200 rounded-2xl px-4 py-4 hover:shadow-md transition"
+                              >
+                                <div className="flex-1">
+                                  <div className="font-semibold text-gray-700">{date}</div>
+                                  <div className="text-xs text-gray-500">Seats available: --</div>
+                                </div>
 
-                                        <div className="flex items-center gap-3">
-                                          <button
-                                            onClick={() => {
-                                              setBookingData((b) => ({ ...b, date }));
-                                              setBookingStep(1);
-                                              setPaymentStatus('unpaid');
-                                              setQrCode(null);
-                                              setBookingOpen(true);
-                                            }}
-                                            className="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition"
-                                          >
-                                            BOOK NOW
-                                          </button>
+                                <div className="flex items-center gap-3">
+                                  <button
+                                    onClick={() => beginBooking(date)}
+                                    className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition"
+                                  >
+                                    BOOK NOW
+                                  </button>
 
-                                          <span className="text-green-600 font-bold text-sm">
-                                            OPEN
-                                          </span>
-                                        </div>
-                                      </div>
-                                    ))}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+                                  <span className="text-green-600 font-bold text-sm">
+                                    OPEN
+                                  </span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
 
               </div>
             </div>
@@ -321,34 +339,12 @@ function Trekking_cards({ items, heading, onOpenModal }, ref) {
                 )}
 
                 {bookingStep === 2 && (
-                  <div>
-                    <div className="mb-3 font-semibold">2. Enter People Details</div>
-                    <input
-                      value={bookingData.name}
-                      onChange={(e) => setBookingData((b) => ({ ...b, name: e.target.value }))}
-                      placeholder="Full name"
-                      className="w-full border rounded p-2 mb-2"
-                      required
-                    />
-                    <input
-                      type="number"
-                      value={bookingData.count}
-                      min={1}
-                      onChange={(e) => setBookingData((b) => ({ ...b, count: Number(e.target.value) }))}
-                      className="w-32 border rounded p-2 mb-2"
-                    />
-                    {!isPeopleValid && <div className="text-sm text-red-600 mb-2">Name and people count are required.</div>}
-                    <div className="flex justify-between mt-4">
-                      <button onClick={() => setBookingStep(1)} className="px-4 py-2 bg-gray-200 rounded">Back</button>
-                      <button
-                        onClick={() => setBookingStep(3)}
-                        disabled={!canAdvanceFromStep2}
-                        className={`px-4 py-2 rounded ${canAdvanceFromStep2 ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-200 text-gray-500 cursor-not-allowed'}`}
-                      >
-                        Next
-                      </button>
-                    </div>
-                  </div>
+                  <ParticipantDetailsForm
+                    bookingData={bookingData}
+                    setBookingData={setBookingData}
+                    onBack={() => setBookingStep(1)}
+                    onNext={() => setBookingStep(3)}
+                  />
                 )}
 
                 {bookingStep === 3 && (
@@ -359,7 +355,7 @@ function Trekking_cards({ items, heading, onOpenModal }, ref) {
                       <div className="flex flex-col items-center gap-4">
                         <img src={qrCode} alt="Booking QR" className="w-48 h-48 bg-white rounded-xl border p-2" />
                         <div className="text-center">
-                          <div className="font-semibold">{bookingData.name || bookingData.email}</div>
+                          <div className="font-semibold">{bookingData.participants[0]?.name || bookingData.email}</div>
                           <div className="text-sm text-gray-500">People: {bookingData.count}</div>
                         </div>
                       </div>
@@ -381,8 +377,9 @@ function Trekking_cards({ items, heading, onOpenModal }, ref) {
                             const expirationTime = Date.now() + 5 * 60 * 1000;
                             const payload = JSON.stringify({
                               date: bookingData.date,
-                              name: bookingData.name || bookingData.email,
+                              name: bookingData.participants[0]?.name || bookingData.email,
                               count: bookingData.count,
+                              participants: bookingData.participants,
                               bookedAt: new Date().toISOString(),
                             });
                             try {
