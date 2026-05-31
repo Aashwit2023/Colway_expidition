@@ -27,6 +27,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setUser(null);
     localStorage.removeItem('colway_user');
+    localStorage.removeItem('colwayAuthEmail');
   };
 
   return (

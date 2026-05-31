@@ -1,4 +1,4 @@
-import { Link, useNavigate, Navigate } from 'react-router-dom'
+import { Link, useNavigate, Navigate, useLocation } from 'react-router-dom'
 import { useState } from 'react'
 import { signUpUser } from '../api/api';
 import signimg from '../assets/signimg.jpg';
@@ -9,6 +9,7 @@ export default function Signup() {
   const { user: CurrentUser } = useAuth();
 
   const navigate = useNavigate();
+  const location = useLocation();
   const [user, setUser] = useState({
     firstname: "",
     lastname: "",
@@ -20,9 +21,11 @@ export default function Signup() {
   const [loading, setLoading] = useState(false);
 
   if (CurrentUser) {
-    return <Navigate to="/" />
+    const from = location.state?.from || '/';
+    const bookingState = location.state?.bookingState;
+    return <Navigate to={from} state={{ bookingState }} replace />
   }
-  
+
   // handling the Input values
   const handleInput = (e) => {
     let name = e.target.name;
@@ -65,7 +68,7 @@ export default function Signup() {
           password: "",
           cnfm_password: ""
         });
-        navigate('/login');
+        navigate('/login', { state: location.state });
       } else {
         toast.error(data.message || "Signup failed. Please try again.");
       }
@@ -144,15 +147,14 @@ export default function Signup() {
                 </span>
               </label>
             </div>
-            <button 
+            <button
               disabled={loading}
-              className={`w-full p-3 rounded-lg text-white font-bold text-lg transition-all duration-300 ${
-                loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#ff7a18] hover:bg-[#e66a15] shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'
-              }`}
+              className={`w-full p-3 rounded-lg text-white font-bold text-lg transition-all duration-300 ${loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#ff7a18] hover:bg-[#e66a15] shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'
+                }`}
             >
               {loading ? "Creating Account..." : "Create Account"}
             </button>
-            <p className="mt-6 text-center text-sm text-gray-600 font-medium">Already have an account? <Link to="/login" className="text-[#ff7a18] hover:underline font-bold ml-1">Login here</Link></p>
+             <p className="mt-6 text-center text-sm text-gray-600 font-medium">Already have an account? <Link to="/login" state={location.state} className="text-[#ff7a18] hover:underline font-bold ml-1">Login here</Link></p>
           </div>
         </form>
       </div>

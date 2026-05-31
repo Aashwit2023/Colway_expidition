@@ -22,6 +22,16 @@ body {
   /* Sets line height for better readability. */
 }
 
+/* Cursor behavior: default arrow for the page, pointer (hand) for interactive elements */
+html, body {
+  cursor: default;
+}
+
+/* Ensure interactive controls show a pointer */
+a, button, input[type="button"], input[type="submit"], .btn, .dropdown-toggle, .theme-card, .theme-card a, .hamburger, .trek-button button, .view-dates, .trek-info, .theme-card .theme-link {
+  cursor: pointer;
+}
+
 /* Link styles to remove underline and inherit color. */
 a {
   text-decoration: none;
@@ -689,4 +699,21 @@ a {
 .custom-select__option--is-selected {
   background-color: #b2b2b8 !important;
   color: white !important;
-}
+}
+
+/* Custom animation for tooltip speech bubble */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 8px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
