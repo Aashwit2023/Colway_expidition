@@ -6,7 +6,7 @@ router.route("/").get(home);
 
 router.route('/login').post(login);
 
-router.route('/signUp').post(signUp);
+router.route('/signup').post(signUp);
 
 router.route('/requestCallback').post(requestCallback);
 

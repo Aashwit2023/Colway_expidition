@@ -1,11 +1,14 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, Navigate } from 'react-router-dom'
 import { useState } from 'react'
 import { loginUser } from '../api/api';
 import loginimg from '../assets/loginimg.jpg';
 import toast from 'react-hot-toast';
+import { useAuth } from '../context/AuthContext';
 
 
 export default function Login() {
+  const { user: currentUser, login } = useAuth();
+  const navigate = useNavigate();
   const [user, setUser] = useState({
     email: "",
     password : ""     
@@ -23,6 +26,10 @@ export default function Login() {
     });
   }
 
+  if (currentUser) {
+    return <Navigate to="/" />
+  }
+
   // Handling the form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,10 +40,12 @@ export default function Login() {
 
       if (response.ok) {
         toast.success(data.message || "Logged in successfully!");
+        login(data.user);
         setUser({
           email: "",
           password: "",
         });
+        navigate('/');
       } else {
         toast.error(data.message || "Login failed. Please check your Credentials.");
       }

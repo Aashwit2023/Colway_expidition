@@ -1,10 +1,14 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, Navigate } from 'react-router-dom'
 import { useState } from 'react'
 import { signUpUser } from '../api/api';
 import signimg from '../assets/signimg.jpg';
 import toast from 'react-hot-toast';
+import { useAuth } from '../context/AuthContext'
 
 export default function Signup() {
+  const { user: CurrentUser } = useAuth();
+
+  const navigate = useNavigate();
   const [user, setUser] = useState({
     firstname: "",
     lastname: "",
@@ -15,6 +19,10 @@ export default function Signup() {
 
   const [loading, setLoading] = useState(false);
 
+  if (CurrentUser) {
+    return <Navigate to="/" />
+  }
+  
   // handling the Input values
   const handleInput = (e) => {
     let name = e.target.name;
@@ -49,7 +57,7 @@ export default function Signup() {
       // const data = await response.json();
 
       if (response.ok) {
-        toast.success(data.message || "Account created successfully!");
+        toast.success(data.message || "Account created successfully! Please log in.");
         setUser({
           firstname: "",
           lastname: "",
@@ -57,6 +65,7 @@ export default function Signup() {
           password: "",
           cnfm_password: ""
         });
+        navigate('/login');
       } else {
         toast.error(data.message || "Signup failed. Please try again.");
       }
