@@ -3,6 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import ParticipantDetailsForm from '../components/ParticipantDetailsForm';
 import { useAuth } from '../context/AuthContext';
 import { themes } from '../data/treks';
+import { createBooking } from '../api/api';
+import toast from 'react-hot-toast';
 
 export default function ParticipantDetails() {
   const location = useLocation();
@@ -92,31 +94,68 @@ export default function ParticipantDetails() {
     });
   }
 
-  const handleToggleExtra = (label) => {
-    setSelectedExtras((prev) => ({
-      ...prev,
-      [label]: !prev[label],
-    }));
+  const handleQuantityChange = (label, delta) => {
+    setSelectedExtras((prev) => {
+      const currentQty = prev[label] || 0;
+      const maxQty = bookingData.count;
+      const newQty = Math.min(maxQty, Math.max(0, currentQty + delta));
+      return {
+        ...prev,
+        [label]: newQty,
+      };
+    });
   };
 
   const basePrice = matchedTrek ? parseInt(matchedTrek.price.replace(/[^0-9]/g, ''), 10) : 0;
   const subtotalBase = basePrice * bookingData.count;
 
-  // Calculate extras cost per person
-  const extrasPricePerPerson = Object.entries(selectedExtras).reduce((sum, [label, isSelected]) => {
-    if (isSelected) {
+  // Calculate total extras cost based on explicit quantities
+  const totalExtrasCost = Object.entries(selectedExtras).reduce((sum, [label, qty]) => {
+    if (qty > 0) {
       const item = extraChargesList.find((x) => x.label === label);
-      if (item) return sum + item.price;
+      if (item) return sum + (item.price * qty);
     }
     return sum;
   }, 0);
 
-  const totalExtrasCost = extrasPricePerPerson * bookingData.count;
   const grandTotal = subtotalBase + totalExtrasCost;
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (bookingData.participants.every((p) => p.name.trim() && p.age > 0)) {
-      navigate('/trekking');
+      try {
+        const items = Object.entries(selectedExtras)
+          .filter(([label, qty]) => qty > 0)
+          .map(([label, qty]) => {
+            const item = extraChargesList.find((x) => x.label === label);
+            return {
+              name: item.label,
+              price: item.price,
+              quantity: qty,
+            };
+          });
+
+        const payload = {
+          userEmail: user.email,
+          trekName: bookingData.trek,
+          trekDate: bookingData.date,
+          participants: bookingData.participants,
+          baseCost: basePrice,
+          additionalItems: items,
+          totalCost: grandTotal
+        };
+        
+        const { response, data } = await createBooking(payload);
+        
+        if (!response.ok) {
+          throw new Error(data.message || 'Failed to save booking');
+        }
+        
+        toast.success("Booking saved successfully!");
+        navigate('/trekking');
+      } catch (err) {
+        console.error("Error saving booking:", err);
+        toast.error(err.message || 'Failed to save booking details. Please try again.');
+      }
     }
   };
 
@@ -177,41 +216,65 @@ export default function ParticipantDetails() {
               {extraChargesList.length > 0 && (
                 <div className="mt-5 border-b border-slate-100 pb-5">
                   <h4 className="text-xs uppercase tracking-[0.2em] text-slate-500 font-semibold mb-4">
-                    Optional Extras (per person)
+                    Optional Extras
                   </h4>
-                  <div className="space-y-3.5">
-                    {extraChargesList.map((item, idx) => (
-                      <label 
-                        key={idx} 
-                        className="flex items-start gap-3 cursor-pointer group select-none text-slate-750 hover:text-slate-900"
-                      >
-                        <input
-                          type="checkbox"
-                          checked={!!selectedExtras[item.label]}
-                          onChange={() => handleToggleExtra(item.label)}
-                          className="mt-1 w-4.5 h-4.5 rounded border-slate-300 text-orange-600 focus:ring-orange-500/20"
-                        />
-                        <div className="text-sm flex-1">
-                          <div className="font-medium text-slate-800 group-hover:text-slate-950 transition-colors">
-                            {item.label}
+                  <div className="space-y-4">
+                    {extraChargesList.map((item, idx) => {
+                      const qty = selectedExtras[item.label] || 0;
+                      return (
+                        <div 
+                          key={idx} 
+                          className="flex items-center justify-between group select-none text-slate-750"
+                        >
+                          <div className="text-sm flex-1 pr-4">
+                            <div className="font-medium text-slate-800 group-hover:text-slate-950 transition-colors">
+                              {item.label}
+                            </div>
+                            <div className="text-xs text-orange-600 font-semibold mt-0.5">
+                              {item.price > 0
+                                ? `+ ₹${item.price.toLocaleString('en-IN')}`
+                                : 'Free'}
+                            </div>
+
+                            <div className="text-[11px] text-slate-400">
+                              Max {bookingData.count} {bookingData.count === 1 ? 'unit' : 'units'}
+                            </div>
                           </div>
-                          <div className="text-xs text-orange-600 font-semibold mt-0.5 animate-pulse-subtle">
-                            {item.price > 0 ? `+ ₹${item.price.toLocaleString('en-IN')}` : 'Free'}
+                          
+                          {/* Quantity Selector */}
+                          <div className="flex items-center gap-3">
+                            <button
+                              type="button"
+                              onClick={() => handleQuantityChange(item.label, -1)}
+                              disabled={qty === 0}
+                              className={`flex h-7 w-7 items-center justify-center rounded-full border transition-colors ${qty === 0 ? 'border-slate-200 text-slate-300' : 'border-orange-200 text-orange-600 hover:bg-orange-50'}`}
+                            >
+                              -
+                            </button>
+                            <span className="w-4 text-center text-sm font-semibold text-slate-800">{qty}</span>
+                            <button
+                              type="button"
+                              onClick={() => handleQuantityChange(item.label, 1)}
+                              disabled={qty >= bookingData.count}
+                              className={`flex h-7 w-7 items-center justify-center rounded-full border transition-colors ${
+                                qty >= bookingData.count
+                                  ? 'border-slate-200 text-slate-300 cursor-not-allowed'
+                                  : 'border-orange-200 text-orange-600 hover:bg-orange-50'
+                              }`}
+                            >
+                              +
+                            </button>
                           </div>
                         </div>
-                      </label>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               )}
 
               {/* Live Calculations Summary */}
-              {extrasPricePerPerson > 0 && (
+              {totalExtrasCost > 0 && (
                 <div className="mt-5 space-y-2.5 border-b border-slate-100 pb-5">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-slate-600">Extras (per person)</span>
-                    <span className="font-medium text-slate-800">+ ₹{extrasPricePerPerson.toLocaleString('en-IN')}</span>
-                  </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-slate-600">Total Extras Cost</span>
                     <span className="font-medium text-slate-800">+ ₹{totalExtrasCost.toLocaleString('en-IN')}</span>
