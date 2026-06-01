@@ -1,4 +1,4 @@
-import { Link, useNavigate, Navigate } from 'react-router-dom'
+import { Link, useNavigate, Navigate, useLocation } from 'react-router-dom'
 import { useState } from 'react'
 import { loginUser } from '../api/api';
 import loginimg from '../assets/loginimg.jpg';
@@ -9,6 +9,7 @@ import { useAuth } from '../context/AuthContext';
 export default function Login() {
   const { user: currentUser, login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [user, setUser] = useState({
     email: "",
     password: ""
@@ -27,7 +28,9 @@ export default function Login() {
   }
 
   if (currentUser) {
-    return <Navigate to="/" />
+    const from = location.state?.from || '/';
+    const bookingState = location.state?.bookingState;
+    return <Navigate to={from} state={{ bookingState }} replace />
   }
 
   // Handling the form submit
@@ -46,7 +49,9 @@ export default function Login() {
           email: "",
           password: "",
         });
-        navigate('/');
+        const from = location.state?.from || '/';
+        const bookingState = location.state?.bookingState;
+        navigate(from, { state: { bookingState } });
       } else {
         toast.error(data.message || "Login failed. Please check your Credentials.");
       }
