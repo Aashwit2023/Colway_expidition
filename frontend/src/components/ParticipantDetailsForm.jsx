@@ -5,7 +5,7 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
     const count = Math.max(1, Math.min(10, Number(value) || 1));
     const existingParticipants = bookingData.participants || [];
     const nextParticipants = Array.from({ length: count }, (_, index) => {
-      return existingParticipants[index] || { name: '', age: '' };
+      return existingParticipants[index] || { name: '', age: '', phoneNumber: '', emergencyContact: '', address: '', gender: '' };
     });
 
     setBookingData((prev) => ({
@@ -16,14 +16,21 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
   };
 
   const updateParticipant = (index, field, value) => {
-    const normalizedValue =
-      field === 'name' ? value.replace(/[^A-Za-z\s]/g, '') : value;
+    let normalizedValue = value;
+
+    if (field === 'name') {
+      normalizedValue = value.replace(/[^A-Za-z\s]/g, '');
+    } else if (field === 'phoneNumber') {
+      normalizedValue = value.replace(/\D/g, '').slice(0, 10);
+    } else if (field === 'age') {
+      normalizedValue = value === '' ? '' : Number(value);
+    }
 
     setBookingData((prev) => {
       const nextParticipants = [...(prev.participants || [])];
       nextParticipants[index] = {
         ...nextParticipants[index],
-        [field]: field === 'age' ? (normalizedValue === '' ? '' : Number(normalizedValue)) : normalizedValue,
+        [field]: normalizedValue,
       };
       return { ...prev, participants: nextParticipants };
     });
@@ -32,19 +39,26 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
   const isValid = (bookingData.participants || []).every((participant) => {
     const name = participant?.name?.trim() || '';
     const nameIsValid = name.length > 0 && /^[A-Za-z\s]+$/.test(name);
-
-    return (
-      nameIsValid &&
+    const phoneNumber = participant?.phoneNumber?.toString().trim() || '';
+    const phoneIsValid = phoneNumber.length === 10 && /^\d{10}$/.test(phoneNumber);
+    const emergencyContact = participant?.emergencyContact?.trim() || '';
+    const emergencyIsValid = emergencyContact.length > 0;
+    const address = participant?.address?.trim() || '';
+    const addressIsValid = address.length > 0;
+    const gender = participant?.gender?.trim() || '';
+    const genderIsValid = gender.length > 0;
+    const ageIsValid =
       participant?.age !== '' &&
       participant?.age !== undefined &&
       participant?.age !== null &&
       Number(participant.age) > 1 &&
-      Number(participant.age) < 90
-    );
+      Number(participant.age) < 90;
+
+    return nameIsValid && phoneIsValid && emergencyIsValid && addressIsValid && genderIsValid && ageIsValid;
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 ">
       <div className="rounded-[30px] border border-slate-200 bg-slate-50 p-6 shadow-sm">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
@@ -66,7 +80,7 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
         </div>
       </div>
 
-      <div className="space-y-15">
+      <div className="space-y-10 ">
         {(bookingData.participants || []).map((participant, index) => (
           <div key={index} className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
             <div className="mb-4 flex flex-col gap-9 sm:flex-row sm:items-center sm:justify-between">
@@ -89,7 +103,19 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
                   className="mt-2 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition focus:border-orange-400"
                 />
               </label>
-              <div className="block relative">
+              <label className="block">
+                <span className="text-sm font-medium text-slate-700">Phone Number</span>
+                <input
+                  type="tel"
+                  value={participant.phoneNumber}
+                  onChange={(event) => updateParticipant(index, 'phoneNumber', event.target.value)}
+                  placeholder="10 digit phone number"
+                  maxLength="10"
+                  inputMode="numeric"
+                  className="mt-2 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition focus:border-orange-400"
+                />
+              </label>
+              <label className="block">
                 <span className="text-sm font-medium text-slate-700">Age</span>
                 <div className="relative mt-2">
                   <input
@@ -97,6 +123,8 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
                     value={participant.age}
                     onChange={(event) => updateParticipant(index, 'age', event.target.value)}
                     placeholder="Age"
+                    min="2"
+                    max="89"
                     className={`w-full rounded-2xl border bg-slate-50 px-4 py-3 text-slate-900 outline-none transition ${
                       participant.age !== '' &&
                       participant.age !== undefined &&
@@ -118,7 +146,40 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
                       </div>
                     )}
                 </div>
-              </div>
+              </label>
+              <label className="block">
+                <span className="text-sm font-medium text-slate-700">Gender</span>
+                <select
+                  value={participant.gender}
+                  onChange={(event) => updateParticipant(index, 'gender', event.target.value)}
+                  className="mt-2 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition focus:border-orange-400"
+                >
+                  <option value="">Select gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </label>
+              <label className="block">
+                <span className="text-sm font-medium text-slate-700">Emergency Contact</span>
+                <input
+                  value={participant.emergencyContact}
+                  onChange={(event) => updateParticipant(index, 'emergencyContact', event.target.value)}
+                  maxLength="10"
+                  inputMode='numeric'
+                  placeholder="Emergency contact name"
+                  className="mt-2 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition focus:border-orange-400"
+                />
+              </label>
+              <label className="block">
+                <span className="text-sm font-medium text-slate-700">Address</span>
+                <input
+                  value={participant.address}
+                  onChange={(event) => updateParticipant(index, 'address', event.target.value)}
+                  placeholder="Full address"
+                  className="mt-2 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition focus:border-orange-400"
+                />
+              </label>
             </div>
           </div>
         ))}
