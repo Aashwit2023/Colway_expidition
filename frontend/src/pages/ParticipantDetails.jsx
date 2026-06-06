@@ -122,40 +122,37 @@ export default function ParticipantDetails() {
 
   const handleSubmit = async () => {
     if (bookingData.participants.every((p) => p.name.trim() && p.age > 0)) {
-      try {
-        const items = Object.entries(selectedExtras)
-          .filter(([label, qty]) => qty > 0)
-          .map(([label, qty]) => {
-            const item = extraChargesList.find((x) => x.label === label);
-            return {
-              name: item.label,
-              price: item.price,
-              quantity: qty,
-            };
-          });
+      const items = Object.entries(selectedExtras)
+        .filter(([label, qty]) => qty > 0)
+        .map(([label, qty]) => {
+          const item = extraChargesList.find((x) => x.label === label);
+          return {
+            name: item.label,
+            price: item.price,
+            quantity: qty,
+          };
+        });
 
-        const payload = {
-          userEmail: user.email,
-          trekName: bookingData.trek,
-          trekDate: bookingData.date,
-          participants: bookingData.participants,
-          baseCost: basePrice,
-          additionalItems: items,
-          totalCost: grandTotal
-        };
-        
-        const { response, data } = await createBooking(payload);
-        
-        if (!response.ok) {
-          throw new Error(data.message || 'Failed to save booking');
+      const payload = {
+        userEmail: user.email,
+        trekName: bookingData.trek,
+        trekDate: bookingData.date,
+        participants: bookingData.participants,
+        baseCost: basePrice,
+        additionalItems: items,
+        totalCost: grandTotal
+      };
+      
+      // Navigate to booking payment/confirmation page
+      navigate('/booking-payment', {
+        state: {
+          bookingPayload: payload,
+          bookingState: bookingData,
+          extraChargesList,
+          selectedExtras,
+          grandTotal
         }
-        
-        toast.success("Booking saved successfully!");
-        navigate('/trekking');
-      } catch (err) {
-        console.error("Error saving booking:", err);
-        toast.error(err.message || 'Failed to save booking details. Please try again.');
-      }
+      });
     }
   };
 

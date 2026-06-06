@@ -16,25 +16,32 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
   };
 
   const updateParticipant = (index, field, value) => {
+    const normalizedValue =
+      field === 'name' ? value.replace(/[^A-Za-z\s]/g, '') : value;
+
     setBookingData((prev) => {
       const nextParticipants = [...(prev.participants || [])];
       nextParticipants[index] = {
         ...nextParticipants[index],
-        [field]: field === 'age' ? (value === '' ? '' : Number(value)) : value,
+        [field]: field === 'age' ? (normalizedValue === '' ? '' : Number(normalizedValue)) : normalizedValue,
       };
       return { ...prev, participants: nextParticipants };
     });
   };
 
-  const isValid = (bookingData.participants || []).every(
-    (participant) =>
-      participant?.name?.trim().length > 0 &&
+  const isValid = (bookingData.participants || []).every((participant) => {
+    const name = participant?.name?.trim() || '';
+    const nameIsValid = name.length > 0 && /^[A-Za-z\s]+$/.test(name);
+
+    return (
+      nameIsValid &&
       participant?.age !== '' &&
       participant?.age !== undefined &&
       participant?.age !== null &&
       Number(participant.age) > 1 &&
       Number(participant.age) < 90
-  );
+    );
+  });
 
   return (
     <div className="space-y-6">
@@ -59,10 +66,10 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
         </div>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-15">
         {(bookingData.participants || []).map((participant, index) => (
-          <div key={index} className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm">
-            <div className="mb-4 flex items-center justify-between gap-3">
+          <div key={index} className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="mb-4 flex flex-col gap-9 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p className="text-sm uppercase tracking-[0.2em] text-slate-500">Participant {index + 1}</p>
                 <h4 className="text-lg font-semibold text-slate-900">Profile details</h4>
@@ -70,13 +77,15 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
               <span className="rounded-full bg-slate-100 px-3 py-1 text-sm font-semibold text-slate-700">#{index + 1}</span>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-6 sm:grid-cols-2">
               <label className="block">
                 <span className="text-sm font-medium text-slate-700">Name</span>
                 <input
                   value={participant.name}
                   onChange={(event) => updateParticipant(index, 'name', event.target.value)}
                   placeholder="Full name"
+                  pattern="[A-Za-z ]+"
+                  inputMode="text"
                   className="mt-2 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition focus:border-orange-400"
                 />
               </label>
