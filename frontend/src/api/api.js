@@ -3,13 +3,13 @@ const BASE_URL = import.meta.env.VITE_BASE_URL + "/api";
 //-------------------------API CALLS------------------//
 
 //-------------------------Signup API------------------//
-export const signUpUser = async  ({ firstname, lastname, email, password, cnfmPassword }) => {
-    const response = await fetch(`${BASE_URL}/auth/signUp`,{
+export const signUpUser = async ({ firstname, lastname, email, password, cnfmPassword }) => {
+    const response = await fetch(`${BASE_URL}/auth/signUp`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({firstname, lastname, email, password, cnfmPassword}),
+        body: JSON.stringify({ firstname, lastname, email, password, cnfmPassword }),
     });
     const data = await response.json();
     return { response, data };
@@ -18,19 +18,19 @@ export const signUpUser = async  ({ firstname, lastname, email, password, cnfmPa
 
 //-------------------------Login API------------------//
 export const loginUser = async (email, password) => {
-    const response = await fetch(`${BASE_URL}/auth/login`,{
+    const response = await fetch(`${BASE_URL}/auth/login`, {
         method: "POST",
         headers: {
-            "Content-Type" : "application/json",
+            "Content-Type": "application/json",
         },
-        body: JSON.stringify({email, password}),
+        body: JSON.stringify({ email, password }),
     });
     const data = await response.json();
     return { response, data };
 };
 
 //-------------------------Request Callback API------------------//
-export const requestCallback = async ({firstName, lastName, email, phone, whatsapp, city, experience, concerns, month, region, specialProgram, treks, call, slots}) => {
+export const requestCallback = async ({ firstName, lastName, email, phone, whatsapp, city, experience, concerns, month, region, specialProgram, treks, call, slots }) => {
     const response = await fetch(`${BASE_URL}/auth/requestCallback`, {
         method: "POST",
         headers: {
@@ -41,3 +41,32 @@ export const requestCallback = async ({firstName, lastName, email, phone, whatsa
     const data = await response.json();
     return { response, data };
 };
+
+//----------------------Booking API Create-----------------------//
+export const createBooking = async ({ userEmail, trekName, trekDate, participants, baseCost, additionalItems, totalCost, isPaymentCompleted }) => {
+    console.log("Calling API...");
+    const response = await fetch(`${BASE_URL}/auth/booking`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "Application/json",
+        },
+        body: JSON.stringify({ userEmail, trekName, trekDate, participants, baseCost, additionalItems, totalCost, isPaymentCompleted }),
+    });
+    const data = await response.json();
+    console.log("API Response:", data);
+    return { response, data };
+};
+
+//--------------------Update booking Status API----------------//
+export const updateBooking = async (bookingId, { isPaymentCompleted }) => {
+    console.log(`Patch req: ${JSON.stringify({ "isPaymentCompleted": isPaymentCompleted })}`)
+    const response = await fetch(`${BASE_URL}/auth/booking/${bookingId}`, {
+        method: "PATCH",
+        headers: {
+            "content-Type": "application/json",
+        },
+        body: JSON.stringify({ "isPaymentCompleted": isPaymentCompleted }),
+    });
+    const data = await response.json();
+    return { response, data };
+}

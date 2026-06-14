@@ -1,10 +1,80 @@
 import React, { useEffect, useState } from 'react';
 import { X, Calendar, MapPin, TrendingUp, Info, CheckCircle2, Users, Mountain, Home } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import ParticipantDetailsForm from '../ParticipantDetailsForm';
+import { useAuth } from '../../context/AuthContext';
 
-const TrekModal = ({ trek, isOpen, onClose }) => {
+const TrekModal = ({ trek, isOpen, onClose, onViewDates }) => {
+  const { user } = useAuth();
   const [activeImage, setActiveImage] = useState(trek?.image);
   const [showSticky, setShowSticky] = useState(false);
   const scrollRef = React.useRef(null);
+
+  // Booking flow state local to modal
+  const [bookingOpen, setBookingOpen] = useState(false);
+  const [bookingStep, setBookingStep] = useState(1);
+  const [bookingData, setBookingData] = useState({ date: null, email: '', count: 1, participants: [{ name: '', age: '' }] });
+  const [paymentStatus, setPaymentStatus] = useState('unpaid');
+  const [qrCode, setQrCode] = useState(null);
+  const [qrExpiration, setQrExpiration] = useState(null);
+  const [qrCountdown, setQrCountdown] = useState(0);
+  const [isGeneratingQr, setIsGeneratingQr] = useState(false);
+
+  const qrLocked = qrExpiration !== null && Date.now() < qrExpiration;
+  const isLoginValid = bookingData.email.trim().length > 0;
+  const isPeopleValid = bookingData.participants.every(
+    (participant) => participant?.name?.trim().length > 0 && participant?.age > 0
+  );
+  const isQrGenerated = Boolean(qrCode);
+  const canAdvanceFromStep1 = isLoginValid;
+  const canAdvanceFromStep2 = isPeopleValid;
+  const canAdvanceFromStep3 = isQrGenerated;
+  const canFinishBooking = paymentStatus === 'paid';
+
+  const formatTimer = (seconds) => {
+    const minutes = String(Math.floor(seconds / 60)).padStart(2, '0');
+    const secs = String(seconds % 60).padStart(2, '0');
+    return `${minutes}:${secs}`;
+  };
+
+  useEffect(() => {
+    if (!qrExpiration) {
+      setQrCountdown(0);
+      return;
+    }
+
+    const interval = setInterval(() => {
+      const remaining = Math.max(0, Math.ceil((qrExpiration - Date.now()) / 1000));
+      setQrCountdown(remaining);
+
+      if (remaining <= 0) {
+        setQrExpiration(null);
+        setQrCode(null);
+        clearInterval(interval);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [qrExpiration]);
+
+  const openBooking = (initialDate) => {
+    const firstDate = initialDate || (trek?.dates && Object.values(trek.dates)[0] && Object.values(trek.dates)[0][0]) || null;
+    setBookingData({ date: firstDate, email: '', count: 1, participants: [{ name: '', age: '' }] });
+    setBookingStep(1);
+    setPaymentStatus('unpaid');
+    setQrCode(null);
+    setQrExpiration(null);
+    setQrCountdown(0);
+    setBookingOpen(true);
+  };
+
+  const isLoggedIn = () => Boolean(user);
+ 
+  const handleBookNow = () => {
+    if (onViewDates) {
+      onViewDates(trek);
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -163,7 +233,7 @@ const TrekModal = ({ trek, isOpen, onClose }) => {
                     )}
 
                     {/* CTA Button */}
-                    <button className="w-full mt-5 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-xl transition-all shadow-md">
+                    <button onClick={handleBookNow} className="w-full mt-5 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-xl transition-all shadow-md">
                       BOOK NOW
                     </button>
                   </div>
@@ -371,11 +441,188 @@ const TrekModal = ({ trek, isOpen, onClose }) => {
               <p className="text-white/50 text-[10px] font-bold uppercase tracking-widest mb-0.5">{trek.title}</p>
               <p className="text-white text-xl font-black tracking-tight">{trek.price}</p>
             </div>
-            <button className="px-8 py-4 bg-orange-500 hover:bg-orange-600 text-white rounded-2xl font-black text-xs tracking-widest shadow-xl shadow-orange-500/20 transition-all transform active:scale-95 uppercase">
+            <button onClick={handleBookNow} className="px-8 py-4 bg-orange-500 hover:bg-orange-600 text-white rounded-2xl font-black text-xs tracking-widest shadow-xl shadow-orange-500/20 transition-all transform active:scale-95 uppercase">
               Book This Trek
             </button>
           </div>
         </div>
+
+        {/* Booking Flow Modal inside TrekModal */}
+        {bookingOpen && (
+          <div className="fixed inset-0 z-[2100] flex items-center justify-center bg-black/20 p-4">
+            <div className="w-full max-w-2xl bg-white rounded-2xl shadow-xl overflow-hidden">
+              <div className="px-6 py-4 border-b flex items-center justify-between">
+                <h3 className="text-lg font-bold">Booking — {trek.title}</h3>
+                <button onClick={() => setBookingOpen(false)} className="w-9 h-9 rounded-full bg-gray-100">✕</button>
+              </div>
+
+              <div className="p-6">
+                <div className="mb-4">
+                  <div className="text-sm text-gray-500">Selected date</div>
+                  <div className="font-semibold">{bookingData.date || '—'}</div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 mb-6 text-xs">
+                  <div className={`rounded-2xl px-3 py-2 border ${bookingStep === 1 ? 'border-orange-500 bg-orange-50 text-orange-700' : 'border-gray-200 bg-gray-50 text-gray-600'}`}>
+                    1. Login / Signup <span className="text-red-500">*</span>
+                  </div>
+                  <div className={`rounded-2xl px-3 py-2 border ${bookingStep === 2 ? 'border-orange-500 bg-orange-50 text-orange-700' : 'border-gray-200 bg-gray-50 text-gray-600'}`}>
+                    2. People Details <span className="text-red-500">*</span>
+                  </div>
+                  <div className={`rounded-2xl px-3 py-2 border ${bookingStep === 3 ? 'border-orange-500 bg-orange-50 text-orange-700' : 'border-gray-200 bg-gray-50 text-gray-600'}`}>
+                    3. QR Confirmation <span className="text-red-500">*</span>
+                  </div>
+                  <div className={`rounded-2xl px-3 py-2 border ${bookingStep === 4 ? 'border-orange-500 bg-orange-50 text-orange-700' : 'border-gray-200 bg-gray-50 text-gray-600'}`}>
+                    4. Payment <span className="text-red-500">*</span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 mb-6 text-xs">
+                  <div className={`rounded-2xl px-3 py-2 border ${bookingStep === 1 ? 'border-orange-500 bg-orange-50 text-orange-700' : 'border-gray-200 bg-gray-50 text-gray-600'}`}>
+                    1. Login / Signup <span className="text-red-500">*</span>
+                  </div>
+                  <div className={`rounded-2xl px-3 py-2 border ${bookingStep === 2 ? 'border-orange-500 bg-orange-50 text-orange-700' : 'border-gray-200 bg-gray-50 text-gray-600'}`}>
+                    2. People Details <span className="text-red-500">*</span>
+                  </div>
+                  <div className={`rounded-2xl px-3 py-2 border ${bookingStep === 3 ? 'border-orange-500 bg-orange-50 text-orange-700' : 'border-gray-200 bg-gray-50 text-gray-600'}`}>
+                    3. QR Confirmation <span className="text-red-500">*</span>
+                  </div>
+                  <div className={`rounded-2xl px-3 py-2 border ${bookingStep === 4 ? 'border-orange-500 bg-orange-50 text-orange-700' : 'border-gray-200 bg-gray-50 text-gray-600'}`}>
+                    4. Payment <span className="text-red-500">*</span>
+                  </div>
+                </div>
+
+                {bookingStep === 1 && (
+                  <div>
+                    <div className="mb-3 font-semibold">1. Login / Signup</div>
+                    <input
+                      value={bookingData.email}
+                      onChange={(e) => setBookingData((b) => ({ ...b, email: e.target.value }))}
+                      placeholder="Email"
+                      className="w-full border rounded p-2 mb-2"
+                    />
+                    <div className="text-sm text-gray-500 mb-2">(We'll treat any email as logged in for demo.)</div>
+                    {!isLoginValid && <div className="text-sm text-red-600 mb-4">Email is required to proceed.</div>}
+                    <div className="flex justify-end gap-2">
+                      <button
+                        onClick={() => setBookingStep(2)}
+                        disabled={!canAdvanceFromStep1}
+                        className={`px-4 py-2 rounded ${canAdvanceFromStep1 ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-200 text-gray-500 cursor-not-allowed'}`}
+                      >
+                        Next
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {bookingStep === 2 && (
+                  <ParticipantDetailsForm
+                    bookingData={bookingData}
+                    setBookingData={setBookingData}
+                    onBack={() => setBookingStep(1)}
+                    onNext={() => setBookingStep(3)}
+                  />
+                )}
+
+                {bookingStep === 3 && (
+                  <div>
+                    <div className="mb-3 font-semibold">3. Show QR</div>
+                    <div className="mb-4">This QR represents your booking — valid for a short time.</div>
+                    {qrCode ? (
+                      <div className="flex flex-col items-center gap-4">
+                        <img src={qrCode} alt="Booking QR" className="w-48 h-48 bg-white rounded-xl border p-2" />
+                        <div className="text-center">
+                          <div className="font-semibold">{bookingData.participants[0]?.name || bookingData.email}</div>
+                          <div className="text-sm text-gray-500">People: {bookingData.count}</div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="mb-4 text-sm text-gray-500">No QR generated yet. Click below when ready.</div>
+                    )}
+
+                    {qrLocked && (
+                      <div className="mb-4 text-sm text-orange-600">Current QR is locked for {formatTimer(qrCountdown)} and cannot be regenerated until the timer ends.</div>
+                    )}
+
+                    <div className="flex justify-between mt-4">
+                      <button onClick={() => setBookingStep(2)} className="px-4 py-2 bg-gray-200 rounded">Back</button>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={async () => {
+                            if (qrLocked) return;
+                            setIsGeneratingQr(true);
+                            const expirationTime = Date.now() + 5 * 60 * 1000;
+                            const payload = JSON.stringify({
+                              trek: trek.title,
+                              date: bookingData.date,
+                              name: bookingData.participants[0]?.name || bookingData.email,
+                              count: bookingData.count,
+                              participants: bookingData.participants,
+                              bookedAt: new Date().toISOString(),
+                            });
+                            try {
+                              const qrDataUrl = await QRCode.toDataURL(payload, { margin: 2, width: 240 });
+                              setQrCode(qrDataUrl);
+                              setQrExpiration(expirationTime);
+                              setQrCountdown(5 * 60);
+                            } catch (error) {
+                              console.error('QR generation failed', error);
+                              setQrCode(null);
+                            } finally {
+                              setIsGeneratingQr(false);
+                            }
+                          }}
+                          className={`px-4 py-2 rounded ${qrLocked || isGeneratingQr ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-green-600 text-white hover:bg-green-700'}`}
+                          disabled={isGeneratingQr || qrLocked}
+                        >
+                          {isGeneratingQr ? 'Generating...' : qrLocked ? `Wait ${formatTimer(qrCountdown)}` : 'Generate QR'}
+                        </button>
+                        <button
+                          onClick={() => setBookingStep(4)}
+                          disabled={!canAdvanceFromStep3}
+                          className={`px-4 py-2 rounded ${canAdvanceFromStep3 ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-200 text-gray-500 cursor-not-allowed'}`}
+                        >
+                          Proceed to Payment
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {bookingStep === 4 && (
+                  <div>
+                    <div className="mb-3 font-semibold">4. Payment</div>
+                    <div className="mb-4 text-sm text-gray-600">Simulated payment step. Mark paid to complete booking.</div>
+                    <div className="flex items-center gap-3 mb-4">
+                      <button onClick={() => setPaymentStatus('paid')} className="px-4 py-2 bg-green-600 text-white rounded">Mark Paid</button>
+                      <button onClick={() => setPaymentStatus('unpaid')} className="px-4 py-2 bg-red-100 rounded">Mark Unpaid</button>
+                      <div className={`ml-4 font-semibold ${paymentStatus === 'paid' ? 'text-green-600' : 'text-red-600'}`}>{paymentStatus.toUpperCase()}</div>
+                    </div>
+
+                    <div className="flex justify-between">
+                      <button onClick={() => setBookingStep(3)} className="px-4 py-2 bg-gray-200 rounded">Back</button>
+                      <button
+                        onClick={() => {
+                          if (canFinishBooking) {
+                            setTimeout(() => { setBookingOpen(false); }, 900);
+                          } else {
+                            alert('Payment must be completed before finishing the booking.');
+                          }
+                        }}
+                        disabled={!canFinishBooking}
+                        className={`px-4 py-2 rounded ${canFinishBooking ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-200 text-gray-500 cursor-not-allowed'}`}
+                      >
+                        Finish
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+              </div>
+            </div>
+          </div>
+        )}
+
       </div>
     </div >
   );

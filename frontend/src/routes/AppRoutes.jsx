@@ -12,6 +12,8 @@ import Trekking from '../pages/Trekking';
 import Expeditions from '../pages/Expeditions';
 import Villages from '../pages/Villages';
 import KailashTrek from '../pages/KailashTrek';
+import ParticipantDetails from '../pages/ParticipantDetails';
+import PaymentPage from '../pages/PaymentPage';
 
 import CancellationPolicy from '../pages/CancellationPolicy';
 
@@ -28,6 +30,8 @@ const AppRoutes = () => {
       <Route path="/expeditions" element={<Expeditions />} />
       <Route path="/villages" element={<Villages />} />
       <Route path="/kailash-trek" element={<KailashTrek />} />
+      <Route path="/participant-details" element={<ParticipantDetails />} />
+      <Route path="/booking-payment" element={<PaymentPage />} />
       <Route path="/cancellation-policy" element={<CancellationPolicy />} />
     </Routes>
   );

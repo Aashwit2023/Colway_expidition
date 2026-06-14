@@ -3,10 +3,11 @@ import Navbar from './components/Navbar'
 import AppRoutes from './routes/AppRoutes'
 import ScrollToTop from './components/ScrollToTop'
 import Footer from './components/Footer'
+import { AuthProvider } from './context/AuthContext'
 
 export default function App() {
   return (
-    <>
+    <AuthProvider>
       <Toaster 
         position="top-right"
         reverseOrder={false}
@@ -60,6 +61,6 @@ export default function App() {
         <AppRoutes />
       </main>
       <Footer />
-    </>
+    </AuthProvider>
   )
 }

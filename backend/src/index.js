@@ -6,10 +6,12 @@ import connectDB from "./config/db.js";
 import cors from "cors";
 const app = express();
 
+const frontendUrl = process.env.FRONTEND_URL;
+
 app.use(express.json());
 app.use(cors({
-  origin: process.env.FRONTEND_URL,
-  methods: ["GET", "POST"],
+  origin: frontendUrl,
+  methods: ["GET", "POST", "PATCH"],
   credentials: true
 }));
 
@@ -19,10 +21,10 @@ app.use("/api/auth", authRoutes);
 
 const port = process.env.PORT || 3000;
 const startServer = async () => {
-    await connectDB();
-    app.listen(port, () => {
-        console.log(`Example app Listening on port ${port}`);
-    });
+  await connectDB();
+  app.listen(port, () => {
+    console.log(`Example app Listening on port ${port}`);
+  });
 };
 
 startServer();
