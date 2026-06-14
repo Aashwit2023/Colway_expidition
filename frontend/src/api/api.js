@@ -42,17 +42,31 @@ export const requestCallback = async ({ firstName, lastName, email, phone, whats
     return { response, data };
 };
 
-//----------------------Booking API-----------------------//
-export const createBooking = async ({ userEmail, trekName, trekDate, participants, baseCost, additionalItems, totalCost }) => {
+//----------------------Booking API Create-----------------------//
+export const createBooking = async ({ userEmail, trekName, trekDate, participants, baseCost, additionalItems, totalCost, isPaymentCompleted }) => {
     console.log("Calling API...");
     const response = await fetch(`${BASE_URL}/auth/booking`, {
         method: "POST",
         headers: {
             "Content-Type": "Application/json",
         },
-        body: JSON.stringify({ userEmail, trekName, trekDate, participants, baseCost, additionalItems, totalCost }),
+        body: JSON.stringify({ userEmail, trekName, trekDate, participants, baseCost, additionalItems, totalCost, isPaymentCompleted }),
     });
     const data = await response.json();
     console.log("API Response:", data);
     return { response, data };
 };
+
+//--------------------Update booking Status API----------------//
+export const updateBooking = async (bookingId, { isPaymentCompleted }) => {
+    console.log(`Patch req: ${JSON.stringify({ "isPaymentCompleted": isPaymentCompleted })}`)
+    const response = await fetch(`${BASE_URL}/auth/booking/${bookingId}`, {
+        method: "PATCH",
+        headers: {
+            "content-Type": "application/json",
+        },
+        body: JSON.stringify({ "isPaymentCompleted": isPaymentCompleted }),
+    });
+    const data = await response.json();
+    return { response, data };
+}

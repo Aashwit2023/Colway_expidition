@@ -2,16 +2,18 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Clock, ShieldCheck, QrCode, Sparkles, CheckCircle } from 'lucide-react';
 import QRCode from 'qrcode';
-import { createBooking } from '../api/api';
+import { updateBooking } from '../api/api';
 import toast from 'react-hot-toast';
 
 export default function PaymentPage() {
   const location = useLocation();
   const navigate = useNavigate();
+  const QR_EXPIRY_TIME = 120;
 
   // Retrieve routing state
   const {
     bookingPayload,
+    bookingId,
     bookingState,
     extraChargesList = [],
     selectedExtras = {},
@@ -20,9 +22,18 @@ export default function PaymentPage() {
 
   const [qrCodeUrl, setQrCodeUrl] = useState('');
   const [isQrRevealed, setIsQrRevealed] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(240); // 4 minutes in seconds
+  const [timeLeft, setTimeLeft] = useState(QR_EXPIRY_TIME); // 2 minutes in seconds
   const [isSubmitting, setIsSubmitting] = useState(false);
   const timerRef = useRef(null);
+  const [payLaterAttempts, setPayLaterAttempts] = useState(0);
+
+  const warningSentences = [
+    "Scan the QR code below using GPay, PhonePe, Paytm, or any UPI client to transfer the amount.",
+    "Are you sure? Payment is highly recommended to secure your slot and confirm your booking.",
+    "Your seat is not confirmed yet. Slots are filling fast, please complete your payment now!",
+    "⚠️ Final Warning: If you do not pay, your booking may be automatically canceled. Pay now to proceed.",
+    "Please complete the payment process by scanning the UPI QR code below."
+  ];
 
   // Redirect if no booking payload exists (e.g. direct page refresh)
   useEffect(() => {
@@ -58,7 +69,7 @@ export default function PaymentPage() {
             clearInterval(timerRef.current);
             setIsQrRevealed(false);
             toast.error('Payment window expired. Click the QR screen to reveal and try again.');
-            return 240;
+            return QR_EXPIRY_TIME;
           }
           return prev - 1;
         });
@@ -80,23 +91,24 @@ export default function PaymentPage() {
 
   const handleRevealQr = () => {
     if (!isQrRevealed) {
-      setTimeLeft(240);
+      setTimeLeft(QR_EXPIRY_TIME);
       setIsQrRevealed(true);
-      toast.success('QR revealed! You have 4 minutes to scan and pay.');
+      toast.success('QR revealed! You have 2 minutes to scan and pay.');
     }
   };
 
   const handleConfirmPayment = async () => {
     setIsSubmitting(true);
     try {
-      const { response, data } = await createBooking(bookingPayload);
+      const { response, data } = await updateBooking(bookingId, { isPaymentCompleted: true });
       if (!response.ok) {
-        throw new Error(data.message || 'Failed to save booking');
+        throw new Error(data.message || 'Failed to complete booking');
       }
 
       toast.success('Booking and Payment confirmed successfully!');
-      // Navigate to trekking page
-      navigate('/trekking');
+      setTimeout(() => {
+        navigate('/trekking', { replace: true });
+      }, 500);
     } catch (err) {
       console.error('Error completing booking:', err);
       toast.error(err.message || 'Failed to finalize your booking. Please try again.');
@@ -115,9 +127,8 @@ export default function PaymentPage() {
     <section className="min-h-[calc(100vh-160px)] bg-slate-50 py-16">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         
-        {/* Back Button */}
         <button
-          onClick={() => navigate('/participant-details', { state: { bookingState } })}
+          onClick={() => navigate('/participant-details', { state: { bookingState, selectedExtras, bookingId } })}
           className="mb-8 flex items-center gap-2 text-sm font-semibold text-slate-600 transition hover:text-slate-900 group"
         >
           <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" />
@@ -128,7 +139,7 @@ export default function PaymentPage() {
           
           {/* Left Column: Review details */}
           <div className="rounded-[32px] border border-slate-200 bg-white p-8 shadow-xl">
-            <span className="text-xs uppercase tracking-[0.35em] text-orange-500 font-bold block mb-2">Step 2 of 2: Payment Review</span>
+            <span className="text-xs uppercase tracking-[0.35em] text-orange-500 font-bold block mb-2">Step 2: Payment Review</span>
             <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">Review Booking Details</h1>
             <p className="mt-3 text-sm leading-6 text-slate-600">
               Please double-check your booking and participant information before scanning the QR code to proceed.
@@ -219,12 +230,18 @@ export default function PaymentPage() {
                 Secure UPI Payment Gateway
               </div>
 
+              {payLaterAttempts > 0 && (
+                <div className="w-full mb-4 p-3 bg-red-50 border border-red-200 rounded-2xl text-xs text-red-600 font-bold text-center animate-pulse">
+                  ⚠️ Action Required: Please complete your payment!
+                </div>
+              )}
+
               {/* Do you want to pay query */}
               <h2 className="text-xl sm:text-2xl font-bold text-slate-900 text-center mb-1">
                 Are you ready to pay?
               </h2>
-              <p className="text-xs text-slate-500 text-center max-w-[280px] mb-6">
-                Scan the QR code below using GPay, PhonePe, Paytm, or any UPI client to transfer the amount.
+              <p className={`text-xs text-center max-w-[280px] mb-6 font-medium transition-all duration-300 ${payLaterAttempts > 0 ? 'text-red-500' : 'text-slate-500'}`}>
+                {warningSentences[Math.min(payLaterAttempts, warningSentences.length - 1)]}
               </p>
 
               {/* QR Screen wrapper */}
@@ -258,7 +275,7 @@ export default function PaymentPage() {
                     </div>
                     <span className="text-sm font-extrabold text-slate-800 block">Click to Reveal QR Code</span>
                     <span className="text-[10px] text-slate-500 mt-1 font-semibold block bg-white/85 px-2.5 py-1 rounded-full border border-slate-100">
-                      Expires in 4:00 mins on reveal
+                      Expires in 2:00 mins on reveal
                     </span>
                   </div>
                 )}
@@ -296,10 +313,28 @@ export default function PaymentPage() {
                     </>
                   )}
                 </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPayLaterAttempts((prev) => prev + 1);
+                    const toastMessages = [
+                      "Warning: Please complete the payment to secure your booking!",
+                      "Trek departure slot is not confirmed. Please pay now!",
+                      "Payment is pending. Your booking is at risk of cancellation!",
+                      "Error: Payment not received. Please scan the QR code to finish booking."
+                    ];
+                    const msg = toastMessages[Math.min(payLaterAttempts, toastMessages.length - 1)] || "Please complete the payment.";
+                    toast.error(msg);
+                  }}
+                  disabled={isSubmitting}
+                  className="w-full py-3.5 rounded-2xl bg-slate-100 border border-slate-200 text-slate-700 font-semibold text-sm hover:bg-slate-200 transition transform active:scale-98"
+                >
+                  Payment not Done, Pay later
+                </button>
 
                 <button
                   type="button"
-                  onClick={() => navigate('/participant-details', { state: { bookingState } })}
+                  onClick={() => navigate('/participant-details', { state: { bookingState, selectedExtras, bookingId } })}
                   disabled={isSubmitting}
                   className="w-full py-3.5 rounded-2xl bg-white border border-slate-200 text-slate-700 font-semibold text-sm hover:bg-slate-50 transition transform active:scale-98"
                 >

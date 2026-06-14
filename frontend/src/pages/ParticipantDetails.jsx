@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import ParticipantDetailsForm from '../components/ParticipantDetailsForm';
+import ParticipantDetailsForm, { validateBookingData } from '../components/ParticipantDetailsForm';
 import { useAuth } from '../context/AuthContext';
 import { themes } from '../data/treks';
 import { createBooking } from '../api/api';
@@ -19,11 +19,18 @@ export default function ParticipantDetails() {
   };
 
   const [bookingData, setBookingData] = useState(location.state?.bookingState || defaultBooking);
-  const [selectedExtras, setSelectedExtras] = useState({});
+  const [selectedExtras, setSelectedExtras] = useState(location.state?.selectedExtras || {});
+  const [bookingId, setBookingId] = useState(location.state?.bookingId || null);
 
   useEffect(() => {
     if (location.state?.bookingState) {
       setBookingData(location.state.bookingState);
+    }
+    if (location.state?.selectedExtras) {
+      setSelectedExtras(location.state.selectedExtras);
+    }
+    if (location.state?.bookingId) {
+      setBookingId(location.state.bookingId);
     }
   }, [location.state]);
 
@@ -120,8 +127,10 @@ export default function ParticipantDetails() {
 
   const grandTotal = subtotalBase + totalExtrasCost;
 
+  const isValid = validateBookingData(bookingData);
+
   const handleSubmit = async () => {
-    if (bookingData.participants.every((p) => p.name.trim() && p.age > 0)) {
+    if (isValid) {
       const items = Object.entries(selectedExtras)
         .filter(([label, qty]) => qty > 0)
         .map(([label, qty]) => {
@@ -142,11 +151,28 @@ export default function ParticipantDetails() {
         additionalItems: items,
         totalCost: grandTotal
       };
+      const { response, data } = await createBooking(payload);
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to save booking.');
+      }
       
+      toast.success(data.message || 'Booking saved successfully!');
+      
+      // Update the current page's history state so browser Back button has it
+      navigate(window.location.pathname, {
+        replace: true,
+        state: {
+          bookingState: bookingData,
+          selectedExtras,
+          bookingId: data.booking._id
+        }
+      });
+
       // Navigate to booking payment/confirmation page
       navigate('/booking-payment', {
         state: {
           bookingPayload: payload,
+          bookingId: data.booking._id,
           bookingState: bookingData,
           extraChargesList,
           selectedExtras,
@@ -172,8 +198,6 @@ export default function ParticipantDetails() {
             <ParticipantDetailsForm
               bookingData={bookingData}
               setBookingData={setBookingData}
-              onBack={() => navigate('/trekking')}
-              onNext={handleSubmit}
             />
           </div>
 
@@ -290,6 +314,25 @@ export default function ParticipantDetails() {
                     ₹{grandTotal.toLocaleString('en-IN')}
                   </span>
                 </div>
+              </div>
+
+              {/* ACTION BUTTONS */}
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <button
+                  type="button"
+                  onClick={() => navigate('/trekking')}
+                  className="w-full sm:w-auto rounded-2xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 text-center"
+                >
+                  Back
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSubmit}
+                  disabled={!isValid}
+                  className={`w-full sm:w-auto rounded-2xl px-5 py-3 text-sm font-semibold transition text-center ${isValid ? 'bg-orange-600 text-white hover:bg-orange-700 shadow-md hover:shadow-lg hover:-translate-y-0.5' : 'bg-slate-200 text-slate-500 cursor-not-allowed'}`}
+                >
+                  Continue
+                </button>
               </div>
 
             </div>

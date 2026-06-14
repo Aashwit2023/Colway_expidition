@@ -1,5 +1,6 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
+import { createPortal } from 'react-dom';
 import ParticipantDetailsForm from '../ParticipantDetailsForm';
 import { useAuth } from '../../context/AuthContext';
 
@@ -28,6 +29,17 @@ function Trekking_cards({ items, heading, onOpenModal }, ref) {
   const [selectedDates, setSelectedDates] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [expandedMonths, setExpandedMonths] = useState([]);
+
+  useEffect(() => {
+    if (selectedDates) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [selectedDates]);
 
   // Fallback sample dates in case incoming item has no `dates` field
   const sampleDates = {
@@ -198,10 +210,15 @@ function Trekking_cards({ items, heading, onOpenModal }, ref) {
           ))}
         </div>
         {/* Global Dates Modal (renders once for selected trek) */}
-        {selectedDates && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 p-4">
+        {selectedDates && createPortal(
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            {/* Dark Backdrop Overlay */}
+            <div
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300"
+              onClick={() => setSelectedDates(null)}
+            />
 
-            <div className="relative w-full max-w-3xl mx-4 md:mx-0 bg-white rounded-3xl shadow-2xl overflow-hidden animate-fadeIn">
+            <div className="relative w-full max-w-md mx-4 md:mx-0 bg-white rounded-3xl shadow-2xl overflow-hidden animate-fadeIn z-10">
 
               {/* Header */}
               <div className="flex items-center justify-between px-6 py-4 border-b">
@@ -253,26 +270,26 @@ function Trekking_cards({ items, heading, onOpenModal }, ref) {
                             {dates.map((date, idx) => (
                               <div
                                 key={idx}
-                                className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border border-gray-200 rounded-2xl px-4 py-4 hover:shadow-md transition"
+                                className="flex flex-row items-center justify-between gap-2.5 border border-gray-200 rounded-2xl px-3 py-3 hover:shadow-md transition"
                               >
-                                <div className="flex-1">
-                                  <div className="font-semibold text-gray-700">
+                                <div className="flex-1 min-w-0">
+                                  <div className="font-bold text-gray-800 text-[13px] sm:text-sm truncate">
                                     {typeof date === 'object' ? date.date : date}
                                   </div>
-                                  <div className="text-xs text-gray-500">
-                                    Seats available: {typeof date === 'object' ? date.seats : 15}
+                                  <div className="text-[10px] sm:text-[11px] text-gray-500 mt-0.5">
+                                    Seats: {typeof date === 'object' ? date.seats : 15}
                                   </div>
                                 </div>
 
-                                <div className="flex items-center gap-3">
+                                <div className="flex items-center gap-2 shrink-0">
                                   <button
                                     onClick={() => beginBooking(date)}
-                                    className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition"
+                                    className="px-3.5 py-1.5 bg-blue-600 text-white rounded-xl text-[10px] sm:text-xs font-bold hover:bg-blue-700 transition shadow-sm"
                                   >
                                     BOOK NOW
                                   </button>
 
-                                  <span className="text-green-600 font-bold text-sm">
+                                  <span className="text-green-600 font-extrabold text-[10px] sm:text-xs">
                                     OPEN
                                   </span>
                                 </div>
@@ -287,7 +304,8 @@ function Trekking_cards({ items, heading, onOpenModal }, ref) {
 
               </div>
             </div>
-          </div>
+          </div>,
+          document.body
         )}
 
         

@@ -131,10 +131,10 @@ export const requestCallback = async (req, res) => {
   }
 };
 
-//-----------------Bookings--------------------------
+//----------------Create-Bookings--------------------------
 export const createBooking = async (req, res) => {
   try {
-    const { userEmail, trekName, trekDate, participants, baseCost, additionalItems, totalCost } = req.body;
+    const { userEmail, trekName, trekDate, participants, baseCost, additionalItems, totalCost, isPaymentCompleted } = req.body;
     
     if (!userEmail || !trekName || !trekDate || !participants || participants.length === 0) {
       return res.status(400).json({ message: "Required fields are missing or no participants provided" });
@@ -148,7 +148,8 @@ export const createBooking = async (req, res) => {
       totalMembers: participants.length,
       baseCost,
       additionalItems,
-      totalCost
+      totalCost,
+      isPaymentCompleted: isPaymentCompleted ?? false
     });
     
     return res.status(201).json({
@@ -158,5 +159,25 @@ export const createBooking = async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: error.message + " Internal Server Error" });
+  }
+};
+
+//-----------------Update-Booking----------------------
+export const updatebooking = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { isPaymentCompleted } = req.body;
+
+    const booking = await Booking.findByIdAndUpdate(
+      id, 
+      { isPaymentCompleted },
+      { new: true }
+    );
+    if (!booking) {
+      return res.status(404).json({message: "Booking not found"});
+    }
+    return res.status(200).json({message: "Booking updated successfully!", booking});
+  } catch (error) {
+    return res.status(500).json({message: error.message + "Internal Server Error"});
   }
 };

@@ -11,7 +11,7 @@ const frontendUrl = process.env.FRONTEND_URL;
 app.use(express.json());
 app.use(cors({
   origin: frontendUrl,
-  methods: ["GET", "POST"],
+  methods: ["GET", "POST", "PATCH"],
   credentials: true
 }));
 
@@ -21,10 +21,10 @@ app.use("/api/auth", authRoutes);
 
 const port = process.env.PORT || 3000;
 const startServer = async () => {
-    await connectDB();
-    app.listen(port, () => {
-        console.log(`Example app Listening on port ${port}`);
-    });
+  await connectDB();
+  app.listen(port, () => {
+    console.log(`Example app Listening on port ${port}`);
+  });
 };
 
 startServer();

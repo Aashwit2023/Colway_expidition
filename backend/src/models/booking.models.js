@@ -52,6 +52,10 @@ const bookingSchema = new mongoose.Schema({
     totalCost: {
         type: Number,
         required: true
+    },
+    isPaymentCompleted: {
+        type: Boolean,
+        default: false
     }
 }, { timestamps: true });
 
