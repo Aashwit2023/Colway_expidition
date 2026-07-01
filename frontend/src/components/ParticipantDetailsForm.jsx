@@ -112,13 +112,13 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
                     value={participant.age}
                     onChange={(event) => updateParticipant(index, 'age', event.target.value)}
                     placeholder="Age"
-                    min="2"
-                    max="89"
+                    min="5"
+                    max="80"
                     className={`w-full rounded-2xl border bg-slate-50 px-4 py-3 text-slate-900 outline-none transition ${
                       participant.age !== '' &&
                       participant.age !== undefined &&
                       participant.age !== null &&
-                      (Number(participant.age) <= 1 || Number(participant.age) >= 90)
+                      (Number(participant.age) < 5 || Number(participant.age) > 80)
                         ? 'border-rose-400 focus:border-rose-400 ring-2 ring-rose-500/35'
                         : 'border-slate-300 focus:border-orange-400'
                     }`}
@@ -126,10 +126,10 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
                   {participant.age !== '' &&
                     participant.age !== undefined &&
                     participant.age !== null &&
-                    (Number(participant.age) <= 1 || Number(participant.age) >= 90) && (
+                    (Number(participant.age) < 5 || Number(participant.age) > 80) && (
                       <div className="absolute bottom-full left-1/2 z-20 mb-3 w-56 -translate-x-1/2 rounded-xl bg-slate-950 border border-slate-800 px-4 py-2.5 text-center text-xs font-semibold text-white shadow-2xl animate-fade-in-up">
                         <div className="relative">
-                         Age should be between 2 to 90.
+                         Age should be between 5 to 80.
                           <div className="absolute top-full left-1/2 mt-[9px] -translate-x-1/2 border-[8px] border-transparent border-t-slate-950" />
                         </div>
                       </div>
@@ -194,13 +194,13 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
                 p?.age !== '' &&
                 p?.age !== undefined &&
                 p?.age !== null &&
-                Number(p.age) > 1 &&
-                Number(p.age) < 90;
+                Number(p.age) >= 5 &&
+                Number(p.age) <= 80;
 
               const errors = [];
               if (!nameIsValid) errors.push('Name (letters & spaces)');
               if (!phoneIsValid) errors.push('Phone Number (10 digits)');
-              if (!ageIsValid) errors.push('Age (2-89)');
+              if (!ageIsValid) errors.push('Age (5-80)');
               if (!genderIsValid) errors.push('Gender');
               if (!emergencyIsValid) errors.push('Emergency Contact (10 digits)');
               if (!addressIsValid) errors.push('Address');
@@ -245,8 +245,8 @@ export const validateBookingData = (bookingData) => {
       participant?.age !== '' &&
       participant?.age !== undefined &&
       participant?.age !== null &&
-      Number(participant.age) > 1 &&
-      Number(participant.age) < 90;
+      Number(participant.age) >= 5 &&
+      Number(participant.age) <= 80;
 
     console.log(`validateBookingData Participant #${index + 1}:`, {
       name, nameIsValid,

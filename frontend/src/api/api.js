@@ -4,7 +4,7 @@ const BASE_URL = import.meta.env.VITE_BASE_URL + "/api";
 
 //-------------------------Signup API------------------//
 export const signUpUser = async ({ firstname, lastname, email, password, cnfmPassword }) => {
-    const response = await fetch(`${BASE_URL}/auth/signUp`, {
+    const response = await fetch(`${BASE_URL}/auth/signup`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -58,14 +58,14 @@ export const createBooking = async ({ userEmail, trekName, trekDate, participant
 };
 
 //--------------------Update booking Status API----------------//
-export const updateBooking = async (bookingId, { isPaymentCompleted }) => {
-    console.log(`Patch req: ${JSON.stringify({ "isPaymentCompleted": isPaymentCompleted })}`)
+export const updateBooking = async (bookingId, updateData) => {
+    console.log(`Patch req: ${JSON.stringify(updateData)}`)
     const response = await fetch(`${BASE_URL}/auth/booking/${bookingId}`, {
         method: "PATCH",
         headers: {
             "content-Type": "application/json",
         },
-        body: JSON.stringify({ "isPaymentCompleted": isPaymentCompleted }),
+        body: JSON.stringify(updateData),
     });
     const data = await response.json();
     return { response, data };

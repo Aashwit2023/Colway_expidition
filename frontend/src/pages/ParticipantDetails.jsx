@@ -1,19 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import ParticipantDetailsForm, { validateBookingData } from '../components/ParticipantDetailsForm';
 import { useAuth } from '../context/AuthContext';
 import { themes } from '../data/treks';
-import { createBooking } from '../api/api';
+import { createBooking, updateBooking } from '../api/api';
 import toast from 'react-hot-toast';
 
 export default function ParticipantDetails() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { slug } = useParams();
   const { user } = useAuth();
+
+  // Find trek details based on slug
+  const matchedTrekBySlug = slug ? themes.find((t) => t.slug === slug) : null;
   
   const defaultBooking = {
-    trek: 'Sar Pass Trek',
-    date: 'May 2 - May 14',
+    trek: matchedTrekBySlug ? matchedTrekBySlug.title : 'Sar Pass Trek',
+    date: (matchedTrekBySlug && matchedTrekBySlug.dates && Object.values(matchedTrekBySlug.dates)[0] && Object.values(matchedTrekBySlug.dates)[0][0])
+      ? Object.values(matchedTrekBySlug.dates)[0][0].date
+      : 'May 2 - May 14',
     count: 1,
     participants: [{ name: '', age: '' }],
   };
@@ -25,6 +31,8 @@ export default function ParticipantDetails() {
   useEffect(() => {
     if (location.state?.bookingState) {
       setBookingData(location.state.bookingState);
+    } else if (matchedTrekBySlug) {
+      setBookingData(defaultBooking);
     }
     if (location.state?.selectedExtras) {
       setSelectedExtras(location.state.selectedExtras);
@@ -32,13 +40,14 @@ export default function ParticipantDetails() {
     if (location.state?.bookingId) {
       setBookingId(location.state.bookingId);
     }
-  }, [location.state]);
+  }, [location.state, slug]);
 
   useEffect(() => {
     if (!user) {
-      navigate('/login', { replace: true, state: { from: '/participant-details', bookingState: bookingData } });
+      const targetPath = slug ? `/trekking/${slug}/participants-details` : '/participant-details';
+      navigate('/login', { replace: true, state: { from: targetPath, bookingState: bookingData } });
     }
-  }, [user, navigate, bookingData]);
+  }, [user, navigate, bookingData, slug]);
 
   // Find the trek details to calculate pricing
   const matchedTrek = themes.find(
@@ -151,12 +160,24 @@ export default function ParticipantDetails() {
         additionalItems: items,
         totalCost: grandTotal
       };
-      const { response, data } = await createBooking(payload);
+      let response, data;
+      if (bookingId) {
+        const res = await updateBooking(bookingId, payload);
+        response = res.response;
+        data = res.data;
+      } else {
+        const res = await createBooking(payload);
+        response = res.response;
+        data = res.data;
+      }
+
       if (!response.ok) {
         throw new Error(data.message || 'Failed to save booking.');
       }
       
       toast.success(data.message || 'Booking saved successfully!');
+      
+      const savedBookingId = data.booking?._id || bookingId;
       
       // Update the current page's history state so browser Back button has it
       navigate(window.location.pathname, {
@@ -164,15 +185,16 @@ export default function ParticipantDetails() {
         state: {
           bookingState: bookingData,
           selectedExtras,
-          bookingId: data.booking._id
+          bookingId: savedBookingId
         }
       });
 
       // Navigate to booking payment/confirmation page
-      navigate('/booking-payment', {
+      const currentSlug = slug || matchedTrek?.slug || '';
+      navigate(`/trekking/${currentSlug}/participants-details/booking-payment`, {
         state: {
           bookingPayload: payload,
-          bookingId: data.booking._id,
+          bookingId: savedBookingId,
           bookingState: bookingData,
           extraChargesList,
           selectedExtras,
@@ -320,7 +342,7 @@ export default function ParticipantDetails() {
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <button
                   type="button"
-                  onClick={() => navigate('/trekking')}
+                  onClick={() => navigate(slug ? `/trekking/${slug}/dates` : '/trekking')}
                   className="w-full sm:w-auto rounded-2xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 text-center"
                 >
                   Back

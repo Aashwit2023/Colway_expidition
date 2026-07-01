@@ -2,6 +2,7 @@ import User from "../models/user.models.js";
 import bcrypt from "bcryptjs";
 import requestCallbackModels from "../models/requestCallback.models.js";
 import { Booking } from "../models/booking.models.js";
+import { sendSignupEmail, sendConfirmBookingEmail } from "../services/emailServices.js";
 
 //.............Landing Page.............
 export const home = async (req, res) => {
@@ -32,6 +33,9 @@ export const signUp = async (req, res) => {
       password: hassedPassword,
       cnfmPassword: hassedPassword,
     });
+    // Send welcome email
+    await sendSignupEmail(user.email, user.firstname);
+    
     return res.status(201).json({
       message: "Account created successfully!",
       user: {
@@ -166,16 +170,26 @@ export const createBooking = async (req, res) => {
 export const updatebooking = async (req, res) => {
   try {
     const { id } = req.params;
-    const { isPaymentCompleted } = req.body;
+    const updateData = req.body;
+
+    if (updateData.participants) {
+      updateData.totalMembers = updateData.participants.length;
+    }
 
     const booking = await Booking.findByIdAndUpdate(
       id, 
-      { isPaymentCompleted },
+      { $set: updateData }, 
       { new: true }
     );
     if (!booking) {
       return res.status(404).json({message: "Booking not found"});
     }
+
+    // Send confirmation email if payment was just completed
+    if (updateData.isPaymentCompleted) {
+      await sendConfirmBookingEmail(booking);
+    }
+
     return res.status(200).json({message: "Booking updated successfully!", booking});
   } catch (error) {
     return res.status(500).json({message: error.message + "Internal Server Error"});

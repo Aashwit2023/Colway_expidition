@@ -4,15 +4,13 @@ import trekking3 from '../assets/trekking3.jpg';
 import trekking33 from '../assets/trekking33.jpg';
 import adventure from "../assets/adventure.jpg";
 import culture from "../assets/culture.jpg";
-import cultural from "../assets/cultural.jpg";
-import trekking from "../assets/trekking.jpg";
 import baliPassCamp from "../assets/bali_pass.jpg";
 import everest_base_camp from "../assets/everest_base_camp.jpg";
-import frndship from "../assets/friendship_peak.jpg";
 
 export const themes = [
   {
     image: trekking1,
+    slug: "sar-pass-trek",
     days: "5 days",
     difficulty: "easy-moderate",
     title: "Sar Pass Trek",
@@ -28,10 +26,6 @@ export const themes = [
       "Easy Summit Experience"
     ],
     dates: {
-      "May-2026": [
-        { date: "May 2 - May 14", seats: 12 },
-        { date: "May 10 - May 22", seats: 8 },
-      ],
       "October-2026": [
         { date: "Oct 2 - Oct 14", seats: 5 },
         { date: "Oct 10 - Oct 22", seats: 18 },
@@ -138,6 +132,7 @@ export const themes = [
   },
   {
     image: trekking2,
+    slug: "buran-ghati-trek",
     days: "8 days",
     difficulty: "moderate-difficult",
     title: "Buran Ghati Trek",
@@ -147,10 +142,6 @@ export const themes = [
     location: "Himachal Pradesh",
     images: [trekking2, trekking3, trekking1],
     dates: {
-      "May-2026": [
-        { date: "May 2 - May 14", seats: 12 },
-        { date: "May 10 - May 22", seats: 8 },
-      ],
       "October-2026": [
         { date: "Oct 2 - Oct 14", seats: 50 },
         { date: "Oct 10 - Oct 22", seats: 18 },
@@ -299,6 +290,7 @@ export const themes = [
   },
   {
     image: trekking3,
+    slug: "rupin-pass-trek",
     days: "7 days",
     difficulty: "moderate-difficult",
     title: "Rupin Pass Trek",
@@ -337,6 +329,7 @@ export const themes = [
   },
   {
     image: baliPassCamp,
+    slug: "bali-pass-trek",
     days: "8 days",
     difficulty: "difficult",
     title: "Bali Pass Trek",
@@ -375,6 +368,7 @@ export const themes = [
   },
   {
     image: adventure,
+    slug: "hampta-pass-trek",
     days: "5 days",
     difficulty: "easy-moderate",
     title: "Hampta Pass Trek",
@@ -413,6 +407,7 @@ export const themes = [
   },
   {
     image: culture,
+    slug: "kashmir-great-lakes-trek",
     days: "7 days",
     difficulty: "moderate",
     title: "Kashmir Great Lakes Trek",
@@ -451,6 +446,7 @@ export const themes = [
   },
   {
     image: trekking33,
+    slug: "pin-bhaba-pass-trek",
     days: "7 days",
     difficulty: "moderate",
     title: "Pin Bhaba Pass Trek",
@@ -489,6 +485,7 @@ export const themes = [
   },
   {
     image: everest_base_camp,
+    slug: "everest-base-camp-trek",
     days: "12 days",
     difficulty: "difficult",
     title: "Everest Base Camp Trek",

@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Clock, ShieldCheck, QrCode, Sparkles, CheckCircle } from 'lucide-react';
-import QRCode from 'qrcode';
 import { updateBooking } from '../api/api';
 import toast from 'react-hot-toast';
+import myQrCode from '../assets/my_qr_code.png';
 
 export default function PaymentPage() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { slug } = useParams();
   const QR_EXPIRY_TIME = 120;
 
   // Retrieve routing state
@@ -39,24 +40,14 @@ export default function PaymentPage() {
   useEffect(() => {
     if (!bookingPayload) {
       toast.error('No active booking details found. Please start over.');
-      navigate('/trekking', { replace: true });
+      navigate(slug ? `/trekking/${slug}/dates` : '/trekking', { replace: true });
     }
-  }, [bookingPayload, navigate]);
+  }, [bookingPayload, navigate, slug]);
 
-  // Generate UPI QR Code URL
+  // Set Static UPI QR Code
   useEffect(() => {
     if (bookingPayload) {
-      const payeeAddress = 'colwayexpeditions@okaxis';
-      const payeeName = 'Colway Expeditions';
-      const note = `Trek booking for ${bookingPayload.trekName}`;
-      const upiUrl = `upi://pay?pa=${payeeAddress}&pn=${encodeURIComponent(payeeName)}&am=${bookingPayload.totalCost}&cu=INR&tn=${encodeURIComponent(note)}`;
-
-      QRCode.toDataURL(upiUrl, { margin: 2, width: 280 })
-        .then((url) => setQrCodeUrl(url))
-        .catch((err) => {
-          console.error('Failed to generate QR code:', err);
-          toast.error('Failed to generate payment QR code.');
-        });
+      setQrCodeUrl(myQrCode);
     }
   }, [bookingPayload]);
 
@@ -128,7 +119,7 @@ export default function PaymentPage() {
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         
         <button
-          onClick={() => navigate('/participant-details', { state: { bookingState, selectedExtras, bookingId } })}
+          onClick={() => navigate(`/trekking/${slug}/participants-details`, { state: { bookingState, selectedExtras, bookingId } })}
           className="mb-8 flex items-center gap-2 text-sm font-semibold text-slate-600 transition hover:text-slate-900 group"
         >
           <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" />
@@ -244,6 +235,15 @@ export default function PaymentPage() {
                 {warningSentences[Math.min(payLaterAttempts, warningSentences.length - 1)]}
               </p>
 
+              <div className="w-full max-w-[280px] mb-4 p-3 bg-orange-50 border border-orange-200 rounded-2xl text-center">
+                <span className="text-xs text-orange-800 font-bold block">
+                  Pay minimum 10% of your amount for confirm your seat:
+                </span>
+                <span className="text-lg font-extrabold text-orange-600 block mt-0.5">
+                  ₹{(bookingPayload.totalCost * 0.1).toLocaleString('en-IN')}
+                </span>
+              </div>
+
               {/* QR Screen wrapper */}
               <div 
                 onClick={handleRevealQr}
@@ -334,7 +334,7 @@ export default function PaymentPage() {
 
                 <button
                   type="button"
-                  onClick={() => navigate('/participant-details', { state: { bookingState, selectedExtras, bookingId } })}
+                  onClick={() => navigate(`/trekking/${slug}/participants-details`, { state: { bookingState, selectedExtras, bookingId } })}
                   disabled={isSubmitting}
                   className="w-full py-3.5 rounded-2xl bg-white border border-slate-200 text-slate-700 font-semibold text-sm hover:bg-slate-50 transition transform active:scale-98"
                 >
