@@ -1,16 +1,20 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
 import { createPortal } from 'react-dom';
 import ParticipantDetailsForm from '../ParticipantDetailsForm';
 import { useAuth } from '../../context/AuthContext';
 
 function Trekking_cards({ items, heading, onOpenModal }, ref) {
   const navigate = useNavigate();
+  const { slug } = useParams();
+  const { pathname } = useLocation();
+  const isDatesPath = pathname.endsWith('/dates');
   const { user } = useAuth();
   const isLoggedIn = () => Boolean(user);
 
   const beginBooking = (dateVal) => {
     const dateStr = typeof dateVal === 'object' ? dateVal.date : dateVal;
+    const targetSlug = selectedDates?.slug || slug || '';
     const bookingState = {
       trek: selectedDates?.title || 'Booked Trek',
       date: dateStr,
@@ -18,12 +22,14 @@ function Trekking_cards({ items, heading, onOpenModal }, ref) {
       participants: [{ name: '', age: '' }],
     };
 
+    const targetUrl = `/trekking/${targetSlug}/participants-details`;
+
     if (isLoggedIn()) {
-      navigate('/participant-details', { state: { bookingState } });
+      navigate(targetUrl, { state: { bookingState } });
       return;
     }
 
-    navigate('/login', { state: { from: '/participant-details', bookingState } });
+    navigate('/login', { state: { from: targetUrl, bookingState } });
   };
   const cardsRef = useRef([]);
   const [selectedDates, setSelectedDates] = useState(null);
@@ -41,41 +47,21 @@ function Trekking_cards({ items, heading, onOpenModal }, ref) {
     };
   }, [selectedDates]);
 
-  // Fallback sample dates in case incoming item has no `dates` field
-  const sampleDates = {
-    "May-2026": [
-      { date: "May 2 - May 14", seats: 10 },
-      { date: "May 8 - May 20", seats: 15 },
-      { date: "May 15 - May 27", seats: 6 }
-    ],
-    "October-2026": [
-      { date: "Oct 2 - Oct 14", seats: 12 },
-      { date: "Oct 3 - Oct 15", seats: 8 },
-      { date: "Oct 4 - Oct 16", seats: 14 },
-      { date: "Oct 10 - Oct 22", seats: 19 }
-    ]
-  };
-
-  // Booking flow state
-  const [bookingOpen, setBookingOpen] = useState(false);
-  const [bookingStep, setBookingStep] = useState(1);
-  const [bookingData, setBookingData] = useState({ date: null, email: '', count: 1, participants: [{ name: '', age: '' }] });
-  const [paymentStatus, setPaymentStatus] = useState('unpaid');
-  const [qrCode, setQrCode] = useState(null);
-  const [qrExpiration, setQrExpiration] = useState(null);
-  const [qrCountdown, setQrCountdown] = useState(0);
-  const [isGeneratingQr, setIsGeneratingQr] = useState(false);
-
-  const qrLocked = qrExpiration !== null && Date.now() < qrExpiration;
-  const isLoginValid = bookingData.email.trim().length > 0;
-  const isPeopleValid = bookingData.participants.every(
-    (participant) => participant?.name?.trim().length > 0 && participant?.age > 0
-  );
-  const isQrGenerated = Boolean(qrCode);
-  const canAdvanceFromStep1 = isLoginValid;
-  const canAdvanceFromStep2 = isPeopleValid;
-  const canAdvanceFromStep3 = isQrGenerated;
-  const canFinishBooking = paymentStatus === 'paid';
+  // Synchronize URL slug and /dates path with the dates modal open/close state
+  useEffect(() => {
+    if (slug && isDatesPath) {
+      const theme = items.find(item => item.slug === slug);
+      if (theme) {
+        const datesObj = theme.dates || {};
+        const months = Object.keys(datesObj);
+        setSelectedDates({ ...theme, dates: datesObj });
+        setSelectedMonth(months[0] || null);
+        setExpandedMonths(months.slice(0, 1));
+        return;
+      }
+    }
+    setSelectedDates(null);
+  }, [slug, isDatesPath, items]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -99,40 +85,12 @@ function Trekking_cards({ items, heading, onOpenModal }, ref) {
   }, [items]);
 
   const openViewDates = (theme) => {
-    const datesObj = theme.dates || sampleDates;
-    const months = Object.keys(datesObj);
-    setSelectedDates({ ...theme, dates: datesObj });
-    setSelectedMonth(months[0] || null);
-    setExpandedMonths(months.slice(0, 1));
+    navigate(`/trekking/${theme.slug}/dates`);
   };
 
   useImperativeHandle(ref, () => ({ openViewDates }));
 
-  const formatTimer = (seconds) => {
-    const minutes = String(Math.floor(seconds / 60)).padStart(2, '0');
-    const secs = String(seconds % 60).padStart(2, '0');
-    return `${minutes}:${secs}`;
-  };
 
-  useEffect(() => {
-    if (!qrExpiration) {
-      setQrCountdown(0);
-      return;
-    }
-
-    const interval = setInterval(() => {
-      const remaining = Math.max(0, Math.ceil((qrExpiration - Date.now()) / 1000));
-      setQrCountdown(remaining);
-
-      if (remaining <= 0) {
-        setQrExpiration(null);
-        setQrCode(null);
-        clearInterval(interval);
-      }
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [qrExpiration]);
 
   return (
     <section className="py-12 bg-transparent">
@@ -191,18 +149,11 @@ function Trekking_cards({ items, heading, onOpenModal }, ref) {
                     </Link>
                   )}
                   <button
-                    onClick={() => {
-                      const datesObj = theme.dates || sampleDates;
-                      const months = Object.keys(datesObj);
-                      setSelectedDates({ ...theme, dates: datesObj });
-                      setSelectedMonth(months[0] || null);
-                      setExpandedMonths(months.slice(0, 1));
-                    }}
+                    onClick={() => openViewDates(theme)}
                     className="flex-1 py-3 bg-teal-600 text-white rounded-xl font-bold text-[10px] tracking-widest hover:bg-teal-700 transition-all transform active:scale-95 shadow-md shadow-teal-100"
                   >
                     VIEW DATES
                   </button>
-
                   
                 </div>
               </div>
@@ -215,7 +166,7 @@ function Trekking_cards({ items, heading, onOpenModal }, ref) {
             {/* Dark Backdrop Overlay */}
             <div
               className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300"
-              onClick={() => setSelectedDates(null)}
+              onClick={() => navigate('/trekking')}
             />
 
             <div className="relative w-full max-w-md mx-4 md:mx-0 bg-white rounded-3xl shadow-2xl overflow-hidden animate-fadeIn z-10">
@@ -227,7 +178,7 @@ function Trekking_cards({ items, heading, onOpenModal }, ref) {
                 </h2>
 
                 <button
-                  onClick={() => setSelectedDates(null)}
+                  onClick={() => navigate('/trekking')}
                   aria-label="Close departures"
                   className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 text-xl flex items-center justify-center"
                 >
@@ -247,60 +198,70 @@ function Trekking_cards({ items, heading, onOpenModal }, ref) {
                 )}
 
                 {/* Collapsible months list */}
-                <div className="space-y-4">
-                  {Object.entries(selectedDates.dates).map(([month, dates], i) => {
-                    const isExpanded = expandedMonths.includes(month);
-                    return (
-                      <div key={i} className="">
-                        <button
-                          onClick={() => {
-                            setExpandedMonths((prev) => (
-                              prev.includes(month) ? [] : [month]
-                            ));
-                            setSelectedMonth(month);
-                          }}
-                          className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl mb-2 ${selectedMonth === month ? 'bg-[#ff7a18] text-white' : 'bg-gray-100 text-gray-800'} font-bold text-lg`}
-                        >
-                          <span className="text-left">{month}</span>
-                          <span className="text-xl">{isExpanded ? '▾' : '▸'}</span>
-                        </button>
+                {Object.keys(selectedDates.dates).length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-10 px-4 text-center bg-gray-50 rounded-2xl border border-gray-200 mt-4">
+                    <div className="w-16 h-16 bg-[#ff7a18]/10 text-[#ff7a18] rounded-full flex items-center justify-center mb-4 text-3xl">
+                      📅
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-800 mb-2">Dates Coming Soon!</h3>
+                    <p className="text-gray-600 text-sm leading-relaxed max-w-sm">We are finalizing the schedule for this adventure. Please check back later or contact us for inquiries.</p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {Object.entries(selectedDates.dates).map(([month, dates], i) => {
+                      const isExpanded = expandedMonths.includes(month);
+                      return (
+                        <div key={i} className="">
+                          <button
+                            onClick={() => {
+                              setExpandedMonths((prev) => (
+                                prev.includes(month) ? [] : [month]
+                              ));
+                              setSelectedMonth(month);
+                            }}
+                            className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl mb-2 ${selectedMonth === month ? 'bg-[#ff7a18] text-white' : 'bg-gray-100 text-gray-800'} font-bold text-lg`}
+                          >
+                            <span className="text-left">{month}</span>
+                            <span className="text-xl">{isExpanded ? '▾' : '▸'}</span>
+                          </button>
 
-                        {isExpanded && (
-                          <div className="space-y-3">
-                            {dates.map((date, idx) => (
-                              <div
-                                key={idx}
-                                className="flex flex-row items-center justify-between gap-2.5 border border-gray-200 rounded-2xl px-3 py-3 hover:shadow-md transition"
-                              >
-                                <div className="flex-1 min-w-0">
-                                  <div className="font-bold text-gray-800 text-[13px] sm:text-sm truncate">
-                                    {typeof date === 'object' ? date.date : date}
+                          {isExpanded && (
+                            <div className="space-y-3">
+                              {dates.map((date, idx) => (
+                                <div
+                                  key={idx}
+                                  className="flex flex-row items-center justify-between gap-2.5 border border-gray-200 rounded-2xl px-3 py-3 hover:shadow-md transition"
+                                >
+                                  <div className="flex-1 min-w-0">
+                                    <div className="font-bold text-gray-800 text-[13px] sm:text-sm truncate">
+                                      {typeof date === 'object' ? date.date : date}
+                                    </div>
+                                    <div className="text-[10px] sm:text-[11px] text-gray-500 mt-0.5">
+                                      Seats: {typeof date === 'object' ? date.seats : 15}
+                                    </div>
                                   </div>
-                                  <div className="text-[10px] sm:text-[11px] text-gray-500 mt-0.5">
-                                    Seats: {typeof date === 'object' ? date.seats : 15}
+
+                                  <div className="flex items-center gap-2 shrink-0">
+                                    <button
+                                      onClick={() => beginBooking(date)}
+                                      className="px-3.5 py-1.5 bg-blue-600 text-white rounded-xl text-[10px] sm:text-xs font-bold hover:bg-blue-700 transition shadow-sm"
+                                    >
+                                      BOOK NOW
+                                    </button>
+
+                                    <span className="text-green-600 font-extrabold text-[10px] sm:text-xs">
+                                      OPEN
+                                    </span>
                                   </div>
                                 </div>
-
-                                <div className="flex items-center gap-2 shrink-0">
-                                  <button
-                                    onClick={() => beginBooking(date)}
-                                    className="px-3.5 py-1.5 bg-blue-600 text-white rounded-xl text-[10px] sm:text-xs font-bold hover:bg-blue-700 transition shadow-sm"
-                                  >
-                                    BOOK NOW
-                                  </button>
-
-                                  <span className="text-green-600 font-extrabold text-[10px] sm:text-xs">
-                                    OPEN
-                                  </span>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
 
               </div>
             </div>
