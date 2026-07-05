@@ -249,7 +249,7 @@ export default function Home() {
 
       <ExploreTheme items={Destination} heading="Recently Visited Treks" />
 
-      <section className="stories container">
+      {/* <section className="stories container">
 
         <h2>Stories From Travelers</h2>
         <div className="stories-slider">
@@ -384,7 +384,7 @@ export default function Home() {
             <p>Cultural Experiences Curator</p>
           </div>
         </div>
-      </section>
+      </section> */}
 
       <FAQ />
 
