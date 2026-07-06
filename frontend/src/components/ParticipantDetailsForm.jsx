@@ -36,6 +36,18 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
     });
   };
 
+  const handleRemoveParticipant = (indexToRemove) => {
+    setBookingData((prev) => {
+      const nextParticipants = (prev.participants || []).filter((_, idx) => idx !== indexToRemove);
+      const count = nextParticipants.length;
+      return {
+        ...prev,
+        count,
+        participants: nextParticipants,
+      };
+    });
+  };
+
   const isValid = (bookingData.participants || []).every((participant) => {
     const name = participant?.name?.trim() || '';
     const nameIsValid = name.length > 0 && /^[A-Za-z\s]+$/.test(name);
@@ -58,7 +70,7 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
   });
 
   return (
-    <div className="space-y-6 ">
+    <div className="space-y-10 ">
       <div className="rounded-[30px] border border-slate-200 bg-slate-50 p-6 shadow-sm">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
@@ -80,15 +92,26 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
         </div>
       </div>
 
-      <div className="space-y-10 ">
+      <div className="space-y-8">
         {(bookingData.participants || []).map((participant, index) => (
-          <div key={index} className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
-            <div className="mb-4 flex flex-col gap-9 sm:flex-row sm:items-center sm:justify-between">
+          <div key={index} className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition-shadow">
+            <div className="mb-6 flex flex-row items-center justify-between border-b border-slate-100 pb-4">
               <div>
-                <p className="text-sm uppercase tracking-[0.2em] text-slate-500">Participant {index + 1}</p>
-                <h4 className="text-lg font-semibold text-slate-900">Profile details</h4>
+                <p className="text-xs uppercase tracking-[0.2em] text-slate-400 font-bold">Participant {index + 1}</p>
+                <h4 className="text-lg font-semibold text-slate-900 mt-0.5">Profile details</h4>
               </div>
-              <span className="rounded-full bg-slate-100 px-3 py-1 text-sm font-semibold text-slate-700">#{index + 1}</span>
+              <div className="flex items-center gap-3">
+                {bookingData.participants.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveParticipant(index)}
+                    className="rounded-full bg-rose-50 hover:bg-rose-100 border border-rose-100 px-3.5 py-1.5 text-xs font-bold text-rose-600 transition-colors shadow-sm cursor-pointer select-none"
+                  >
+                    Remove
+                  </button>
+                )}
+                <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600">#{index + 1}</span>
+              </div>
             </div>
 
             <div className="grid gap-6 sm:grid-cols-2">
@@ -191,7 +214,7 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
         </div>
       )}
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between pt-8 border-t border-slate-100 mt-2">
         <button
           type="button"
           onClick={onBack}
