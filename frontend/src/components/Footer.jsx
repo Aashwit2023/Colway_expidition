@@ -16,10 +16,10 @@ export default function Footer() {
             <h4>Quick Links</h4>
             <ul>
               <li>
-                <Link to="/expeditions">Expeditions</Link>
+                <Link to="/trekking">Trekking</Link>
               </li>
               <li>
-                <Link to="/trekking">Trekking</Link>
+                <Link to="/expeditions">Expeditions</Link>
               </li>
               <li>
                 <Link to="/villages">Villages</Link>

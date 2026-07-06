@@ -2,7 +2,15 @@ import React from 'react';
 
 export default function ParticipantDetailsForm({ bookingData, setBookingData, onNext, onBack }) {
   const handleCountChange = (value) => {
-    const count = Math.max(1, Math.min(10, Number(value) || 1));
+    if (value === '') {
+      setBookingData((prev) => ({
+        ...prev,
+        count: '',
+      }));
+      return;
+    }
+
+    const count = Math.max(1, Math.min(20, Number(value)));
     const existingParticipants = bookingData.participants || [];
     const nextParticipants = Array.from({ length: count }, (_, index) => {
       return existingParticipants[index] || { name: '', age: '', phoneNumber: '', emergencyContact: '', address: '', gender: '' };
@@ -20,7 +28,7 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
 
     if (field === 'name') {
       normalizedValue = value.replace(/[^A-Za-z\s]/g, '');
-    } else if (field === 'phoneNumber') {
+    } else if (field === 'phoneNumber' || field === 'emergencyContact') {
       normalizedValue = value.replace(/\D/g, '').slice(0, 10);
     } else if (field === 'age') {
       normalizedValue = value === '' ? '' : Number(value);
@@ -36,6 +44,7 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
     });
   };
 
+<<<<<<< HEAD
   const handleRemoveParticipant = (indexToRemove) => {
     setBookingData((prev) => {
       const nextParticipants = (prev.participants || []).filter((_, idx) => idx !== indexToRemove);
@@ -68,6 +77,9 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
 
     return nameIsValid && phoneIsValid && emergencyIsValid && addressIsValid && genderIsValid && ageIsValid;
   });
+=======
+  const isValid = validateBookingData(bookingData);
+>>>>>>> origin
 
   return (
     <div className="space-y-10 ">
@@ -83,7 +95,7 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
             <input
               type="number"
               min="1"
-              max="10"
+              max="20"
               value={bookingData.count}
               onChange={(event) => handleCountChange(event.target.value)}
               className="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-orange-400"
@@ -130,7 +142,7 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
                 <span className="text-sm font-medium text-slate-700">Phone Number</span>
                 <input
                   type="tel"
-                  value={participant.phoneNumber}
+                  value={participant.phoneNumber || ''}
                   onChange={(event) => updateParticipant(index, 'phoneNumber', event.target.value)}
                   placeholder="10 digit phone number"
                   maxLength="10"
@@ -146,13 +158,13 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
                     value={participant.age}
                     onChange={(event) => updateParticipant(index, 'age', event.target.value)}
                     placeholder="Age"
-                    min="2"
-                    max="89"
+                    min="5"
+                    max="80"
                     className={`w-full rounded-2xl border bg-slate-50 px-4 py-3 text-slate-900 outline-none transition ${
                       participant.age !== '' &&
                       participant.age !== undefined &&
                       participant.age !== null &&
-                      (Number(participant.age) <= 1 || Number(participant.age) >= 90)
+                      (Number(participant.age) < 5 || Number(participant.age) > 80)
                         ? 'border-rose-400 focus:border-rose-400 ring-2 ring-rose-500/35'
                         : 'border-slate-300 focus:border-orange-400'
                     }`}
@@ -160,10 +172,10 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
                   {participant.age !== '' &&
                     participant.age !== undefined &&
                     participant.age !== null &&
-                    (Number(participant.age) <= 1 || Number(participant.age) >= 90) && (
+                    (Number(participant.age) < 5 || Number(participant.age) > 80) && (
                       <div className="absolute bottom-full left-1/2 z-20 mb-3 w-56 -translate-x-1/2 rounded-xl bg-slate-950 border border-slate-800 px-4 py-2.5 text-center text-xs font-semibold text-white shadow-2xl animate-fade-in-up">
                         <div className="relative">
-                         Age should be between 2 to 90.
+                         Age should be between 5 to 80.
                           <div className="absolute top-full left-1/2 mt-[9px] -translate-x-1/2 border-[8px] border-transparent border-t-slate-950" />
                         </div>
                       </div>
@@ -173,7 +185,7 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
               <label className="block">
                 <span className="text-sm font-medium text-slate-700">Gender</span>
                 <select
-                  value={participant.gender}
+                  value={participant.gender || ''}
                   onChange={(event) => updateParticipant(index, 'gender', event.target.value)}
                   className="mt-2 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition focus:border-orange-400"
                 >
@@ -186,18 +198,19 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
               <label className="block">
                 <span className="text-sm font-medium text-slate-700">Emergency Contact</span>
                 <input
-                  value={participant.emergencyContact}
+                  type="tel"
+                  value={participant.emergencyContact || ''}
                   onChange={(event) => updateParticipant(index, 'emergencyContact', event.target.value)}
                   maxLength="10"
                   inputMode='numeric'
-                  placeholder="Emergency contact name"
+                  placeholder="10 digit phone number"
                   className="mt-2 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition focus:border-orange-400"
                 />
               </label>
               <label className="block">
                 <span className="text-sm font-medium text-slate-700">Address</span>
                 <input
-                  value={participant.address}
+                  value={participant.address || ''}
                   onChange={(event) => updateParticipant(index, 'address', event.target.value)}
                   placeholder="Full address"
                   className="mt-2 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition focus:border-orange-400"
@@ -209,10 +222,48 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
       </div>
 
       {!isValid && (
-        <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
-          Please fill in all details for each participant before continuing.
+        <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-4 text-sm text-rose-700 space-y-2">
+          <div className="font-semibold">Please fill in all details for each participant before continuing:</div>
+          <ul className="list-disc pl-5 space-y-1 text-xs">
+            {(bookingData.participants || []).map((p, idx) => {
+              const name = p?.name?.trim() || '';
+              const nameIsValid = name.length > 0 && /^[A-Za-z\s]+$/.test(name);
+              const phoneNumber = p?.phoneNumber?.toString().trim() || '';
+              const phoneIsValid = phoneNumber.length === 10 && /^\d{10}$/.test(phoneNumber);
+              const emergencyContact = p?.emergencyContact?.toString().trim() || '';
+              const emergencyIsValid = emergencyContact.length === 10 && /^\d{10}$/.test(emergencyContact);
+              const address = p?.address?.trim() || '';
+              const addressIsValid = address.length > 0;
+              const gender = p?.gender?.trim() || '';
+              const genderIsValid = gender.length > 0;
+              const ageIsValid =
+                p?.age !== '' &&
+                p?.age !== undefined &&
+                p?.age !== null &&
+                Number(p.age) >= 5 &&
+                Number(p.age) <= 80;
+
+              const errors = [];
+              if (!nameIsValid) errors.push('Name (letters & spaces)');
+              if (!phoneIsValid) errors.push('Phone Number (10 digits)');
+              if (!ageIsValid) errors.push('Age (5-80)');
+              if (!genderIsValid) errors.push('Gender');
+              if (!emergencyIsValid) errors.push('Emergency Contact (10 digits)');
+              if (!addressIsValid) errors.push('Address');
+
+              if (errors.length > 0) {
+                return (
+                  <li key={idx}>
+                    Participant #{idx + 1}: {errors.join(', ')}
+                  </li>
+                );
+              }
+              return null;
+            })}
+          </ul>
         </div>
       )}
+<<<<<<< HEAD
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between pt-8 border-t border-slate-100 mt-2">
         <button
@@ -231,6 +282,50 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
           Continue
         </button>
       </div>
+=======
+>>>>>>> origin
     </div>
   );
 }
+
+export const validateBookingData = (bookingData) => {
+  const countValid = bookingData.count !== '' && Number(bookingData.count) >= 1 && Number(bookingData.count) <= 20;
+  const lenValid = (bookingData.participants || []).length === Number(bookingData.count);
+  
+  if (!countValid || !lenValid) {
+    console.log('validateBookingData basic check failed:', { count: bookingData.count, countValid, lenValid, length: (bookingData.participants || []).length });
+    return false;
+  }
+
+  const results = (bookingData.participants || []).map((participant, index) => {
+    const name = participant?.name?.trim() || '';
+    const nameIsValid = name.length > 0 && /^[A-Za-z\s]+$/.test(name);
+    const phoneNumber = participant?.phoneNumber?.toString().trim() || '';
+    const phoneIsValid = phoneNumber.length === 10 && /^\d{10}$/.test(phoneNumber);
+    const emergencyContact = participant?.emergencyContact?.toString().trim() || '';
+    const emergencyIsValid = emergencyContact.length === 10 && /^\d{10}$/.test(emergencyContact);
+    const address = participant?.address?.trim() || '';
+    const addressIsValid = address.length > 0;
+    const gender = participant?.gender?.trim() || '';
+    const genderIsValid = gender.length > 0;
+    const ageIsValid =
+      participant?.age !== '' &&
+      participant?.age !== undefined &&
+      participant?.age !== null &&
+      Number(participant.age) >= 5 &&
+      Number(participant.age) <= 80;
+
+    console.log(`validateBookingData Participant #${index + 1}:`, {
+      name, nameIsValid,
+      phoneNumber, phoneIsValid,
+      emergencyContact, emergencyIsValid,
+      address, addressIsValid,
+      gender, genderIsValid,
+      age: participant?.age, ageIsValid
+    });
+
+    return nameIsValid && phoneIsValid && emergencyIsValid && addressIsValid && genderIsValid && ageIsValid;
+  });
+
+  return results.every(r => r === true);
+};

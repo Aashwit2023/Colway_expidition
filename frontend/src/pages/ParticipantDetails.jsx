@@ -1,37 +1,53 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import ParticipantDetailsForm from '../components/ParticipantDetailsForm';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import ParticipantDetailsForm, { validateBookingData } from '../components/ParticipantDetailsForm';
 import { useAuth } from '../context/AuthContext';
 import { themes } from '../data/treks';
-import { createBooking } from '../api/api';
+import { createBooking, updateBooking } from '../api/api';
 import toast from 'react-hot-toast';
 
 export default function ParticipantDetails() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { slug } = useParams();
   const { user } = useAuth();
+
+  // Find trek details based on slug
+  const matchedTrekBySlug = slug ? themes.find((t) => t.slug === slug) : null;
   
   const defaultBooking = {
-    trek: 'Sar Pass Trek',
-    date: 'May 2 - May 14',
+    trek: matchedTrekBySlug ? matchedTrekBySlug.title : 'Sar Pass Trek',
+    date: (matchedTrekBySlug && matchedTrekBySlug.dates && Object.values(matchedTrekBySlug.dates)[0] && Object.values(matchedTrekBySlug.dates)[0][0])
+      ? Object.values(matchedTrekBySlug.dates)[0][0].date
+      : 'May 2 - May 14',
     count: 1,
     participants: [{ name: '', age: '' }],
   };
 
   const [bookingData, setBookingData] = useState(location.state?.bookingState || defaultBooking);
-  const [selectedExtras, setSelectedExtras] = useState({});
+  const [selectedExtras, setSelectedExtras] = useState(location.state?.selectedExtras || {});
+  const [bookingId, setBookingId] = useState(location.state?.bookingId || null);
 
   useEffect(() => {
     if (location.state?.bookingState) {
       setBookingData(location.state.bookingState);
+    } else if (matchedTrekBySlug) {
+      setBookingData(defaultBooking);
     }
-  }, [location.state]);
+    if (location.state?.selectedExtras) {
+      setSelectedExtras(location.state.selectedExtras);
+    }
+    if (location.state?.bookingId) {
+      setBookingId(location.state.bookingId);
+    }
+  }, [location.state, slug]);
 
   useEffect(() => {
     if (!user) {
-      navigate('/login', { replace: true, state: { from: '/participant-details', bookingState: bookingData } });
+      const targetPath = slug ? `/trekking/${slug}/participants-details` : '/participant-details';
+      navigate('/login', { replace: true, state: { from: targetPath, bookingState: bookingData } });
     }
-  }, [user, navigate, bookingData]);
+  }, [user, navigate, bookingData, slug]);
 
   // Find the trek details to calculate pricing
   const matchedTrek = themes.find(
@@ -120,8 +136,10 @@ export default function ParticipantDetails() {
 
   const grandTotal = subtotalBase + totalExtrasCost;
 
+  const isValid = validateBookingData(bookingData);
+
   const handleSubmit = async () => {
-    if (bookingData.participants.every((p) => p.name.trim() && p.age > 0)) {
+    if (isValid) {
       const items = Object.entries(selectedExtras)
         .filter(([label, qty]) => qty > 0)
         .map(([label, qty]) => {
@@ -142,11 +160,41 @@ export default function ParticipantDetails() {
         additionalItems: items,
         totalCost: grandTotal
       };
+      let response, data;
+      if (bookingId) {
+        const res = await updateBooking(bookingId, payload);
+        response = res.response;
+        data = res.data;
+      } else {
+        const res = await createBooking(payload);
+        response = res.response;
+        data = res.data;
+      }
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to save booking.');
+      }
       
+      toast.success(data.message || 'Booking saved successfully!');
+      
+      const savedBookingId = data.booking?._id || bookingId;
+      
+      // Update the current page's history state so browser Back button has it
+      navigate(window.location.pathname, {
+        replace: true,
+        state: {
+          bookingState: bookingData,
+          selectedExtras,
+          bookingId: savedBookingId
+        }
+      });
+
       // Navigate to booking payment/confirmation page
-      navigate('/booking-payment', {
+      const currentSlug = slug || matchedTrek?.slug || '';
+      navigate(`/trekking/${currentSlug}/participants-details/booking-payment`, {
         state: {
           bookingPayload: payload,
+          bookingId: savedBookingId,
           bookingState: bookingData,
           extraChargesList,
           selectedExtras,
@@ -172,8 +220,6 @@ export default function ParticipantDetails() {
             <ParticipantDetailsForm
               bookingData={bookingData}
               setBookingData={setBookingData}
-              onBack={() => navigate('/trekking')}
-              onNext={handleSubmit}
             />
           </div>
 
@@ -290,6 +336,25 @@ export default function ParticipantDetails() {
                     ₹{grandTotal.toLocaleString('en-IN')}
                   </span>
                 </div>
+              </div>
+
+              {/* ACTION BUTTONS */}
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <button
+                  type="button"
+                  onClick={() => navigate(slug ? `/trekking/${slug}/dates` : '/trekking')}
+                  className="w-full sm:w-auto rounded-2xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 text-center"
+                >
+                  Back
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSubmit}
+                  disabled={!isValid}
+                  className={`w-full sm:w-auto rounded-2xl px-5 py-3 text-sm font-semibold transition text-center ${isValid ? 'bg-orange-600 text-white hover:bg-orange-700 shadow-md hover:shadow-lg hover:-translate-y-0.5' : 'bg-slate-200 text-slate-500 cursor-not-allowed'}`}
+                >
+                  Continue
+                </button>
               </div>
 
             </div>

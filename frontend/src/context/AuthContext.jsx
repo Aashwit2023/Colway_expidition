@@ -8,12 +8,35 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const storedUser = localStorage.getItem('colway_user');
+    const loginTimestamp = localStorage.getItem('colway_login_timestamp');
+
     if (storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch (error) {
-        console.error('Failed to parse stored user:', error);
+      let isExpired = false;
+      if (loginTimestamp) {
+        const diffTime = Date.now() - parseInt(loginTimestamp, 10);
+        const sevenDaysInMs = 7 * 24 * 60 * 60 * 1000;
+        if (diffTime > sevenDaysInMs) {
+          isExpired = true;
+        }
+      } else {
+        // Fallback: If no timestamp exists, set it to current time to start a 7-day window.
+        localStorage.setItem('colway_login_timestamp', Date.now().toString());
+      }
+
+      if (isExpired) {
         localStorage.removeItem('colway_user');
+        localStorage.removeItem('colwayAuthEmail');
+        localStorage.removeItem('colway_login_timestamp');
+        setUser(null);
+      } else {
+        try {
+          setUser(JSON.parse(storedUser));
+        } catch (error) {
+          console.error('Failed to parse stored user:', error);
+          localStorage.removeItem('colway_user');
+          localStorage.removeItem('colwayAuthEmail');
+          localStorage.removeItem('colway_login_timestamp');
+        }
       }
     }
     setLoading(false);
@@ -22,12 +45,14 @@ export const AuthProvider = ({ children }) => {
   const login = (userData) => {
     setUser(userData);
     localStorage.setItem('colway_user', JSON.stringify(userData));
+    localStorage.setItem('colway_login_timestamp', Date.now().toString());
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem('colway_user');
     localStorage.removeItem('colwayAuthEmail');
+    localStorage.removeItem('colway_login_timestamp');
   };
 
   return (

@@ -27,11 +27,13 @@ const AppRoutes = () => {
       <Route path="/contact" element={<Contact />} />
       <Route path="/activities" element={<ActivitiesPage />} />
       <Route path="/trekking" element={<Trekking />} />
+      <Route path="/trekking/:slug" element={<Trekking />} />
+      <Route path="/trekking/:slug/dates" element={<Trekking />} />
+      <Route path="/trekking/:slug/Participants-details" element={<ParticipantDetails />} />
+      <Route path="/trekking/:slug/Participants-details/booking-payment" element={<PaymentPage />} />
       <Route path="/expeditions" element={<Expeditions />} />
       <Route path="/villages" element={<Villages />} />
       <Route path="/kailash-trek" element={<KailashTrek />} />
-      <Route path="/participant-details" element={<ParticipantDetails />} />
-      <Route path="/booking-payment" element={<PaymentPage />} />
       <Route path="/cancellation-policy" element={<CancellationPolicy />} />
     </Routes>
   );

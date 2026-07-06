@@ -1,4 +1,5 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import HeroSection from '../components/HeroSection';
 import Trekking_cards from '../components/Trekking_cards/Trekking_cards.jsx';
 import TrekModal from '../components/Trekking_cards/TrekModal.jsx';
@@ -11,20 +12,31 @@ import { themes } from '../data/treks';
 
 export default function Trekking() {
   const trekImages = [trekking2, trekking1, trekking33];
-  const [selectedTrek, setSelectedTrek] = useState(null);
+  const { slug } = useParams();
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const isDatesPath = pathname.endsWith('/dates');
   const trekkingCardsRef = useRef(null);
 
-  const handleOpenViewDates = (trek) => {
-    setSelectedTrek(null);
-    if (trekkingCardsRef.current?.openViewDates) {
-      trekkingCardsRef.current.openViewDates(trek);
-    }
+  // Derive selected trek from the URL slug, only if not viewing dates
+  const selectedTrek = (slug && !isDatesPath) ? (themes.find((t) => t.slug === slug) || null) : null;
+
+  // When the URL has a slug on first load, open the matching trek
+  useEffect(() => {
+    // Reactively derived from parameters
+  }, [slug, isDatesPath]);
+
+  const openTrek = (trek) => {
+    navigate(`/trekking/${trek.slug}`);
   };
 
+  const closeTrek = () => {
+    navigate('/trekking');
+  };
 
-
-
-
+  const handleOpenViewDates = (trek) => {
+    navigate(`/trekking/${trek.slug}/dates`);
+  };
 
   return (
     <div className="bg-white min-h-screen pb-32">
@@ -47,7 +59,6 @@ export default function Trekking() {
           </div>
 
           {/* Integrated 3-Column Grid - Balanced Layout */}
-
           <div className="bg-gray-50/50 rounded-[2rem] border border-dashed border-gray-200 overflow-hidden">
             <Trekking_cards
               items={themes}
@@ -57,10 +68,9 @@ export default function Trekking() {
                   <div className="w-24 h-1 bg-blue-600 mx-auto rounded-full mb-8"></div>
                 </>
               }
-                ref={trekkingCardsRef}
-                onOpenModal={setSelectedTrek}
+              ref={trekkingCardsRef}
+              onOpenModal={openTrek}
             />
-
           </div>
         </div>
       </div>
@@ -68,7 +78,7 @@ export default function Trekking() {
       <TrekModal
         trek={selectedTrek}
         isOpen={!!selectedTrek}
-        onClose={() => setSelectedTrek(null)}
+        onClose={closeTrek}
         onViewDates={handleOpenViewDates}
       />
     </div>
