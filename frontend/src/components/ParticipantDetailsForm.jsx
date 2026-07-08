@@ -44,7 +44,6 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
     });
   };
 
-<<<<<<< HEAD
   const handleRemoveParticipant = (indexToRemove) => {
     setBookingData((prev) => {
       const nextParticipants = (prev.participants || []).filter((_, idx) => idx !== indexToRemove);
@@ -57,29 +56,7 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
     });
   };
 
-  const isValid = (bookingData.participants || []).every((participant) => {
-    const name = participant?.name?.trim() || '';
-    const nameIsValid = name.length > 0 && /^[A-Za-z\s]+$/.test(name);
-    const phoneNumber = participant?.phoneNumber?.toString().trim() || '';
-    const phoneIsValid = phoneNumber.length === 10 && /^\d{10}$/.test(phoneNumber);
-    const emergencyContact = participant?.emergencyContact?.trim() || '';
-    const emergencyIsValid = emergencyContact.length > 0;
-    const address = participant?.address?.trim() || '';
-    const addressIsValid = address.length > 0;
-    const gender = participant?.gender?.trim() || '';
-    const genderIsValid = gender.length > 0;
-    const ageIsValid =
-      participant?.age !== '' &&
-      participant?.age !== undefined &&
-      participant?.age !== null &&
-      Number(participant.age) > 1 &&
-      Number(participant.age) < 90;
-
-    return nameIsValid && phoneIsValid && emergencyIsValid && addressIsValid && genderIsValid && ageIsValid;
-  });
-=======
   const isValid = validateBookingData(bookingData);
->>>>>>> origin
 
   return (
     <div className="space-y-10 ">
@@ -90,7 +67,7 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
             <h3 className="mt-3 text-2xl font-semibold text-slate-900">Add each trek participant</h3>
             <p className="mt-2 text-sm text-slate-600">Set the total number of participants and enter the name and age for each person joining the trek.</p>
           </div>
-          <div className="w-full max-w-[160px]">
+          <div className="w-full max-w-40">
             <label className="block text-xs font-semibold text-slate-600 mb-2">Total participants</label>
             <input
               type="number"
@@ -176,7 +153,7 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
                       <div className="absolute bottom-full left-1/2 z-20 mb-3 w-56 -translate-x-1/2 rounded-xl bg-slate-950 border border-slate-800 px-4 py-2.5 text-center text-xs font-semibold text-white shadow-2xl animate-fade-in-up">
                         <div className="relative">
                          Age should be between 5 to 80.
-                          <div className="absolute top-full left-1/2 mt-[9px] -translate-x-1/2 border-[8px] border-transparent border-t-slate-950" />
+                          <div className="absolute top-full left-1/2 mt-2.25 -translate-x-1/2 border-8 border-transparent border-t-slate-950" />
                         </div>
                       </div>
                     )}
@@ -263,27 +240,29 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
           </ul>
         </div>
       )}
-<<<<<<< HEAD
-
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between pt-8 border-t border-slate-100 mt-2">
-        <button
-          type="button"
-          onClick={onBack}
-          className="rounded-2xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
-        >
-          Back
-        </button>
-        <button
-          type="button"
-          onClick={onNext}
-          disabled={!isValid}
-          className={`rounded-2xl px-5 py-3 text-sm font-semibold transition ${isValid ? 'bg-orange-600 text-white hover:bg-orange-700' : 'bg-slate-200 text-slate-500 cursor-not-allowed'}`}
-        >
-          Continue
-        </button>
-      </div>
-=======
->>>>>>> origin
+      {(onBack || onNext) && (
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between pt-8 border-t border-slate-100 mt-2">
+          {onBack && (
+            <button
+              type="button"
+              onClick={onBack}
+              className="rounded-2xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
+            >
+              Back
+            </button>
+          )}
+          {onNext && (
+            <button
+              type="button"
+              onClick={onNext}
+              disabled={!isValid}
+              className={`rounded-2xl px-5 py-3 text-sm font-semibold transition ${isValid ? 'bg-orange-600 text-white hover:bg-orange-700' : 'bg-slate-200 text-slate-500 cursor-not-allowed'}`}
+            >
+              Continue
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

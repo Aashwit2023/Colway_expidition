@@ -88,6 +88,36 @@ function Trekking_cards({ items, heading, onOpenModal }, ref) {
     navigate(`/trekking/${theme.slug}/dates`);
   };
 
+  const handleCardOpen = (theme) => {
+    if (theme?.hasModal) {
+      onOpenModal?.(theme);
+      return;
+    }
+
+    const target = theme?.trekking_info || '#';
+    if (target.startsWith('/')) {
+      navigate(target);
+    }
+  };
+
+  const handleTrekInfoClick = (event, theme) => {
+    event.stopPropagation();
+    if (theme?.hasModal) {
+      onOpenModal?.(theme);
+      return;
+    }
+
+    const target = theme?.trekking_info || '#';
+    if (target.startsWith('/')) {
+      navigate(target);
+    }
+  };
+
+  const handleViewDatesClick = (event, theme) => {
+    event.stopPropagation();
+    openViewDates(theme);
+  };
+
   useImperativeHandle(ref, () => ({ openViewDates }));
 
 
@@ -105,7 +135,16 @@ function Trekking_cards({ items, heading, onOpenModal }, ref) {
             <div
               key={index}
               ref={(el) => cardsRef.current[index] = el}
-              className="bg-white rounded-[1.5rem] overflow-hidden shadow-lg border border-gray-100 opacity-0 translate-y-12 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] group hover:-translate-y-2 hover:shadow-xl flex flex-col h-full cursor-pointer"
+              onClick={() => handleCardOpen(theme)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault();
+                  handleCardOpen(theme);
+                }
+              }}
+              role="button"
+              tabIndex={0}
+              className="bg-white rounded-[1.5rem] overflow-hidden shadow-lg border border-gray-100 opacity-0 translate-y-12 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] group hover:-translate-y-2 hover:shadow-xl active:scale-[0.98] flex flex-col h-full cursor-pointer"
             >
               {/* Image Container with Zoom */}
               <div className="relative h-56 overflow-hidden shrink-0 border-b-2 border-yellow-400/10">
@@ -134,22 +173,16 @@ function Trekking_cards({ items, heading, onOpenModal }, ref) {
                 </p>
 
                 <div className="mt-auto flex gap-3">
-                  {theme.hasModal ? (
-                    <button
-                      onClick={() => onOpenModal(theme)}
-                      className="flex-1 py-3 bg-[#ff7a18] text-white rounded-xl font-bold text-[10px] tracking-widest hover:bg-[#e67225] transition-all transform active:scale-95 shadow-md shadow-orange-200"
-                    >
-                      TREK INFO
-                    </button>
-                  ) : (
-                    <Link to={theme.trekking_info || '#'} className="flex-1">
-                      <button className="w-full py-3 bg-[#ff7a18] text-white rounded-xl font-bold text-[10px] tracking-widest hover:bg-[#e67225] transition-all transform active:scale-95 shadow-md shadow-orange-200">
-                        TREK INFO
-                      </button>
-                    </Link>
-                  )}
                   <button
-                    onClick={() => openViewDates(theme)}
+                    type="button"
+                    onClick={(event) => handleTrekInfoClick(event, theme)}
+                    className="flex-1 py-3 bg-[#ff7a18] text-white rounded-xl font-bold text-[10px] tracking-widest hover:bg-[#e67225] transition-all transform active:scale-95 shadow-md shadow-orange-200"
+                  >
+                    TREK INFO
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(event) => handleViewDatesClick(event, theme)}
                     className="flex-1 py-3 bg-teal-600 text-white rounded-xl font-bold text-[10px] tracking-widest hover:bg-teal-700 transition-all transform active:scale-95 shadow-md shadow-teal-100"
                   >
                     VIEW DATES

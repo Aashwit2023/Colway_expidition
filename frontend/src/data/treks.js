@@ -176,7 +176,7 @@ export const themes = [
       "+ ₹3,000 Transport (to & from basecamp)"
     ],
     addOns: [
-      "+ Tents",
+      "+ Personal Tents",
       "₹4,800 Backpack Offloading"
     ],
     info: [
@@ -391,7 +391,7 @@ export const themes = [
       "+ ₹1,200 Transport (to & from basecamp)"
     ],
     addOns: [
-      "+ Tents",
+      "+ Personal Tents",
       "₹3,000 Backpack Offloading"
     ],
     info: [

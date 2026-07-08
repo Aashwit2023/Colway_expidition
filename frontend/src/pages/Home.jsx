@@ -106,8 +106,24 @@ export default function Home() {
   const Destination = [
     {
       image: baliPassCamp,
-      title: "Bali Pass Camp, India",
+      title: "Valley Of Flowers, India",
       description: "Experience the serene beauty of Bali Pass Camp, nestled in the heart of India's wilderness. Enjoy luxurious tents, breathtaking views, and unforgettable adventures."
+    },
+    {
+      image: buran_ghati,
+      title: "Beas Kund Trek, India",
+      description: "A scenic high-altitude mountain pass, popular among trekkers for its dramatic landscapes. The trail passes through dense forests, alpine meadows, and snow-covered slopes, offering breathtaking Himalayan views."
+
+    },
+    {
+      image: punchkula,
+      title: "Bhrigu Lake, India",
+      description: "Explore the natural beauty of Panchkula through its serene trekking trails nestled in the Shivalik range. From forest walks to hilltop views,the experience combines adventure with tranquility."
+    },
+    {
+      image: frndship,
+      title: "Rupin Pass, India",
+      description: "Celebrate the universal bond of friendship with our unique travel experiences designed to connect you with people and cultures around the world."
     },
     {
       image: buran_ghati,
@@ -115,16 +131,6 @@ export default function Home() {
       description: "A scenic high-altitude mountain pass, popular among trekkers for its dramatic landscapes. The trail passes through dense forests, alpine meadows, and snow-covered slopes, offering breathtaking Himalayan views."
 
     },
-    {
-      image: punchkula,
-      title: "Panchkula Trek, India",
-      description: "Explore the natural beauty of Panchkula through its serene trekking trails nestled in the Shivalik range. From forest walks to hilltop views,the experience combines adventure with tranquility."
-    },
-    {
-      image: frndship,
-      title: "Friendship Peak, India",
-      description: "Celebrate the universal bond of friendship with our unique travel experiences designed to connect you with people and cultures around the world."
-    }
   ];
 
   const treks = [
@@ -247,7 +253,7 @@ export default function Home() {
         </div>
       </section>
 
-      <ExploreTheme items={Destination} heading="Recently Visited Treks" />
+      <ExploreTheme items={Destination} heading="Upcoming Treks" />
 
       {/* <section className="stories container">
 
