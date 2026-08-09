@@ -29,7 +29,9 @@ const AppRoutes = () => {
       <Route path="/trekking" element={<Trekking />} />
       <Route path="/trekking/:slug" element={<Trekking />} />
       <Route path="/trekking/:slug/dates" element={<Trekking />} />
+      <Route path="/trekking/:slug/participants-details" element={<ParticipantDetails />} />
       <Route path="/trekking/:slug/Participants-details" element={<ParticipantDetails />} />
+      <Route path="/trekking/:slug/participants-details/booking-payment" element={<PaymentPage />} />
       <Route path="/trekking/:slug/Participants-details/booking-payment" element={<PaymentPage />} />
       <Route path="/expeditions" element={<Expeditions />} />
       <Route path="/villages" element={<Villages />} />

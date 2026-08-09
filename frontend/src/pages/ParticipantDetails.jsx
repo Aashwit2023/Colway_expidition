@@ -139,7 +139,9 @@ export default function ParticipantDetails() {
   const isValid = validateBookingData(bookingData);
 
   const handleSubmit = async () => {
-    if (isValid) {
+    if (!isValid) return;
+
+    try {
       const items = Object.entries(selectedExtras)
         .filter(([label, qty]) => qty > 0)
         .map(([label, qty]) => {
@@ -201,6 +203,9 @@ export default function ParticipantDetails() {
           grandTotal
         }
       });
+    } catch (error) {
+      console.error('Booking submission failed:', error);
+      toast.error(error.message || 'Unable to continue to payment.');
     }
   };
 

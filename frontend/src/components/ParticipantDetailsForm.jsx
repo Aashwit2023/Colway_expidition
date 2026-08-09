@@ -44,10 +44,22 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
     });
   };
 
+  const handleRemoveParticipant = (indexToRemove) => {
+    setBookingData((prev) => {
+      const nextParticipants = (prev.participants || []).filter((_, idx) => idx !== indexToRemove);
+      const count = nextParticipants.length;
+      return {
+        ...prev,
+        count,
+        participants: nextParticipants,
+      };
+    });
+  };
+
   const isValid = validateBookingData(bookingData);
 
   return (
-    <div className="space-y-6 ">
+    <div className="space-y-10 ">
       <div className="rounded-[30px] border border-slate-200 bg-slate-50 p-6 shadow-sm">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
@@ -55,7 +67,7 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
             <h3 className="mt-3 text-2xl font-semibold text-slate-900">Add each trek participant</h3>
             <p className="mt-2 text-sm text-slate-600">Set the total number of participants and enter the name and age for each person joining the trek.</p>
           </div>
-          <div className="w-full max-w-[160px]">
+          <div className="w-full max-w-40">
             <label className="block text-xs font-semibold text-slate-600 mb-2">Total participants</label>
             <input
               type="number"
@@ -69,15 +81,26 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
         </div>
       </div>
 
-      <div className="space-y-10 ">
+      <div className="space-y-8">
         {(bookingData.participants || []).map((participant, index) => (
-          <div key={index} className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
-            <div className="mb-4 flex flex-col gap-9 sm:flex-row sm:items-center sm:justify-between">
+          <div key={index} className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition-shadow">
+            <div className="mb-6 flex flex-row items-center justify-between border-b border-slate-100 pb-4">
               <div>
-                <p className="text-sm uppercase tracking-[0.2em] text-slate-500">Participant {index + 1}</p>
-                <h4 className="text-lg font-semibold text-slate-900">Profile details</h4>
+                <p className="text-xs uppercase tracking-[0.2em] text-slate-400 font-bold">Participant {index + 1}</p>
+                <h4 className="text-lg font-semibold text-slate-900 mt-0.5">Profile details</h4>
               </div>
-              <span className="rounded-full bg-slate-100 px-3 py-1 text-sm font-semibold text-slate-700">#{index + 1}</span>
+              <div className="flex items-center gap-3">
+                {bookingData.participants.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveParticipant(index)}
+                    className="rounded-full bg-rose-50 hover:bg-rose-100 border border-rose-100 px-3.5 py-1.5 text-xs font-bold text-rose-600 transition-colors shadow-sm cursor-pointer select-none"
+                  >
+                    Remove
+                  </button>
+                )}
+                <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600">#{index + 1}</span>
+              </div>
             </div>
 
             <div className="grid gap-6 sm:grid-cols-2">
@@ -130,7 +153,7 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
                       <div className="absolute bottom-full left-1/2 z-20 mb-3 w-56 -translate-x-1/2 rounded-xl bg-slate-950 border border-slate-800 px-4 py-2.5 text-center text-xs font-semibold text-white shadow-2xl animate-fade-in-up">
                         <div className="relative">
                          Age should be between 5 to 80.
-                          <div className="absolute top-full left-1/2 mt-[9px] -translate-x-1/2 border-[8px] border-transparent border-t-slate-950" />
+                          <div className="absolute top-full left-1/2 mt-2.25 -translate-x-1/2 border-8 border-transparent border-t-slate-950" />
                         </div>
                       </div>
                     )}
@@ -215,6 +238,29 @@ export default function ParticipantDetailsForm({ bookingData, setBookingData, on
               return null;
             })}
           </ul>
+        </div>
+      )}
+      {(onBack || onNext) && (
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between pt-8 border-t border-slate-100 mt-2">
+          {onBack && (
+            <button
+              type="button"
+              onClick={onBack}
+              className="rounded-2xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
+            >
+              Back
+            </button>
+          )}
+          {onNext && (
+            <button
+              type="button"
+              onClick={onNext}
+              disabled={!isValid}
+              className={`rounded-2xl px-5 py-3 text-sm font-semibold transition ${isValid ? 'bg-orange-600 text-white hover:bg-orange-700' : 'bg-slate-200 text-slate-500 cursor-not-allowed'}`}
+            >
+              Continue
+            </button>
+          )}
         </div>
       )}
     </div>
