@@ -34,6 +34,12 @@ const AppRoutes = () => {
       <Route path="/trekking/:slug/participants-details/booking-payment" element={<PaymentPage />} />
       <Route path="/trekking/:slug/Participants-details/booking-payment" element={<PaymentPage />} />
       <Route path="/expeditions" element={<Expeditions />} />
+      <Route path="/expeditions/:slug" element={<Expeditions />} />
+      <Route path="/expeditions/:slug/dates" element={<Expeditions />} />
+      <Route path="/expeditions/:slug/participants-details" element={<ParticipantDetails />} />
+      <Route path="/expeditions/:slug/Participants-details" element={<ParticipantDetails />} />
+      <Route path="/expeditions/:slug/participants-details/booking-payment" element={<PaymentPage />} />
+      <Route path="/expeditions/:slug/Participants-details/booking-payment" element={<PaymentPage />} />
       <Route path="/villages" element={<Villages />} />
       <Route path="/kailash-trek" element={<KailashTrek />} />
       <Route path="/cancellation-policy" element={<CancellationPolicy />} />

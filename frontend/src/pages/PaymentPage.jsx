@@ -4,6 +4,7 @@ import { ArrowLeft, Clock, ShieldCheck, QrCode, Sparkles, CheckCircle } from 'lu
 import { updateBooking } from '../api/api';
 import toast from 'react-hot-toast';
 import myQrCode from '../assets/my_qr_code.png';
+import { expeditions } from '../data/expeditions';
 
 export default function PaymentPage() {
   const location = useLocation();
@@ -40,7 +41,8 @@ export default function PaymentPage() {
   useEffect(() => {
     if (!bookingPayload) {
       toast.error('No active booking details found. Please start over.');
-      navigate(slug ? `/trekking/${slug}/dates` : '/trekking', { replace: true });
+      const isExp = expeditions.some((e) => e.slug === slug);
+      navigate(slug ? (isExp ? `/expeditions/${slug}/dates` : `/trekking/${slug}/dates`) : (isExp ? '/expeditions' : '/trekking'), { replace: true });
     }
   }, [bookingPayload, navigate, slug]);
 
@@ -97,8 +99,9 @@ export default function PaymentPage() {
       }
 
       toast.success('Booking and Payment confirmed successfully!');
+      const isExp = expeditions.some((e) => e.slug === slug);
       setTimeout(() => {
-        navigate('/trekking', { replace: true });
+        navigate(isExp ? '/expeditions' : '/trekking', { replace: true });
       }, 500);
     } catch (err) {
       console.error('Error completing booking:', err);
@@ -119,7 +122,10 @@ export default function PaymentPage() {
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         
         <button
-          onClick={() => navigate(`/trekking/${slug}/participants-details`, { state: { bookingState, selectedExtras, bookingId } })}
+          onClick={() => {
+            const isExp = expeditions.some((e) => e.slug === slug);
+            navigate(isExp ? `/expeditions/${slug}/participants-details` : `/trekking/${slug}/participants-details`, { state: { bookingState, selectedExtras, bookingId } });
+          }}
           className="mb-8 flex items-center gap-2 text-sm font-semibold text-slate-600 transition hover:text-slate-900 group"
         >
           <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" />
@@ -334,7 +340,10 @@ export default function PaymentPage() {
 
                 <button
                   type="button"
-                  onClick={() => navigate(`/trekking/${slug}/participants-details`, { state: { bookingState, selectedExtras, bookingId } })}
+                  onClick={() => {
+                    const isExp = expeditions.some((e) => e.slug === slug);
+                    navigate(isExp ? `/expeditions/${slug}/participants-details` : `/trekking/${slug}/participants-details`, { state: { bookingState, selectedExtras, bookingId } });
+                  }}
                   disabled={isSubmitting}
                   className="w-full py-3.5 rounded-2xl bg-white border border-slate-200 text-slate-700 font-semibold text-sm hover:bg-slate-50 transition transform active:scale-98"
                 >
