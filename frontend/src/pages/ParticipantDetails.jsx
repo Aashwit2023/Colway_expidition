@@ -3,6 +3,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import ParticipantDetailsForm, { validateBookingData } from '../components/ParticipantDetailsForm';
 import { useAuth } from '../context/AuthContext';
 import { themes } from '../data/treks';
+import { expeditions } from '../data/expeditions';
 import { createBooking, updateBooking } from '../api/api';
 import toast from 'react-hot-toast';
 
@@ -13,7 +14,8 @@ export default function ParticipantDetails() {
   const { user } = useAuth();
 
   // Find trek details based on slug
-  const matchedTrekBySlug = slug ? themes.find((t) => t.slug === slug) : null;
+  const allItems = [...themes, ...expeditions];
+  const matchedTrekBySlug = slug ? allItems.find((t) => t.slug === slug) : null;
   
   const defaultBooking = {
     trek: matchedTrekBySlug ? matchedTrekBySlug.title : 'Sar Pass Trek',
@@ -44,15 +46,18 @@ export default function ParticipantDetails() {
 
   useEffect(() => {
     if (!user) {
-      const targetPath = slug ? `/trekking/${slug}/participants-details` : '/participant-details';
+      const isExp = expeditions.some((e) => e.slug === slug);
+      const targetPath = slug 
+        ? (isExp ? `/expeditions/${slug}/participants-details` : `/trekking/${slug}/participants-details`)
+        : '/participant-details';
       navigate('/login', { replace: true, state: { from: targetPath, bookingState: bookingData } });
     }
   }, [user, navigate, bookingData, slug]);
 
   // Find the trek details to calculate pricing
-  const matchedTrek = themes.find(
+  const matchedTrek = allItems.find(
     (t) => t.title.toLowerCase().trim() === bookingData.trek.toLowerCase().trim()
-  ) || themes[0];
+  ) || allItems[0];
 
   // Helper to parse extra charge strings (e.g. "+ ₹240 Trek Insurance")
   const parseExtraFacility = (str) => {
@@ -193,7 +198,9 @@ export default function ParticipantDetails() {
 
       // Navigate to booking payment/confirmation page
       const currentSlug = slug || matchedTrek?.slug || '';
-      navigate(`/trekking/${currentSlug}/participants-details/booking-payment`, {
+      const isExp = expeditions.some((e) => e.slug === currentSlug);
+      const targetPrefix = isExp ? 'expeditions' : 'trekking';
+      navigate(`/${targetPrefix}/${currentSlug}/participants-details/booking-payment`, {
         state: {
           bookingPayload: payload,
           bookingId: savedBookingId,
@@ -347,7 +354,10 @@ export default function ParticipantDetails() {
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <button
                   type="button"
-                  onClick={() => navigate(slug ? `/trekking/${slug}/dates` : '/trekking')}
+                  onClick={() => {
+                    const isExp = expeditions.some((e) => e.slug === slug);
+                    navigate(slug ? (isExp ? `/expeditions/${slug}/dates` : `/trekking/${slug}/dates`) : '/trekking');
+                  }}
                   className="w-full sm:w-auto rounded-2xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 text-center"
                 >
                   Back
