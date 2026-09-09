@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import express from "express";
 import authRoutes from "./routes/authRoutes.js";
+import reviewRoutes from "./routes/reviewRoutes.js";
 import connectDB from "./config/db.js";
 import cors from "cors";
 import { transporter } from "./config/mail.js";
@@ -11,7 +12,7 @@ const frontendUrl = process.env.FRONTEND_URL;
 
 app.use(express.json());
 app.use(cors({
-  origin: frontendUrl,
+  origin: frontendUrl || "http://localhost:5173",
   methods: ["GET", "POST", "PATCH"],
   credentials: true
 }));
@@ -19,6 +20,7 @@ app.use(cors({
 
 //Mount the router: To use the router in your main Express app, you can "Mount" it ar a specific URL prefix
 app.use("/api/auth", authRoutes);
+app.use("/api/reviews", reviewRoutes);
 
 async function verifyMailer() {
   try {
