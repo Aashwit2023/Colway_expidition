@@ -1,5 +1,6 @@
 import { Toaster } from 'react-hot-toast'
 import Navbar from './components/Navbar'
+import AnnouncementBanner from './components/AnnouncementBanner'
 import AppRoutes from './routes/AppRoutes'
 import ScrollToTop from './components/ScrollToTop'
 import Footer from './components/Footer'
@@ -58,6 +59,7 @@ export default function App() {
       <ScrollToTop />
       <Navbar />
       <main className="pt-[60px] md:pt-[80px]"> {/* Responsive offset for fixed navbar */}
+        <AnnouncementBanner />
         <AppRoutes />
       </main>
       <Footer />

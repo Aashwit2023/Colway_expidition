@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { X, Calendar, MapPin, TrendingUp, Info, CheckCircle2, Users, Mountain, Home } from 'lucide-react';
-
+import { 
+  X, Calendar, MapPin, TrendingUp, Info, CheckCircle2, Users, Mountain, Home, Check,
+  Backpack, Shirt, Footprints, ShieldAlert, Sparkles, AlertCircle, Award, Utensils,
+  Maximize2, Minimize2
+} from 'lucide-react';
 
 const TrekModal = ({ trek, isOpen, onClose, onViewDates }) => {
   const [activeImage, setActiveImage] = useState(trek?.image);
   const [showSticky, setShowSticky] = useState(false);
+  const [activeTab, setActiveTab] = useState('inclusions');
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const scrollRef = React.useRef(null);
+
   const handleBookNow = () => {
     if (onViewDates) {
       onViewDates(trek);
@@ -26,9 +32,10 @@ const TrekModal = ({ trek, isOpen, onClose, onViewDates }) => {
 
     if (isOpen) {
       document.body.style.overflow = 'hidden';
-      // Reset scroll on open
       if (currentScrollRef) currentScrollRef.scrollTop = 0;
       setShowSticky(false);
+      setActiveTab('inclusions');
+      setIsFullscreen(false);
     } else {
       document.body.style.overflow = 'unset';
     }
@@ -42,7 +49,10 @@ const TrekModal = ({ trek, isOpen, onClose, onViewDates }) => {
   }, [isOpen]);
 
   useEffect(() => {
-    if (trek) setActiveImage(trek.image);
+    if (trek) {
+      setActiveImage(trek.image);
+      setActiveTab('inclusions');
+    }
   }, [trek]);
 
   if (!isOpen || !trek) return null;
@@ -54,6 +64,7 @@ const TrekModal = ({ trek, isOpen, onClose, onViewDates }) => {
     users: Users,
     location: MapPin,
     tent: Home,
+    challenge: Info,
     challange: Info,
     distance: TrendingUp,
     season: Calendar,
@@ -62,16 +73,63 @@ const TrekModal = ({ trek, isOpen, onClose, onViewDates }) => {
     country: MapPin,
   };
 
+  const getCategoryIcon = (iconName, category) => {
+    if (iconName === 'Shirt' || category?.toLowerCase().includes('cloth')) return Shirt;
+    if (iconName === 'Footprints' || category?.toLowerCase().includes('foot') || category?.toLowerCase().includes('gear')) return Footprints;
+    if (iconName === 'ShieldAlert' || category?.toLowerCase().includes('medic') || category?.toLowerCase().includes('essential')) return ShieldAlert;
+    if (category?.toLowerCase().includes('meal') || category?.toLowerCase().includes('food') || category?.toLowerCase().includes('stay')) return Utensils;
+    if (category?.toLowerCase().includes('safety') || category?.toLowerCase().includes('equip')) return Award;
+    return Backpack;
+  };
+
+  const getInclusionsCount = () => {
+    if (!trek.inclusions) return 0;
+    if (Array.isArray(trek.inclusions) && trek.inclusions.length > 0) {
+      if (typeof trek.inclusions[0] === 'object' && trek.inclusions[0].items) {
+        return trek.inclusions.reduce((acc, cat) => acc + (cat.items?.length || 0), 0);
+      }
+      return trek.inclusions.length;
+    }
+    return 0;
+  };
+
+  const exclusionsList = trek.exclusions || trek.nonincludions || [];
+  const carryList = trek.carryDetails || trek.gear || [];
+
   return (
-    <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 -mb-20 -mt-5">
+    <div className={`fixed inset-0 z-[2000] flex items-center justify-center transition-all duration-300 ${
+      isFullscreen ? 'p-0' : 'p-3 sm:p-5'
+    }`}>
       {/* Blurred Backdrop */}
       <div
-        className="absolute inset-0 bg-black/70 backdrop-blur-xl transition-opacity duration-300"
+        className="absolute inset-0 bg-black/75 backdrop-blur-xl transition-opacity duration-300"
         onClick={onClose}
       />
 
       {/* Modal Content container */}
-      <div className="relative bg-white w-full max-w-4xl max-h-[90vh] rounded-[2rem] shadow-2xl overflow-hidden flex flex-col transform transition-all duration-500 scale-100 opacity-100">
+      <div className={`relative bg-white shadow-2xl overflow-hidden flex flex-col transform transition-all duration-500 scale-100 opacity-100 text-gray-800 ${
+        isFullscreen 
+          ? 'w-full h-full max-w-none max-h-none rounded-none' 
+          : 'w-full max-w-4xl max-h-[90vh] rounded-[2rem]'
+      }`}>
+
+        {/* Float Action Buttons - STUCK AT TOP RIGHT */}
+        <div className="absolute top-5 right-5 z-[70] flex items-center gap-2.5">
+          <button
+            onClick={() => setIsFullscreen(!isFullscreen)}
+            title={isFullscreen ? "Exit Fullscreen" : "View Fullscreen"}
+            className="p-3 bg-black/40 hover:bg-black/75 backdrop-blur-md rounded-full text-white transition-all transform hover:scale-105 active:scale-95 shadow-xl flex items-center justify-center border border-white/20"
+          >
+            {isFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
+          </button>
+          <button
+            onClick={onClose}
+            title="Close Modal"
+            className="p-3 bg-black/40 hover:bg-black/75 backdrop-blur-md rounded-full text-white transition-all hover:rotate-90 transform active:scale-95 shadow-xl border border-white/20"
+          >
+            <X size={22} />
+          </button>
+        </div>
 
         {/* Scrollable Container */}
         <div
@@ -79,7 +137,9 @@ const TrekModal = ({ trek, isOpen, onClose, onViewDates }) => {
           className="overflow-y-auto w-full scroll-smooth"
         >
           {/* Top Section: Image Gallery */}
-          <div className="w-full h-[50vh] md:h-[65vh] relative bg-gray-100">
+          <div className={`w-full relative bg-gray-100 transition-all duration-500 ${
+            isFullscreen ? 'h-[55vh] md:h-[65vh]' : 'h-[50vh] md:h-[65vh]'
+          }`}>
             <img
               src={activeImage}
               alt={trek.title}
@@ -94,59 +154,55 @@ const TrekModal = ({ trek, isOpen, onClose, onViewDates }) => {
                     e.stopPropagation();
                     setActiveImage(img);
                   }}
-                  className={`flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-xl overflow-hidden border-2 transition-all ${activeImage === img ? 'border-orange-500 scale-110 shadow-lg' : 'border-white/50 opacity-70 hover:opacity-100'
-                    }`}
+                  className={`flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-xl overflow-hidden border-2 transition-all ${
+                    activeImage === img ? 'border-orange-500 scale-110 shadow-lg' : 'border-white/50 opacity-70 hover:opacity-100'
+                  }`}
                 >
                   <img src={img} className="w-full h-full object-cover" alt="" />
                 </button>
               ))}
             </div>
-
-            {/* Float Close Button - Top Right of Image */}
-            <button
-              onClick={onClose}
-              className="absolute top-6 right-6 z-50 p-3 bg-black/20 hover:bg-black/40 backdrop-blur-md rounded-full text-white transition-all hover:rotate-90"
-            >
-              <X size={24} />
-            </button>
           </div>
 
           {/* Content Section below Image */}
-          <div className="p-8 md:p-16 bg-white pb-32">
-            <div className="max-w-3xl mx-auto">
+          <div className={`bg-white pb-32 transition-all duration-500 ${
+            isFullscreen ? 'p-8 md:p-16 max-w-5xl mx-auto' : 'p-8 md:p-16 max-w-3xl mx-auto'
+          }`}>
+            <div>
               <div className="mb-10">
-                <div className="flex items-center gap-2 text-orange-500 font-bold text-xs uppercase tracking-widest mb-4">
+                <div className="flex items-center gap-2 text-orange-600 font-bold text-xs uppercase tracking-[0.16em] mb-3">
                   <MapPin size={14} />
                   {trek.location || 'Himalayas'}
                 </div>
 
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-6">
-                  <h2 className="text-4xl md:text-6xl font-black text-gray-900 tracking-tighter italic leading-none">
-                    {trek.title}
-                  </h2>
+                <div className="flex flex-col md:flex-row md:items-start justify-between gap-8 mb-10">
+                  <div className="flex-1">
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-950 tracking-tight leading-[1.1]">
+                      {trek.title}
+                    </h2>
+                    <p className="text-gray-600 font-normal leading-relaxed mt-4 text-base sm:text-lg">
+                      {trek.fullDescription || trek.description}
+                    </p>
+                  </div>
+
                   {/* Inline Action Option - Directly after Title */}
-
-                  <div className="bg-white shadow-lg rounded-2xl p-5 w-full max-w-xs border border-gray-100">
-
-                    {/* Price Header */}
-                    <p className="text-xs uppercase tracking-wider text-gray-500">
+                  <div className="bg-white shadow-xl rounded-2xl p-6 w-full max-w-xs border border-gray-100 shrink-0 self-start">
+                    <p className="text-[11px] uppercase tracking-[0.14em] text-gray-400 font-bold">
                       Starting From
                     </p>
-
-                    <h2 className="text-3xl font-bold text-gray-900 mt-1">
+                    <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mt-1 tracking-tight">
                       {trek.price}
                     </h2>
 
-                    {/* Divider */}
-                    <div className="my-3 border-t"></div>
+                    <div className="my-4 border-t border-gray-100"></div>
 
-                    {/* Inclusions */}
+                    {/* Inclusions in sidebar */}
                     {trek.sidebarInclusions && trek.sidebarInclusions.length > 0 && (
                       <div className="mb-4">
-                        <h4 className="text-sm font-semibold text-gray-700 mb-2">
+                        <h4 className="text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
                           Includes
                         </h4>
-                        <ul className="text-sm text-gray-600 space-y-1">
+                        <ul className="text-xs text-gray-600 space-y-1.5 font-medium">
                           {trek.sidebarInclusions.map((item, i) => (
                             <li key={i}>{item}</li>
                           ))}
@@ -157,10 +213,10 @@ const TrekModal = ({ trek, isOpen, onClose, onViewDates }) => {
                     {/* Optional Add-ons */}
                     {trek.addOns && trek.addOns.length > 0 && (
                       <div>
-                        <h4 className="text-sm font-semibold text-gray-700 mb-2">
+                        <h4 className="text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
                           Optional Add-ons
                         </h4>
-                        <ul className="text-sm text-gray-600 space-y-1">
+                        <ul className="text-xs text-gray-600 space-y-1.5 font-medium">
                           {trek.addOns.map((item, i) => (
                             <li key={i}>{item}</li>
                           ))}
@@ -169,45 +225,39 @@ const TrekModal = ({ trek, isOpen, onClose, onViewDates }) => {
                     )}
 
                     {/* CTA Button */}
-                    <button onClick={handleBookNow} className="w-full mt-5 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-xl transition-all shadow-md">
+                    <button onClick={handleBookNow} className="w-full mt-5 bg-orange-500 hover:bg-orange-600 text-white font-bold py-3.5 rounded-xl transition-all shadow-md shadow-orange-500/20 uppercase tracking-wider text-xs">
                       BOOK NOW
                     </button>
                   </div>
-                  {/* <div className="flex flex-col items-start md:items-end">
-                    <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-1">Starting from</p>
-                    <p className="text-2xl font-black text-gray-900 mb-2">{trek.price}</p>
-                    <button className="px-8 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-black text-xs tracking-widest shadow-lg shadow-orange-200 transition-all transform active:scale-95 uppercase">
-                      Book Now
-                    </button>
-                  </div> */}
                 </div>
-
-
 
                 {trek.info && (
                   <div className="mb-12">
-                    <h4 className="text-2xl font-black text-gray-900 mb-6 italic tracking-tight">
-                      Trek Details
-                    </h4>
+                    <div className="flex items-center justify-between mb-5 pb-2 border-b border-gray-100">
+                      <h4 className="text-xl sm:text-2xl font-extrabold text-gray-900 tracking-tight">
+                        Trek Overview
+                      </h4>
+                      <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Key Details</span>
+                    </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       {trek.info.map((item, i) => {
-                        const Icon = iconMap[item.icon];
+                        const Icon = iconMap[item.icon] || Info;
 
                         return (
                           <div
                             key={i}
-                            className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl border border-gray-100"
+                            className="flex items-start gap-3.5 p-4 bg-gray-50/80 border border-gray-100 rounded-2xl hover:bg-white hover:border-gray-200 hover:shadow-sm transition-all"
                           >
-                            <div className="p-2 bg-orange-100 rounded-lg">
-                              {Icon && <Icon size={20} className="text-orange-500" />}
+                            <div className="p-2 bg-orange-100 text-orange-600 rounded-xl shrink-0">
+                              <Icon size={18} />
                             </div>
 
                             <div>
-                              <p className="text-xs font-bold text-gray-400 uppercase">
+                              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
                                 {item.label}
                               </p>
-                              <p className="text-sm font-semibold text-gray-800">
+                              <p className="text-sm sm:text-[15px] font-bold text-gray-900 mt-0.5 leading-snug">
                                 {item.value}
                               </p>
                             </div>
@@ -217,40 +267,39 @@ const TrekModal = ({ trek, isOpen, onClose, onViewDates }) => {
                     </div>
                   </div>
                 )}
-
-                <p className="text-lg text-gray-600 font-light leading-relaxed mb-10">
-                  {trek.fullDescription || trek.description}
-                </p>
               </div>
 
               {/* Trek Itinerary */}
-
               {trek.itinerary && (
-                <div className="max-w-3xl mx-auto p-6">
-                  <h4 className="text-2xl font-black text-gray-900 mb-6 italic tracking-tight">
-                    Trek Itinerary
-                  </h4>
+                <div className="max-w-3xl mx-auto mb-12">
+                  <div className="flex items-center justify-between mb-6 pb-2 border-b border-gray-100">
+                    <h4 className="text-xl sm:text-2xl font-extrabold text-gray-900 tracking-tight">
+                      Trek Itinerary
+                    </h4>
+                    <span className="text-xs font-semibold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full">
+                      {trek.days || `${trek.itinerary.length} Days`}
+                    </span>
+                  </div>
                   {trek.itinerary?.map((item, index) => (
-                    <div key={index} className="flex gap-4 mb-8">
-
+                    <div key={index} className="flex gap-4 mb-6">
                       {/* Dot */}
                       <div className="flex flex-col items-center">
-                        <div className="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
+                        <div className="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-xs shadow-sm">
                           {item.day}
                         </div>
 
                         {index !== trek.itinerary.length - 1 && (
-                          <div className="w-1 bg-blue-200 flex-1 mt-1"></div>
+                          <div className="w-0.5 bg-blue-200 flex-1 my-1"></div>
                         )}
                       </div>
 
                       {/* Content */}
-                      <div>
-                        <h2 className="text-xl font-bold mb-2">
+                      <div className="flex-1 bg-white border border-gray-100 rounded-2xl p-5 hover:shadow-md hover:border-gray-200 transition-all">
+                        <h5 className="text-base sm:text-lg font-bold text-gray-900 mb-2 leading-snug">
                           {item.title}
-                        </h2>
+                        </h5>
 
-                        <ul className="list-disc pl-5 text-gray-700 space-y-1">
+                        <ul className="list-disc pl-4 text-sm text-gray-600 space-y-1.5 leading-relaxed font-normal">
                           {item.details?.map((detail, i) => {
                             if (typeof detail === "string") {
                               return <li key={i}>{detail}</li>;
@@ -259,10 +308,10 @@ const TrekModal = ({ trek, isOpen, onClose, onViewDates }) => {
                             if (typeof detail === "object") {
                               return (
                                 <li key={i}>
-                                  <span className="font-semibold">{detail.label}</span>
+                                  <span className="font-semibold text-gray-800">{detail.label}</span>
 
                                   {detail.values && (
-                                    <ul className="list-disc pl-5 text-gray-600 mt-1 space-y-1">
+                                    <ul className="list-disc pl-4 text-gray-600 mt-1 space-y-1 font-normal">
                                       {detail.values.map((v, idx) => (
                                         <li key={idx}>{v}</li>
                                       ))}
@@ -280,43 +329,35 @@ const TrekModal = ({ trek, isOpen, onClose, onViewDates }) => {
                           })}
                         </ul>
                       </div>
-
                     </div>
                   ))}
 
-
-
                   {/* Notes Section */}
-                  <div className="mt-10">
-                    <h3 className="text-xl font-bold mb-3">Note:</h3>
-
-                    <ul className="list-disc pl-5 space-y-2 text-gray-700">
+                  <div className="mt-8 p-5 bg-amber-50/50 border border-amber-200/60 rounded-2xl">
+                    <h5 className="text-sm font-bold text-amber-900 uppercase tracking-wider mb-2">Important Notes:</h5>
+                    <ul className="list-disc pl-4 space-y-1.5 text-xs sm:text-sm text-gray-700 leading-relaxed font-normal">
                       <li>Keep a buffer day in your travel plan.</li>
-                      <li>
-                        If buffer day is not used in the travel then it can be used to
-                        explore Shimla.
-                      </li>
-                      <li>
-                        Distance, Altitude, and Trekking hours are approximate and rounded off.
-                      </li>
+                      <li>If buffer day is not used in travel, explore local heritage and nature.</li>
+                      <li>Distance, Altitude, and Trekking hours are approximate and rounded off.</li>
                       <li>Keep the original and copy of ID proof handy.</li>
-                      <li>
-                        Come one day early if planning to come by flight.
-                      </li>
+                      <li>Arrive one day prior if traveling by flight.</li>
                     </ul>
                   </div>
                 </div>
               )}
 
-
-              {/* highlights */}
+              {/* Highlights */}
               {trek.highlights && (
                 <div className="mb-12">
-                  <h4 className="text-2xl font-black text-gray-900 mb-6 italic tracking-tight">Experience Highlights</h4>
+                  <div className="flex items-center justify-between mb-5 pb-2 border-b border-gray-100">
+                    <h4 className="text-xl sm:text-2xl font-extrabold text-gray-900 tracking-tight">
+                      Experience Highlights
+                    </h4>
+                  </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {trek.highlights.map((h, i) => (
-                      <div key={i} className="flex items-center gap-3 p-4 bg-blue-50/30 rounded-2xl border border-blue-100/50 text-gray-700 font-medium">
-                        <CheckCircle2 size={20} className="text-blue-600 shrink-0" />
+                      <div key={i} className="flex items-center gap-3.5 p-4 bg-blue-50/50 border border-blue-100/80 rounded-2xl text-gray-800 text-sm font-semibold leading-snug">
+                        <CheckCircle2 size={18} className="text-blue-600 shrink-0" />
                         {h}
                       </div>
                     ))}
@@ -324,55 +365,184 @@ const TrekModal = ({ trek, isOpen, onClose, onViewDates }) => {
                 </div>
               )}
 
-              {/* Inclusions */}
-              {trek.inclusions?.length > 0 && (
-                <div className="mb-12">
-                  <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6 w-full">
-
-                    <h4 className="text-lg font-bold text-center mb-4 uppercase">
-                      What's Included
+              {/* Inclusion, Exclusion and Carry Details Section */}
+              <div className="mb-12 bg-white border border-gray-200/80 rounded-3xl p-6 sm:p-8 shadow-sm">
+                <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 pb-4 border-b border-gray-100 gap-2">
+                  <div>
+                    <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-widest text-orange-600 bg-orange-50 px-3 py-1 rounded-full mb-2">
+                      <Sparkles size={12} /> Trip Essentials
+                    </span>
+                    <h4 className="text-2xl font-black text-gray-900 tracking-tight">
+                      Inclusion, Exclusion & Carry
                     </h4>
-
-                    <div className="space-y-3">
-                      {trek.inclusions.map((inc, i) => (
-                        <div key={i} className="flex items-start gap-3 text-gray-700 text-sm">
-                          <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
-                          {inc}
-                        </div>
-                      ))}
-                    </div>
-
                   </div>
+                  <p className="text-xs text-gray-500 max-w-sm font-medium">
+                    A quick reference for what is covered, what stays personal, and what you should pack for the trek.
+                  </p>
                 </div>
-              )}
 
-              {/* Non-Inclusions */}
-              {trek.nonincludions?.length > 0 && (
-                <div className="mb-12">
-                  <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6 w-full">
+                {/* Tab Controls */}
+                <div className="grid grid-cols-3 bg-gray-100/90 p-1.5 rounded-2xl mb-8 gap-1.5">
+                  <button
+                    onClick={() => setActiveTab('inclusions')}
+                    className={`py-3 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 ${
+                      activeTab === 'inclusions'
+                        ? 'bg-white text-gray-900 shadow-md shadow-black/5 scale-[1.02]'
+                        : 'text-gray-500 hover:text-gray-800'
+                    }`}
+                  >
+                    <CheckCircle2 size={16} className={activeTab === 'inclusions' ? 'text-green-600 shrink-0' : 'text-gray-400 shrink-0'} />
+                    <span className="truncate">Inclusions</span>
+                    {getInclusionsCount() > 0 && (
+                      <span className="hidden md:inline-block text-[10px] bg-green-100 text-green-700 font-bold px-2 py-0.5 rounded-full">
+                        {getInclusionsCount()}
+                      </span>
+                    )}
+                  </button>
 
-                    <h4 className="text-lg font-bold text-center mb-4 uppercase">
-                      What's Not Included
-                    </h4>
+                  <button
+                    onClick={() => setActiveTab('exclusions')}
+                    className={`py-3 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 ${
+                      activeTab === 'exclusions'
+                        ? 'bg-white text-gray-900 shadow-md shadow-black/5 scale-[1.02]'
+                        : 'text-gray-500 hover:text-gray-800'
+                    }`}
+                  >
+                    <X size={16} className={activeTab === 'exclusions' ? 'text-red-500 shrink-0' : 'text-gray-400 shrink-0'} />
+                    <span className="truncate">Exclusions</span>
+                    {exclusionsList.length > 0 && (
+                      <span className="hidden md:inline-block text-[10px] bg-red-100 text-red-700 font-bold px-2 py-0.5 rounded-full">
+                        {exclusionsList.length}
+                      </span>
+                    )}
+                  </button>
 
-                    <div className="space-y-3">
-                      {trek.nonincludions.map((inc, i) => (
-                        <div key={i} className="flex items-start gap-3 text-gray-700 text-sm">
-                          <div className="w-2 h-2 bg-red-500 rounded-full mt-2"></div>
-                          {inc}
-                        </div>
-                      ))}
+                  <button
+                    onClick={() => setActiveTab('carry')}
+                    className={`py-3 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 ${
+                      activeTab === 'carry'
+                        ? 'bg-white text-gray-900 shadow-md shadow-black/5 scale-[1.02]'
+                        : 'text-gray-500 hover:text-gray-800'
+                    }`}
+                  >
+                    <Backpack size={16} className={activeTab === 'carry' ? 'text-orange-500 shrink-0' : 'text-gray-400 shrink-0'} />
+                    <span className="truncate">Things to Carry</span>
+                  </button>
+                </div>
+
+                {/* Tab 1: INCLUSIONS */}
+                {activeTab === 'inclusions' && (
+                  <div className="space-y-6 animate-fadeIn">
+                    {Array.isArray(trek.inclusions) && typeof trek.inclusions[0] === 'object' && trek.inclusions[0].items ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        {trek.inclusions.map((group, gIdx) => {
+                          const GroupIcon = getCategoryIcon(null, group.category);
+                          return (
+                            <div key={gIdx} className="bg-gray-50/90 border border-gray-200/70 rounded-2xl p-5 hover:border-orange-200 hover:bg-white transition-all">
+                              <div className="flex items-center gap-2.5 mb-3 pb-2.5 border-b border-gray-200/60">
+                                <div className="p-1.5 bg-orange-100 text-orange-600 rounded-lg">
+                                  <GroupIcon size={16} />
+                                </div>
+                                <h5 className="font-bold text-gray-900 text-sm tracking-tight">{group.category}</h5>
+                                <span className="ml-auto text-[10px] font-bold text-gray-400 bg-white border border-gray-200 px-2 py-0.5 rounded-full">
+                                  {group.items?.length || 0} items
+                                </span>
+                              </div>
+                              <ul className="space-y-2.5">
+                                {group.items?.map((item, iIdx) => (
+                                  <li key={iIdx} className="flex items-start gap-2.5 text-xs sm:text-[13px] text-gray-700 leading-relaxed font-normal">
+                                    <Check size={14} className="text-green-600 shrink-0 mt-0.5" />
+                                    <span>{item}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 bg-gray-50/90 border border-gray-200/70 rounded-2xl p-5">
+                        {trek.inclusions?.map((inc, i) => (
+                          <div key={i} className="flex items-start gap-2.5 text-xs sm:text-[13px] text-gray-700 leading-relaxed font-normal">
+                            <Check size={14} className="text-green-600 shrink-0 mt-0.5" />
+                            <span>{typeof inc === 'string' ? inc : inc.title || JSON.stringify(inc)}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Tab 2: EXCLUSIONS */}
+                {activeTab === 'exclusions' && (
+                  <div className="space-y-4 animate-fadeIn">
+                    <div className="bg-red-50/40 border border-red-100 rounded-2xl p-5">
+                      <div className="flex items-center gap-2 mb-4 pb-2 border-b border-red-100 text-red-800">
+                        <AlertCircle size={16} className="text-red-500" />
+                        <h5 className="font-bold text-sm tracking-tight">Personal Expenses & Non-Covered Items</h5>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                        {exclusionsList.map((exc, i) => (
+                          <div key={i} className="flex items-start gap-2.5 text-xs sm:text-[13px] text-gray-700 leading-relaxed font-normal">
+                            <span className="w-1.5 h-1.5 rounded-full bg-red-500 shrink-0 mt-1.5"></span>
+                            <span>{exc}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
+                )}
+
+                {/* Tab 3: THINGS TO CARRY */}
+                {activeTab === 'carry' && (
+                  <div className="space-y-6 animate-fadeIn">
+                    {Array.isArray(carryList) && carryList.length > 0 && typeof carryList[0] === 'object' && carryList[0].items ? (
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                        {carryList.map((cat, cIdx) => {
+                          const IconComp = getCategoryIcon(cat.icon, cat.category);
+                          return (
+                            <div key={cIdx} className="bg-gray-50/90 border border-gray-200/70 rounded-2xl p-5 flex flex-col hover:border-orange-200 hover:bg-white transition-all">
+                              <div className="flex items-center gap-2.5 mb-3.5 pb-2.5 border-b border-gray-200/60">
+                                <div className="p-1.5 bg-orange-100 text-orange-600 rounded-lg shrink-0">
+                                  <IconComp size={16} />
+                                </div>
+                                <h5 className="font-bold text-gray-900 text-xs sm:text-sm tracking-tight leading-tight">{cat.category}</h5>
+                              </div>
+                              <ul className="space-y-2 flex-1">
+                                {cat.items?.map((item, iIdx) => (
+                                  <li key={iIdx} className="flex items-start gap-2 text-xs sm:text-[13px] text-gray-700 leading-relaxed font-normal">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-orange-400 shrink-0 mt-1.5"></span>
+                                    <span>{item}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <div className="bg-gray-50/90 border border-gray-200/70 rounded-2xl p-5">
+                        <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          {carryList.map((item, i) => (
+                            <li key={i} className="flex items-start gap-2 text-xs sm:text-[13px] text-gray-700 leading-relaxed font-normal">
+                              <span className="w-1.5 h-1.5 rounded-full bg-orange-400 shrink-0 mt-1.5"></span>
+                              <span>{typeof item === 'string' ? item : item.name || JSON.stringify(item)}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
             </div>
           </div>
         </div>
 
         {/* Sticky Global Action Bar - Appears on Scroll */}
         <div className={`absolute bottom-8 left-1/2 -translate-x-1/2 w-full max-w-md px-4 transition-all duration-500 transform ${showSticky ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-20 opacity-0 scale-90'}`}>
-          <div className="bg-gray-900/90 backdrop-blur-xl border border-white/10 rounded-3xl p-4 flex items-center justify-between shadow-2xl">
+          <div className="bg-gray-900/95 backdrop-blur-xl border border-white/10 rounded-3xl p-4 flex items-center justify-between shadow-2xl">
             <div className="pl-4">
               <p className="text-white/50 text-[10px] font-bold uppercase tracking-widest mb-0.5">{trek.title}</p>
               <p className="text-white text-xl font-black tracking-tight">{trek.price}</p>
@@ -383,10 +553,8 @@ const TrekModal = ({ trek, isOpen, onClose, onViewDates }) => {
           </div>
         </div>
 
-
-
       </div>
-    </div >
+    </div>
   );
 };
 

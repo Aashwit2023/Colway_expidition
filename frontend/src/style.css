@@ -8,18 +8,27 @@
   /* Removes default padding from all elements. */
   box-sizing: border-box;
   /* Includes padding and border in element's total width and height. */
-  font-family: 'Playfair Display', serif;
-  /* Sets default font family for the entire site. */
+}
+
+body, input, button, select, textarea {
+  font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6, .heading-font {
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: -0.02em;
 }
 
 /* Body styles for the overall page background and text. */
 body {
   background: #ffffff;
   /* Sets white background for the page. */
-  color: #333;
-  /* Sets default text color to dark gray. */
+  color: #1f2937;
+  /* Sets default text color to modern slate-gray. */
   line-height: 1.6;
   /* Sets line height for better readability. */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Cursor behavior: default arrow for the page, pointer (hand) for interactive elements */
@@ -730,5 +739,91 @@ a {
 .animate-fadeIn {
   animation: fadeIn 0.3s ease-out forwards;
 }
+
+/* Animated Moving Orange Shadow and Beam for Announcement Banner */
+@keyframes movingOrangeGlow {
+  0% {
+    background-position: 0% 50%;
+    box-shadow: 0 4px 20px -2px rgba(255, 122, 24, 0.45), 0 10px 30px -4px rgba(255, 122, 24, 0.25);
+  }
+  50% {
+    background-position: 100% 50%;
+    box-shadow: 0 6px 28px 2px rgba(255, 160, 40, 0.7), 0 14px 40px -2px rgba(255, 122, 24, 0.4);
+  }
+  100% {
+    background-position: 0% 50%;
+    box-shadow: 0 4px 20px -2px rgba(255, 122, 24, 0.45), 0 10px 30px -4px rgba(255, 122, 24, 0.25);
+  }
+}
+
+@keyframes orangeSweep {
+  0% {
+    transform: translateX(-100%) skewX(-20deg);
+  }
+  50% {
+    transform: translateX(200%) skewX(-20deg);
+  }
+  100% {
+    transform: translateX(200%) skewX(-20deg);
+  }
+}
+
+.sticky-announcement-banner {
+  position: sticky;
+  top: 60px;
+  z-index: 40;
+  animation: movingOrangeGlow 5s ease-in-out infinite;
+}
+
+@media (min-width: 768px) {
+  .sticky-announcement-banner {
+    top: 80px;
+  }
+}
+
+.orange-shadow-beam {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, #ff7a18 30%, #ffa500 50%, #ff4500 70%, transparent 100%);
+  background-size: 200% 100%;
+  animation: movingOrangeGlow 4s linear infinite;
+  box-shadow: 0 0 12px #ff7a18, 0 0 24px rgba(255, 122, 24, 0.7);
+}
+
+.orange-sweep-light {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 35%;
+  background: linear-gradient(90deg, transparent, rgba(255, 122, 24, 0.25), rgba(255, 180, 80, 0.4), transparent);
+  animation: orangeSweep 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  pointer-events: none;
+}
+
+/* Horizontal Rolling Marquee Animation */
+@keyframes horizontalRoll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-horizontal-roll {
+  display: flex;
+  width: max-content;
+  animation: horizontalRoll 60s linear infinite;
+  will-change: transform;
+}
+
+.animate-horizontal-roll:hover {
+  animation-play-state: paused;
+}
+
+
 
 

@@ -33,6 +33,7 @@ export default function Navbar() {
         <div className="flex items-center gap-4 md:gap-0">
           <div className={`links ${isOpen ? 'open' : ''}`}>
             <Link to="/" onClick={toggleMenu}>Home</Link>
+            <Link to="/about" onClick={toggleMenu}>About Us</Link>
             <Link to="/activities" onClick={toggleMenu}>Activities</Link>
             <Link to="/enquire" onClick={toggleMenu}>Enquire</Link>
             <Link to="/contact" onClick={toggleMenu}>Contact Us</Link>

@@ -69,4 +69,46 @@ export const updateBooking = async (bookingId, updateData) => {
     });
     const data = await response.json();
     return { response, data };
-}
+};
+
+//--------------------Review APIs----------------//
+export const fetchReviews = async () => {
+    try {
+        const response = await fetch(`${BASE_URL}/reviews`);
+        const data = await response.json();
+        return { response, data };
+    } catch (error) {
+        console.error("fetchReviews error:", error);
+        return { response: { ok: false }, data: null };
+    }
+};
+
+export const submitReview = async ({ name, location, rating, expedition, text }) => {
+    try {
+        const response = await fetch(`${BASE_URL}/reviews`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ name, location, rating, expedition, text }),
+        });
+        const data = await response.json();
+        return { response, data };
+    } catch (error) {
+        console.error("submitReview error:", error);
+        return { response: { ok: false }, data: null };
+    }
+};
+
+export const markReviewHelpful = async (reviewId) => {
+    try {
+        const response = await fetch(`${BASE_URL}/reviews/${reviewId}/helpful`, {
+            method: "POST",
+        });
+        const data = await response.json();
+        return { response, data };
+    } catch (error) {
+        console.error("markReviewHelpful error:", error);
+        return { response: { ok: false }, data: null };
+    }
+};
