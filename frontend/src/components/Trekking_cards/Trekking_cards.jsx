@@ -151,6 +151,8 @@ function Trekking_cards({ items, heading, onOpenModal }, ref) {
                 <img
                   src={theme.image}
                   alt={theme.title}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                 />
                 <div className="absolute top-3 left-3 flex gap-2">

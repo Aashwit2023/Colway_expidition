@@ -1,13 +1,15 @@
 import React from 'react';
-import contactimg from '../assets/contact.jpg';
+import { buildCloudinaryUrl, CLOUDINARY_ASSETS } from '../utils/cloudinary.js';
 
 const CancellationPolicy = () => {
+  const heroBg = buildCloudinaryUrl(CLOUDINARY_ASSETS.banners.contact, { width: 1600, quality: 'auto', format: 'auto' });
+
   return (
     <div className="min-h-screen bg-white font-sans text-gray-800">
       {/* Hero Section */}
       <div 
         className="relative h-[30vh] flex items-center justify-center bg-cover bg-center"
-        style={{ backgroundImage: `url(${contactimg})` }}
+        style={{ backgroundImage: `url(${heroBg})` }}
       >
         <div className="absolute inset-0 bg-black/60"></div>
         <div className="relative z-10 text-center px-4">

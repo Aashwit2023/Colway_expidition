@@ -3,6 +3,7 @@ dotenv.config();
 import express from "express";
 import authRoutes from "./routes/authRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
+import mediaRoutes from "./routes/mediaRoutes.js";
 import connectDB from "./config/db.js";
 import cors from "cors";
 import { transporter } from "./config/mail.js";
@@ -18,9 +19,10 @@ app.use(cors({
 }));
 
 
-//Mount the router: To use the router in your main Express app, you can "Mount" it ar a specific URL prefix
+//Mount routers
 app.use("/api/auth", authRoutes);
 app.use("/api/reviews", reviewRoutes);
+app.use("/api/media", mediaRoutes);
 
 async function verifyMailer() {
   try {

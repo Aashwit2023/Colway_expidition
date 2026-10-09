@@ -1,8 +1,10 @@
 import React from 'react';
 import HeroSection from '../components/HeroSection';
-import kailashImage from '../assets/everest_base_camp.jpg';
+import { buildCloudinaryUrl, CLOUDINARY_ASSETS } from '../utils/cloudinary.js';
 
 const KailashTrek = () => {
+  const kailashImage = buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.everest_base_camp, { width: 1920, quality: 'auto', format: 'auto' });
+
   return (
     <div className="bg-gray-50 min-h-screen pb-32">
       <HeroSection 

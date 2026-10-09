@@ -1,93 +1,120 @@
-import React from "react";
+import React, { useMemo } from "react";
 import TrekSlider from "../components/TrekSlider";
 import ExploreTheme from "../components/Cards/ExploreTheme";
-import adventure from "../assets/adventure.jpg";
-import kailash from "../assets/kailash.jpg";
-import frndship from "../assets/friendship_peak.jpg";
-import trekking1 from "../assets/trekking1.jpg";
-import trekking2 from "../assets/trekking2.jpg";
-import cultural from "../assets/cultural.jpg";
-import bali_pass from "../assets/bali_pass.jpg";
-import buran_ghati from "../assets/buran_ghati.jpg";
-import trekking33 from "../assets/trekking33.jpg";
+import { buildCloudinaryUrl, CLOUDINARY_ASSETS } from "../utils/cloudinary.js";
+import useTreksMedia from "../hooks/useTreksMedia";
+import useExpeditionsMedia from "../hooks/useExpeditionsMedia";
+
+const adventure = buildCloudinaryUrl(CLOUDINARY_ASSETS.banners.adventure);
+const kailash = buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.kailash);
+const frndship = buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.friendship_peak);
+const trekking2 = buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.trekking2);
+const cultural = buildCloudinaryUrl(CLOUDINARY_ASSETS.banners.cultural);
+const bali_pass = buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.bali_pass);
+const buran_ghati = buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.buran_ghati);
 import FAQ from "../components/FAQ/FAQ.jsx";
 import HomeAboutVisual from "../components/HomeAboutVisual";
 import CountUp from "../components/CountUp/CountUp";
 import GoogleReviews from "../components/GoogleReviews";
 
 export default function Home() {
-  const upcomingActivities = [
-    {
-      image: frndship,
-      title: "Kedarkantha Winter Trek",
-      description: "Summit sunrise over 13 Himalayan peaks at 12,500 ft and camp by the frozen Juda Ka Talab lake in Uttarkashi.",
-      link: "/trekking/kedarkantha-winter-trek",
-      bookLink: "/trekking/kedarkantha-winter-trek/dates",
-      badge: "12,500 ft • 5 Days",
-      status: "Booking Open",
-      dates: "Oct 31 - Dec 5, 2026",
-      seats: "12 Seats Left"
-    },
-    {
-      image: bali_pass,
-      title: "Brahmatal Snow Trek",
-      description: "Walk across pristine snow ridges and frozen alpine lakes with direct close-up views of Mt. Trishul (7,120m) & Nanda Ghunti.",
-      link: "/trekking/brahmatal-snow-trek",
-      bookLink: "/trekking/brahmatal-snow-trek/dates",
-      badge: "12,250 ft • 6 Days",
-      status: "Booking Open",
-      dates: "Nov 6 - Dec 5, 2026",
-      seats: "15 Seats Left"
-    },
-    {
-      image: buran_ghati,
-      title: "Dayara Bugyal Winter Trek",
-      description: "Endless rolling snow meadows (Bugyals) with panoramic vistas of Bandarpoonch, Draupadi Ka Danda, and Srikanth.",
-      link: "/trekking/dayara-bugyal-winter-trek",
-      bookLink: "/trekking/dayara-bugyal-winter-trek/dates",
-      badge: "12,057 ft • 5 Days",
-      status: "Booking Open",
-      dates: "Nov 7 - Dec 5, 2026",
-      seats: "10 Seats Left"
-    },
-    {
-      image: adventure,
-      title: "Kuari Pass Winter Trek",
-      description: "The historic Lord Curzon Trail facing the grand amphitheater of Mt. Nanda Devi (7,816m), Dronagiri, and Kamet.",
-      link: "/trekking/kuari-pass-winter-trek",
-      bookLink: "/trekking/kuari-pass-winter-trek/dates",
-      badge: "12,516 ft • 6 Days",
-      status: "Booking Open",
-      dates: "Nov 13 - Dec 5, 2026",
-      seats: "14 Seats Left"
-    },
-    {
-      image: frndship,
-      title: "Friendship Peak Expedition",
-      description: "Summit Friendship Peak (5,289m) in the Pir Panjal range near Manali. A premier semi-technical snow climb.",
-      link: "/expeditions/friendship-peak",
-      bookLink: "/expeditions/friendship-peak/dates",
-      badge: "5,289m • 7 Days",
-      status: "Booking Open",
-      dates: "Oct - Nov 2026",
-      seats: "8 Seats Left"
-    },
-    {
-      image: kailash,
-      title: "Chopta–Tungnath–Chandrashila",
-      description: "Summit Chandrashila (4,000m) and visit the world's highest Shiva temple at Tungnath surrounded by snow peaks.",
-      link: "/trekking/chopta-tungnath-chandrashila-trek",
-      bookLink: "/trekking/chopta-tungnath-chandrashila-trek/dates",
-      badge: "13,123 ft • 4 Days",
-      status: "Booking Open",
-      dates: "Nov 21 - Dec 5, 2026",
-      seats: "16 Seats Left"
-    }
-  ];
+  const { byTrek, general: generalTreks } = useTreksMedia();
+  const { byExpedition, general: generalExpeditions } = useExpeditionsMedia();
 
-  const treks = [
+  const getDynamicMedia = (link, fallback) => {
+    if (!link) return fallback;
+    const parts = link.split('/');
+    const section = parts[1];
+    const slug = parts[2];
+
+    if (section === 'trekking' && byTrek && byTrek[slug]?.length > 0) {
+      return byTrek[slug][0].optimizedUrl || byTrek[slug][0].url;
+    }
+    if (section === 'expeditions' && byExpedition && byExpedition[slug]?.length > 0) {
+      return byExpedition[slug][0].optimizedUrl || byExpedition[slug][0].url;
+    }
+    return fallback;
+  };
+
+  const upcomingActivities = useMemo(() => {
+    const rawList = [
+      {
+        image: frndship,
+        title: "Kedarkantha Winter Trek",
+        description: "Summit sunrise over 13 Himalayan peaks at 12,500 ft and camp by the frozen Juda Ka Talab lake in Uttarkashi.",
+        link: "/trekking/kedarkantha-winter-trek",
+        bookLink: "/trekking/kedarkantha-winter-trek/dates",
+        badge: "12,500 ft • 5 Days",
+        status: "Booking Open",
+        dates: "Oct 31 - Dec 5, 2026",
+        seats: "12 Seats Left"
+      },
+      {
+        image: bali_pass,
+        title: "Brahmatal Snow Trek",
+        description: "Walk across pristine snow ridges and frozen alpine lakes with direct close-up views of Mt. Trishul (7,120m) & Nanda Ghunti.",
+        link: "/trekking/brahmatal-snow-trek",
+        bookLink: "/trekking/brahmatal-snow-trek/dates",
+        badge: "12,250 ft • 6 Days",
+        status: "Booking Open",
+        dates: "Nov 6 - Dec 5, 2026",
+        seats: "15 Seats Left"
+      },
+      {
+        image: buran_ghati,
+        title: "Dayara Bugyal Winter Trek",
+        description: "Endless rolling snow meadows (Bugyals) with panoramic vistas of Bandarpoonch, Draupadi Ka Danda, and Srikanth.",
+        link: "/trekking/dayara-bugyal-winter-trek",
+        bookLink: "/trekking/dayara-bugyal-winter-trek/dates",
+        badge: "12,057 ft • 5 Days",
+        status: "Booking Open",
+        dates: "Nov 7 - Dec 5, 2026",
+        seats: "10 Seats Left"
+      },
+      {
+        image: buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.kuari_pass),
+        title: "Kuari Pass Winter Trek",
+        description: "The historic Lord Curzon Trail facing the grand amphitheater of Mt. Nanda Devi (7,816m), Dronagiri, and Kamet.",
+        link: "/trekking/kuari-pass-winter-trek",
+        bookLink: "/trekking/kuari-pass-winter-trek/dates",
+        badge: "12,516 ft • 6 Days",
+        status: "Booking Open",
+        dates: "Nov 13 - Dec 5, 2026",
+        seats: "14 Seats Left"
+      },
+      {
+        image: frndship,
+        title: "Friendship Peak Expedition",
+        description: "Summit Friendship Peak (5,289m) in the Pir Panjal range near Manali. A premier semi-technical snow climb.",
+        link: "/expeditions/friendship-peak",
+        bookLink: "/expeditions/friendship-peak/dates",
+        badge: "5,289m • 7 Days",
+        status: "Booking Open",
+        dates: "Oct - Nov 2026",
+        seats: "8 Seats Left"
+      },
+      {
+        image: kailash,
+        title: "Chopta–Tungnath–Chandrashila",
+        description: "Summit Chandrashila (4,000m) and visit the world's highest Shiva temple at Tungnath surrounded by snow peaks.",
+        link: "/trekking/chopta-tungnath-chandrashila-trek",
+        bookLink: "/trekking/chopta-tungnath-chandrashila-trek/dates",
+        badge: "13,123 ft • 4 Days",
+        status: "Booking Open",
+        dates: "Nov 21 - Dec 5, 2026",
+        seats: "16 Seats Left"
+      }
+    ];
+
+    return rawList.map(item => ({
+      ...item,
+      image: getDynamicMedia(item.link, item.image)
+    }));
+  }, [byTrek, byExpedition]);
+
+  const treks = useMemo(() => [
     {
-      image: trekking1,
+      image: generalExpeditions && generalExpeditions.length > 0 ? generalExpeditions[0].optimizedUrl : buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.himalayan_expeditions),
       title: "Himalayan Expeditions",
       location: "High-Altitude Mastery",
       description: "Conquer the giants of the world. Our expertly guided expeditions provide the ultimate challenge for seasoned adventurers seeking the roof of the world.",
@@ -96,7 +123,7 @@ export default function Home() {
       link: "/expeditions"
     },
     {
-      image: trekking2,
+      image: generalTreks && generalTreks.length > 0 ? generalTreks[0].optimizedUrl : trekking2,
       title: "Alpine Trekking",
       location: "The Path Less Traveled",
       description: "Discover hidden valleys and ancient trails. From lush forests to stark glacial moraines, experience the diverse beauty of the mountains at every step.",
@@ -122,7 +149,7 @@ export default function Home() {
       grade: "Spiritual",
       link: "/kailash-trek"
     }
-  ];
+  ], [generalExpeditions, generalTreks]);
 
   return (
     <>

@@ -1,9 +1,10 @@
 import { useState } from "react";
-import "../style.css"
-import contactimg from '../assets/contact.jpg';
+import "../style.css";
 import toast from 'react-hot-toast';
+import { buildCloudinaryUrl, CLOUDINARY_ASSETS } from '../utils/cloudinary.js';
 
 export default function ContactUs() {
+  const contactimg = buildCloudinaryUrl(CLOUDINARY_ASSETS.banners.contact, { width: 1920, quality: 'auto', format: 'auto' });
 
   const [formData, setFormData] = useState({
     name: "",

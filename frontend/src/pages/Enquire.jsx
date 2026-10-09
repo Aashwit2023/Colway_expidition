@@ -5,10 +5,11 @@ import Select from "react-select";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { requestCallback } from '../api/api';
-import cllbck from '../assets/cllbck.jpg';
 import toast from 'react-hot-toast';
+import { buildCloudinaryUrl, CLOUDINARY_ASSETS } from '../utils/cloudinary.js';
 
 export default function Enquire() {
+  const cllbck = buildCloudinaryUrl(CLOUDINARY_ASSETS.banners.cllbck, { width: 1920, quality: 'auto', format: 'auto' });
 
   const [formData, setFormData] = useState({
     firstName: "",

@@ -10,6 +10,8 @@ const ActivityCard = ({ image, title, description, link }) => {
           <img 
             src={image} 
             alt={title} 
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110"
           />
           <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">

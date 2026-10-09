@@ -1,15 +1,18 @@
-import trekking1 from '../assets/trekking1.jpg';
-import trekking2 from '../assets/trekking2.jpg';
-import trekking3 from '../assets/trekking3.jpg';
-import trekking33 from '../assets/trekking33.jpg';
-import adventure from "../assets/adventure.jpg";
-import culture from "../assets/culture.jpg";
-import cultural from "../assets/cultural.jpg";
-import baliPassCamp from "../assets/bali_pass.jpg";
-import everest_base_camp from "../assets/everest_base_camp.jpg";
-import buran_ghati from "../assets/buran_ghati.jpg";
-import friendship from "../assets/friendship.jpg";
-import kailash from "../assets/kailash.jpg";
+import { buildCloudinaryUrl, CLOUDINARY_ASSETS } from '../utils/cloudinary.js';
+
+const trekking1 = buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.trekking1);
+const trekking2 = buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.trekking2);
+const trekking3 = buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.trekking3);
+const trekking33 = buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.trekking33);
+const adventure = buildCloudinaryUrl(CLOUDINARY_ASSETS.banners.adventure);
+const culture = buildCloudinaryUrl(CLOUDINARY_ASSETS.banners.culture);
+const cultural = buildCloudinaryUrl(CLOUDINARY_ASSETS.banners.cultural);
+const baliPassCamp = buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.bali_pass);
+const everest_base_camp = buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.everest_base_camp);
+const buran_ghati = buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.buran_ghati);
+const friendship = buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.friendship);
+const kailash = buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.kailash);
+
 
 export const defaultWinterTrekDates = {
   "October-2026": [
@@ -382,7 +385,7 @@ export const themes = [
 
   // 4. Kuari Pass Winter Trek — Uttarakhand
   {
-    image: adventure,
+    image: buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.kuari_pass),
     slug: "kuari-pass-winter-trek",
     days: "6 days",
     difficulty: "easy-moderate",
@@ -391,7 +394,7 @@ export const themes = [
     hasModal: true,
     price: "₹9,999",
     location: "Joshimath, Uttarakhand",
-    images: [adventure, everest_base_camp, baliPassCamp, trekking2],
+    images: [buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.kuari_pass), everest_base_camp, baliPassCamp, trekking2],
     highlights: [
       "Historic Lord Curzon Trail (12,516 ft)",
       "Unrivalled Views of Mt. Nanda Devi (7,816m) & Dronagiri",

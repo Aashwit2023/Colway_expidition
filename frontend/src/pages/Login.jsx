@@ -1,12 +1,12 @@
 import { Link, useNavigate, Navigate, useLocation } from 'react-router-dom'
 import { useState } from 'react'
 import { loginUser } from '../api/api';
-import loginimg from '../assets/loginimg.jpg';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
-
+import { buildCloudinaryUrl, CLOUDINARY_ASSETS } from '../utils/cloudinary.js';
 
 export default function Login() {
+  const loginimg = buildCloudinaryUrl(CLOUDINARY_ASSETS.auth.loginimg, { width: 1920, quality: 'auto', format: 'auto' });
   const { user: currentUser, login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();

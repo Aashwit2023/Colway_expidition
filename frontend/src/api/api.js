@@ -112,3 +112,26 @@ export const markReviewHelpful = async (reviewId) => {
         return { response: { ok: false }, data: null };
     }
 };
+
+//--------------------Media Discovery APIs (Cloudinary)----------------//
+export const fetchMediaByFolder = async (folder = 'colway_expeditions/treks') => {
+    try {
+        const response = await fetch(`${BASE_URL}/media?folder=${encodeURIComponent(folder)}`);
+        const data = await response.json();
+        return { response, data };
+    } catch (error) {
+        console.error("fetchMediaByFolder error:", error);
+        return { response: { ok: false }, data: null };
+    }
+};
+
+export const fetchMediaCatalog = async () => {
+    try {
+        const response = await fetch(`${BASE_URL}/media/catalog`);
+        const data = await response.json();
+        return { response, data };
+    } catch (error) {
+        console.error("fetchMediaCatalog error:", error);
+        return { response: { ok: false }, data: null };
+    }
+};

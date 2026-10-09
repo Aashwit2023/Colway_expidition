@@ -1,14 +1,17 @@
-import friendship_peak from '../assets/friendship_peak.jpg';
-import friendship from '../assets/friendship.jpg';
-import adventure from '../assets/adventure.jpg';
-import bali_pass from '../assets/bali_pass.jpg';
-import trekking33 from '../assets/trekking33.jpg';
-import everest_base_camp from '../assets/everest_base_camp.jpg';
-import kailash from '../assets/kailash.jpg';
-import buran_ghati from '../assets/buran_ghati.jpg';
-import culture from '../assets/culture.jpg';
-import trekking1 from '../assets/trekking1.jpg';
-import trekking2 from '../assets/trekking2.jpg';
+import { buildCloudinaryUrl, CLOUDINARY_ASSETS } from '../utils/cloudinary.js';
+
+const friendship_peak = buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.friendship_peak);
+const friendship = buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.friendship);
+const adventure = buildCloudinaryUrl(CLOUDINARY_ASSETS.banners.adventure);
+const bali_pass = buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.bali_pass);
+const trekking33 = buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.trekking33);
+const everest_base_camp = buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.everest_base_camp);
+const kailash = buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.kailash);
+const buran_ghati = buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.buran_ghati);
+const culture = buildCloudinaryUrl(CLOUDINARY_ASSETS.banners.culture);
+const trekking1 = buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.trekking1);
+const trekking2 = buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.trekking2);
+
 
 export const expeditions = [
   {
