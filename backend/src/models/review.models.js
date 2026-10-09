@@ -33,6 +33,18 @@ const reviewSchema = new mongoose.Schema(
       type: String,
       default: ""
     },
+    avatarPublicId: {
+      type: String,
+      default: ""
+    },
+    avatarFolder: {
+      type: String,
+      default: "colway_expeditions/profiles"
+    },
+    avatarResourceType: {
+      type: String,
+      default: "image"
+    },
     source: {
       type: String,
       enum: ["website", "google"],

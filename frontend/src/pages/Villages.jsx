@@ -1,12 +1,20 @@
 import React from 'react';
 import HeroSection from '../components/HeroSection';
-import villageImage from '../assets/culture.jpg';
+import { buildCloudinaryUrl, CLOUDINARY_ASSETS } from '../utils/cloudinary.js';
+import useCloudinaryFolder from '../hooks/useCloudinaryFolder';
 
 const Villages = () => {
+  const fallbackVillageImage = buildCloudinaryUrl(CLOUDINARY_ASSETS.banners.culture, { width: 1920, quality: 'auto', format: 'auto' });
+  const { images: dynamicPhotos } = useCloudinaryFolder('people');
+
+  const villageImages = dynamicPhotos && dynamicPhotos.length > 0
+    ? dynamicPhotos.map(p => p.optimizedUrl || p.url).slice(0, 3)
+    : [fallbackVillageImage];
+
   return (
     <div className="bg-white min-h-screen pb-32">
       <HeroSection 
-        images={villageImage}
+        images={villageImages}
         title="Village Life & Culture"
         subtitle="Step into the heart of the mountains and experience life as it has been for centuries."
       />

@@ -19,9 +19,10 @@ import {
   Snowflake
 } from 'lucide-react';
 import SpotlightCard from './SpotlightCard/SpotlightCard';
-import friendship_peak from '../assets/friendship_peak.jpg';
+import { buildCloudinaryUrl, CLOUDINARY_ASSETS } from '../utils/cloudinary.js';
 
 export default function AboutSection() {
+  const friendship_peak = buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.friendship_peak, { width: 1000, quality: 'auto', format: 'auto' });
   // Experience Checklist Items
   const experienceList = [
     "High-altitude Himalayan trekking",

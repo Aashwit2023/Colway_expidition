@@ -3,7 +3,6 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Clock, ShieldCheck, QrCode, Sparkles, CheckCircle } from 'lucide-react';
 import { updateBooking } from '../api/api';
 import toast from 'react-hot-toast';
-import myQrCode from '../assets/my_qr_code.png';
 import { expeditions } from '../data/expeditions';
 
 export default function PaymentPage() {

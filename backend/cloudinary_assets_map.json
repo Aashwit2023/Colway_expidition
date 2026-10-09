@@ -1,0 +1,182 @@
+{
+  "adventure.jpg": {
+    "publicId": "colway_expeditions/banners/adventure",
+    "url": "https://res.cloudinary.com/n2tlqhzj/image/upload/v1790714767/colway_expeditions/banners/adventure.jpg",
+    "format": "jpg",
+    "width": 612,
+    "height": 408,
+    "bytes": 44112,
+    "folder": "colway_expeditions/banners"
+  },
+  "bali_pass.jpg": {
+    "publicId": "colway_expeditions/treks/bali_pass",
+    "url": "https://res.cloudinary.com/n2tlqhzj/image/upload/v1790714769/colway_expeditions/treks/bali_pass.jpg",
+    "format": "jpg",
+    "width": 980,
+    "height": 500,
+    "bytes": 60668,
+    "folder": "colway_expeditions/treks"
+  },
+  "buran_ghati.jpg": {
+    "publicId": "colway_expeditions/treks/buran_ghati",
+    "url": "https://res.cloudinary.com/n2tlqhzj/image/upload/v1790714770/colway_expeditions/treks/buran_ghati.jpg",
+    "format": "jpg",
+    "width": 627,
+    "height": 467,
+    "bytes": 89410,
+    "folder": "colway_expeditions/treks"
+  },
+  "cllbck.jpg": {
+    "publicId": "colway_expeditions/banners/cllbck",
+    "url": "https://res.cloudinary.com/n2tlqhzj/image/upload/v1790714771/colway_expeditions/banners/cllbck.jpg",
+    "format": "jpg",
+    "width": 906,
+    "height": 572,
+    "bytes": 83558,
+    "folder": "colway_expeditions/banners"
+  },
+  "contact.jpg": {
+    "publicId": "colway_expeditions/banners/contact",
+    "url": "https://res.cloudinary.com/n2tlqhzj/image/upload/v1790714773/colway_expeditions/banners/contact.jpg",
+    "format": "jpg",
+    "width": 785,
+    "height": 419,
+    "bytes": 67819,
+    "folder": "colway_expeditions/banners"
+  },
+  "cultural.jpg": {
+    "publicId": "colway_expeditions/banners/cultural",
+    "url": "https://res.cloudinary.com/n2tlqhzj/image/upload/v1790714775/colway_expeditions/banners/cultural.jpg",
+    "format": "jpg",
+    "width": 1920,
+    "height": 1280,
+    "bytes": 359483,
+    "folder": "colway_expeditions/banners"
+  },
+  "culture.jpg": {
+    "publicId": "colway_expeditions/banners/culture",
+    "url": "https://res.cloudinary.com/n2tlqhzj/image/upload/v1790714777/colway_expeditions/banners/culture.jpg",
+    "format": "jpg",
+    "width": 2600,
+    "height": 1700,
+    "bytes": 365369,
+    "folder": "colway_expeditions/banners"
+  },
+  "everest_base_camp.jpg": {
+    "publicId": "colway_expeditions/treks/everest_base_camp",
+    "url": "https://res.cloudinary.com/n2tlqhzj/image/upload/v1790714779/colway_expeditions/treks/everest_base_camp.jpg",
+    "format": "jpg",
+    "width": 1600,
+    "height": 1200,
+    "bytes": 139982,
+    "folder": "colway_expeditions/treks"
+  },
+  "friendship.jpg": {
+    "publicId": "colway_expeditions/treks/friendship",
+    "url": "https://res.cloudinary.com/n2tlqhzj/image/upload/v1790714780/colway_expeditions/treks/friendship.jpg",
+    "format": "jpg",
+    "width": 267,
+    "height": 471,
+    "bytes": 31242,
+    "folder": "colway_expeditions/treks"
+  },
+  "friendship_peak.jpg": {
+    "publicId": "colway_expeditions/treks/friendship_peak",
+    "url": "https://res.cloudinary.com/n2tlqhzj/image/upload/v1790714781/colway_expeditions/treks/friendship_peak.jpg",
+    "format": "jpg",
+    "width": 1000,
+    "height": 666,
+    "bytes": 90082,
+    "folder": "colway_expeditions/treks"
+  },
+  "kailash.jpg": {
+    "publicId": "colway_expeditions/treks/kailash",
+    "url": "https://res.cloudinary.com/n2tlqhzj/image/upload/v1790714783/colway_expeditions/treks/kailash.jpg",
+    "format": "jpg",
+    "width": 911,
+    "height": 597,
+    "bytes": 92481,
+    "folder": "colway_expeditions/treks"
+  },
+  "loginimg.jpg": {
+    "publicId": "colway_expeditions/auth/loginimg",
+    "url": "https://res.cloudinary.com/n2tlqhzj/image/upload/v1790714784/colway_expeditions/auth/loginimg.jpg",
+    "format": "jpg",
+    "width": 800,
+    "height": 337,
+    "bytes": 45282,
+    "folder": "colway_expeditions/auth"
+  },
+  "my_qr_code.png": {
+    "publicId": "colway_expeditions/payments/my_qr_code",
+    "url": "https://res.cloudinary.com/n2tlqhzj/image/upload/v1790714785/colway_expeditions/payments/my_qr_code.jpg",
+    "format": "jpg",
+    "width": 581,
+    "height": 579,
+    "bytes": 45439,
+    "folder": "colway_expeditions/payments"
+  },
+  "punchkula.jpg": {
+    "publicId": "colway_expeditions/banners/punchkula",
+    "url": "https://res.cloudinary.com/n2tlqhzj/image/upload/v1790714786/colway_expeditions/banners/punchkula.jpg",
+    "format": "jpg",
+    "width": 630,
+    "height": 464,
+    "bytes": 88699,
+    "folder": "colway_expeditions/banners"
+  },
+  "signimg.jpg": {
+    "publicId": "colway_expeditions/auth/signimg",
+    "url": "https://res.cloudinary.com/n2tlqhzj/image/upload/v1790714788/colway_expeditions/auth/signimg.jpg",
+    "format": "jpg",
+    "width": 909,
+    "height": 578,
+    "bytes": 120357,
+    "folder": "colway_expeditions/auth"
+  },
+  "trekking.jpg": {
+    "publicId": "colway_expeditions/treks/trekking",
+    "url": "https://res.cloudinary.com/n2tlqhzj/image/upload/v1790714789/colway_expeditions/treks/trekking.jpg",
+    "format": "jpg",
+    "width": 275,
+    "height": 183,
+    "bytes": 12684,
+    "folder": "colway_expeditions/treks"
+  },
+  "trekking1.jpg": {
+    "publicId": "colway_expeditions/treks/trekking1",
+    "url": "https://res.cloudinary.com/n2tlqhzj/image/upload/v1790714790/colway_expeditions/treks/trekking1.jpg",
+    "format": "jpg",
+    "width": 800,
+    "height": 450,
+    "bytes": 124060,
+    "folder": "colway_expeditions/treks"
+  },
+  "trekking2.jpg": {
+    "publicId": "colway_expeditions/treks/trekking2",
+    "url": "https://res.cloudinary.com/n2tlqhzj/image/upload/v1790714791/colway_expeditions/treks/trekking2.jpg",
+    "format": "jpg",
+    "width": 800,
+    "height": 450,
+    "bytes": 82008,
+    "folder": "colway_expeditions/treks"
+  },
+  "trekking3.jpg": {
+    "publicId": "colway_expeditions/treks/trekking3",
+    "url": "https://res.cloudinary.com/n2tlqhzj/image/upload/v1790714792/colway_expeditions/treks/trekking3.jpg",
+    "format": "jpg",
+    "width": 259,
+    "height": 194,
+    "bytes": 8457,
+    "folder": "colway_expeditions/treks"
+  },
+  "trekking33.jpg": {
+    "publicId": "colway_expeditions/treks/trekking33",
+    "url": "https://res.cloudinary.com/n2tlqhzj/image/upload/v1790714794/colway_expeditions/treks/trekking33.jpg",
+    "format": "jpg",
+    "width": 1920,
+    "height": 1078,
+    "bytes": 277754,
+    "folder": "colway_expeditions/treks"
+  }
+}

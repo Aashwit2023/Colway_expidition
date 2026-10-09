@@ -1,11 +1,12 @@
 import { Link, useNavigate, Navigate, useLocation } from 'react-router-dom'
 import { useState } from 'react'
 import { signUpUser } from '../api/api';
-import signimg from '../assets/signimg.jpg';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext'
+import { buildCloudinaryUrl, CLOUDINARY_ASSETS } from '../utils/cloudinary.js';
 
 export default function Signup() {
+  const signimg = buildCloudinaryUrl(CLOUDINARY_ASSETS.auth.signimg, { width: 1920, quality: 'auto', format: 'auto' });
   const { user: CurrentUser } = useAuth();
 
   const navigate = useNavigate();

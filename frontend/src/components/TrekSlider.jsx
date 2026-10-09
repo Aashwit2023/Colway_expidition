@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import CloudinaryImage from './CloudinaryImage';
 
 export default function TrekSlider({ treks }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -81,13 +82,16 @@ export default function TrekSlider({ treks }) {
         >
           {/* Background Image with Overlay */}
           <div className="relative w-full h-full">
-            <img 
-              src={treks[currentIndex].image} 
-              alt={treks[currentIndex].title} 
-              className="w-full h-full object-cover"
+            <CloudinaryImage
+              src={treks[currentIndex].image}
+              alt={treks[currentIndex].title}
+              width={1920}
+              priority={currentIndex === 0}
+              sizes="100vw"
+              className="w-full h-full"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
           </div>
 
           {/* Content Container */}

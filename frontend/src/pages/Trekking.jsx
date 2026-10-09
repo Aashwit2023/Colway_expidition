@@ -1,17 +1,50 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useMemo } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import HeroSection from '../components/HeroSection';
 import Trekking_cards from '../components/Trekking_cards/Trekking_cards.jsx';
 import TrekModal from '../components/Trekking_cards/TrekModal.jsx';
+import useTreksMedia from '../hooks/useTreksMedia';
 
 // Assets
-import trekking1 from '../assets/trekking1.jpg';
-import trekking2 from '../assets/trekking2.jpg';
-import trekking33 from '../assets/trekking33.jpg';
-import { themes } from '../data/treks';
+import { buildCloudinaryUrl, CLOUDINARY_ASSETS } from '../utils/cloudinary.js';
+import { themes as staticThemes } from '../data/treks';
 
 export default function Trekking() {
-  const trekImages = [trekking2, trekking1, trekking33];
+  const { general, byTrek } = useTreksMedia();
+
+  const generalUrls = useMemo(() => {
+    if (!general || !general.length) return [];
+    return general.map(p => p.optimizedUrl || p.url);
+  }, [general]);
+
+  const fallbackTrekImages = [
+    buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.trekking2, { width: 1920, quality: 'auto', format: 'auto' }),
+    buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.trekking1, { width: 1920, quality: 'auto', format: 'auto' }),
+    buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.trekking33, { width: 1920, quality: 'auto', format: 'auto' })
+  ];
+
+  const trekImages = generalUrls.length > 0 ? generalUrls.slice(0, 5) : fallbackTrekImages;
+
+  // Enhance each trek with photos strictly from its own Cloudinary subfolder
+  const themes = useMemo(() => {
+    return staticThemes.map((item) => {
+      const slugKey = (item.slug || '').toLowerCase().trim();
+      const titleKey = (item.title || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      
+      const matchedAssets = byTrek[slugKey] || byTrek[titleKey] || [];
+      const specificUrls = matchedAssets.map(p => p.optimizedUrl || p.url);
+
+      if (specificUrls.length > 0) {
+        return {
+          ...item,
+          image: specificUrls[0],
+          images: specificUrls // Strictly subfolder images
+        };
+      }
+
+      return item;
+    });
+  }, [byTrek]);
   const { slug } = useParams();
   const navigate = useNavigate();
   const { pathname } = useLocation();

@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import AboutSection from '../components/AboutSection';
-import trekking33 from '../assets/trekking33.jpg';
+import { buildCloudinaryUrl, CLOUDINARY_ASSETS } from '../utils/cloudinary.js';
 
 export default function About() {
+  const heroImage = buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.trekking33, { width: 1920, quality: 'auto', format: 'auto' });
+
   return (
     <div className="bg-[#fbfaf8] min-h-screen text-[#1c1d20]">
       
@@ -11,8 +13,10 @@ export default function About() {
       <section className="relative min-h-[70vh] sm:min-h-[80vh] flex items-end bg-[#11110f] text-white overflow-hidden pt-28 pb-16 sm:pb-24 px-4 sm:px-8 lg:px-12">
         {/* Background Image with Dark Linear Gradients */}
         <img
-          src={trekking33}
+          src={heroImage}
           alt="Himalayan Mountain Expeditions"
+          fetchPriority="high"
+          loading="eager"
           className="absolute inset-0 w-full h-full object-cover object-center opacity-40 scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#11110f] via-[#11110f]/60 to-black/30"></div>

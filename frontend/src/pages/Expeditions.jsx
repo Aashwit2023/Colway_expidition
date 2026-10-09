@@ -1,17 +1,53 @@
-import React, { useRef } from 'react';
+import React, { useRef, useMemo } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import HeroSection from '../components/HeroSection';
 import Expedition_cards from '../components/Expedition_cards';
 import ExpeditionModal from '../components/ExpeditionModal';
-import { expeditions } from '../data/expeditions';
+import { expeditions as staticExpeditions } from '../data/expeditions';
+import useExpeditionsMedia from '../hooks/useExpeditionsMedia';
 
 // Assets for Hero Slider
-import trekking33 from '../assets/trekking33.jpg';
-import everest_base_camp from '../assets/everest_base_camp.jpg';
-import adventure from '../assets/adventure.jpg';
+import { buildCloudinaryUrl, CLOUDINARY_ASSETS } from '../utils/cloudinary.js';
 
 export default function Expeditions() {
-  const heroImages = [trekking33, everest_base_camp, adventure];
+  const { general, byExpedition } = useExpeditionsMedia();
+
+  const generalUrls = useMemo(() => {
+    if (!general || !general.length) return [];
+    return general.map(p => p.optimizedUrl || p.url);
+  }, [general]);
+
+  const fallbackHeroImages = [
+    buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.trekking33, { width: 1920, quality: 'auto', format: 'auto' }),
+    buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.everest_base_camp, { width: 1920, quality: 'auto', format: 'auto' }),
+    buildCloudinaryUrl(CLOUDINARY_ASSETS.banners.adventure, { width: 1920, quality: 'auto', format: 'auto' })
+  ];
+
+  const heroImages = generalUrls.length > 0 ? generalUrls.slice(0, 5) : fallbackHeroImages;
+
+  // Enhance each expedition item with photos from its specific Cloudinary subfolder
+  const expeditions = useMemo(() => {
+    return staticExpeditions.map((item, idx) => {
+      const slugKey = (item.slug || '').toLowerCase().trim();
+      const titleKey = (item.title || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      
+      // Match specific subfolder images for this expedition
+      const matchedAssets = byExpedition[slugKey] || byExpedition[titleKey] || [];
+      const specificUrls = matchedAssets.map(p => p.optimizedUrl || p.url);
+
+      if (specificUrls.length > 0) {
+        return {
+          ...item,
+          image: specificUrls[0],
+          images: specificUrls // Strictly subfolder images only
+        };
+      }
+
+      // If this expedition does not have a subfolder yet, keep its own original package images
+      return item;
+    });
+  }, [byExpedition]);
+
   const { slug } = useParams();
   const navigate = useNavigate();
   const { pathname } = useLocation();

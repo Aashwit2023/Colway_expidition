@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Mountain, Compass, ShieldCheck, ArrowRight, Award, ChevronRight } from 'lucide-react';
-import friendship_peak from '../assets/friendship_peak.jpg';
+import CloudinaryImage from './CloudinaryImage';
+import { CLOUDINARY_ASSETS } from '../utils/cloudinary.js';
 import CountUp from './CountUp/CountUp';
 
 export default function HomeAboutVisual() {
@@ -92,12 +93,14 @@ export default function HomeAboutVisual() {
               
               {/* Primary Large Image */}
               <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white aspect-[4/5] sm:aspect-[1/1] lg:aspect-[4/5]">
-                <img
-                  src={friendship_peak}
+                <CloudinaryImage
+                  src={CLOUDINARY_ASSETS.treks.friendship_peak}
                   alt="Colway Mountain Expedition"
-                  className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700"
+                  width={800}
+                  aspectRatio="4/5"
+                  className="w-full h-full transform hover:scale-105 transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent pointer-events-none"></div>
                 
                 <div className="absolute bottom-5 left-5 right-5 text-white">
                   <span className="font-mono text-[10px] uppercase tracking-widest text-[#ff7a18] bg-black/50 backdrop-blur-md px-2.5 py-1 rounded border border-white/10 inline-block mb-1.5">

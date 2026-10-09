@@ -2,13 +2,24 @@ import React, { useEffect, useRef } from 'react';
 import HeroSection from '../components/HeroSection';
 import ActivityCard from '../components/ActivityCard';
 
-// Import assets
-import adventureImage from '../assets/adventure.jpg';
-import trekkingImage from '../assets/trekking.jpg';
-import villageImage from '../assets/culture.jpg';
-import kailashImage from '../assets/everest_base_camp.jpg';
+import useCloudinaryFolder from '../hooks/useCloudinaryFolder';
+
+// Import Cloudinary media
+import { buildCloudinaryUrl, CLOUDINARY_ASSETS } from '../utils/cloudinary.js';
+
+const fallbackAdventureImage = buildCloudinaryUrl(CLOUDINARY_ASSETS.banners.adventure, { width: 1200, quality: 'auto', format: 'auto' });
+const fallbackTrekkingImage = buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.trekking, { width: 1200, quality: 'auto', format: 'auto' });
+const fallbackVillageImage = buildCloudinaryUrl(CLOUDINARY_ASSETS.banners.culture, { width: 1200, quality: 'auto', format: 'auto' });
+const fallbackKailashImage = buildCloudinaryUrl(CLOUDINARY_ASSETS.treks.everest_base_camp, { width: 1200, quality: 'auto', format: 'auto' });
 
 const ActivitiesPage = () => {
+  const { images: landscapePhotos } = useCloudinaryFolder('landscapes');
+  const landscapeUrls = landscapePhotos.map(p => p.optimizedUrl || p.url);
+
+  const adventureImage = landscapeUrls[0] || fallbackAdventureImage;
+  const trekkingImage = landscapeUrls[1] || fallbackTrekkingImage;
+  const villageImage = landscapeUrls[2] || fallbackVillageImage;
+  const kailashImage = landscapeUrls[3] || fallbackKailashImage;
   const scrollRef = useRef([]);
 
   useEffect(() => {
